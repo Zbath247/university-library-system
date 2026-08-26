@@ -124,13 +124,27 @@ router.post('/checkin', async (req, res) => {
       return res.status(400).json({ success: false, message: 'University ID is required.' });
     }
 
-    const user = db.findUserByUniversityId(university_id);
+    let user = db.findUserByUniversityId(university_id);
     if (!user) {
-      return res.status(404).json({
-        success: false,
-        registered: false,
-        message: 'User profile not found. Please register first.'
-      });
+      const { full_name, role_id, department_id, email, phone } = req.body;
+      if (full_name) {
+        user = db.createUser({
+          university_id,
+          full_name,
+          role_id: Number(role_id) || 1,
+          department_id: Number(department_id) || 1,
+          email: email || `${university_id.toLowerCase().replace(/[^a-z0-9]/g, '')}@duc.edu.kh`,
+          phone: phone || '',
+          research_field: research_topic || 'Academic Research',
+          default_purpose: purpose_of_visit || 'Study & Revision'
+        });
+      } else {
+        return res.status(404).json({
+          success: false,
+          registered: false,
+          message: 'User profile not found. Please click "Switch Profile / Register" to register.'
+        });
+      }
     }
 
     const sessionResult = db.createSession(

@@ -103,7 +103,12 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
     setLoading(true);
     setMessage(null);
     try {
-      const res = await api.checkin(savedUser.university_id, selectedPurpose, savedUser.research_field);
+      const res = await api.checkin(
+        savedUser.university_id,
+        selectedPurpose,
+        savedUser.research_field,
+        savedUser
+      );
       if (res.success) {
         setActiveSession(res.session);
         setMessage({

@@ -28,14 +28,19 @@ export const api = {
     return res.json();
   },
 
-  checkin: async (universityId, purposeOfVisit, researchTopic) => {
+  checkin: async (universityId, purposeOfVisit, researchTopic, userDetails = {}) => {
     const res = await fetch(`${API_BASE}/kiosk/checkin`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         university_id: universityId,
         purpose_of_visit: purposeOfVisit,
-        research_topic: researchTopic
+        research_topic: researchTopic,
+        full_name: userDetails.full_name,
+        role_id: userDetails.role_id,
+        department_id: userDetails.department_id,
+        email: userDetails.email,
+        phone: userDetails.phone
       })
     });
     return res.json();
