@@ -299,21 +299,7 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={toggleLanguage}
-            className="px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-xs font-semibold text-teal-300 transition"
-          >
-            {lang === 'km' ? '🇰🇭 ខ្មែរ' : '🇬🇧 EN'}
-          </button>
-          
-          {onNavigateEntrance && (
-            <button
-              onClick={onNavigateEntrance}
-              className="text-[11px] text-slate-400 hover:text-white px-2 py-1 rounded-lg bg-slate-800/60 transition"
-            >
-              {t('mobileBackToEntrance')}
-            </button>
-          )}
+          {/* Removed Language Switcher and Back to Kiosk buttons as per user request */}
         </div>
       </div>
 
