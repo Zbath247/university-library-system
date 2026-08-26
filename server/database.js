@@ -302,7 +302,17 @@ class RelationalDatabase {
     const cleanId = String(payload.university_id).trim().toUpperCase();
     const existing = this.data.users.find(u => u.university_id.toUpperCase() === cleanId);
     if (existing) {
-      throw new Error(`University ID ${cleanId} already registered.`);
+      if (payload.full_name) existing.full_name = payload.full_name.trim();
+      if (payload.email) existing.email = payload.email.trim();
+      if (payload.phone !== undefined) existing.phone = payload.phone.trim();
+      if (payload.role_id) existing.role_id = Number(payload.role_id);
+      if (payload.department_id) existing.department_id = Number(payload.department_id);
+      if (payload.research_field) existing.research_field = payload.research_field.trim();
+      if (payload.default_purpose) existing.default_purpose = payload.default_purpose.trim();
+      else if (payload.purpose_of_visit) existing.default_purpose = payload.purpose_of_visit.trim();
+      existing.updated_at = new Date().toISOString();
+      this.save();
+      return this.hydrateUser(existing);
     }
 
     const nextId = this.data.users.length > 0 ? Math.max(...this.data.users.map(u => u.id)) + 1 : 1;
@@ -342,6 +352,14 @@ class RelationalDatabase {
     // Check if user is already checked in
     const existingActive = this.getActiveSessionForUser(userId);
     if (existingActive) {
+      if (purposeOfVisit) existingActive.purpose_of_visit = purposeOfVisit;
+      if (researchTopic) existingActive.research_topic = researchTopic;
+      const actualSession = this.data.sessions.find(s => s.id === existingActive.id);
+      if (actualSession) {
+        if (purposeOfVisit) actualSession.purpose_of_visit = purposeOfVisit;
+        if (researchTopic) actualSession.research_topic = researchTopic;
+      }
+      this.save();
       return {
         alreadyActive: true,
         session: existingActive
