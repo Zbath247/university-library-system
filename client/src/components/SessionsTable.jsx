@@ -304,8 +304,8 @@ export default function SessionsTable({
 
       </div>
 
-      {/* Sessions Table */}
-      <div className="overflow-x-auto">
+      {/* Sessions Table - Desktop View */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left text-xs text-slate-300">
           <thead className="bg-slate-950/80 text-[11px] uppercase tracking-wider text-slate-400 font-semibold border-b border-slate-800">
             <tr>
@@ -504,6 +504,164 @@ export default function SessionsTable({
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Sessions List - Mobile Cards View (Optimized for Phone Screens) */}
+      <div className="block md:hidden p-4 space-y-3">
+        {filteredSessions.length === 0 ? (
+          <div className="py-8 text-center text-slate-500 text-xs">
+            {t('noSessionsFound')}
+          </div>
+        ) : (
+          filteredSessions.map((session) => {
+            const user = session.user || {};
+            const isActive = session.status === 'ACTIVE';
+            const inTime = new Date(session.check_in_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const inDate = new Date(session.check_in_time).toLocaleDateString([], { month: 'short', day: 'numeric' });
+            const outTime = session.check_out_time ? new Date(session.check_out_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : (isActive ? t('statusActive') : '-');
+
+            const hours = Math.floor(session.duration_minutes / 60);
+            const mins = session.duration_minutes % 60;
+            const durationFormatted = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+
+            const purpose = session.purpose_of_visit || user.default_purpose || 'Study & Revision';
+            const isBorrow = purpose === 'Book Borrowing';
+            const isReturn = purpose === 'Book Return';
+            const rawTopic = session.research_topic || user.research_field || '';
+            const cleanTopic = rawTopic.replace(/^\[(ខ្ចី|សង)\]\s*/, '').trim();
+
+            return (
+              <div
+                key={session.id}
+                className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/90 shadow-md space-y-3 hover:border-slate-700 transition"
+              >
+                {/* Header: Name, ID, Role */}
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center font-bold text-xs text-white border border-slate-700 shrink-0">
+                      {(user.full_name || 'U').charAt(0)}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white text-sm leading-tight">
+                        {user.full_name || 'Visitor'}
+                      </h4>
+                      <span className="font-mono text-[11px] text-teal-400 font-bold">
+                        {user.university_id}
+                      </span>
+                    </div>
+                  </div>
+
+                  <span
+                    className="px-2 py-0.5 rounded text-[10px] font-bold font-mono text-white shadow-xs shrink-0"
+                    style={{ backgroundColor: user.role_badge_color || '#3B82F6' }}
+                  >
+                    {tRole(user.role_name || 'Student')}
+                  </span>
+                </div>
+
+                {/* Purpose & Book Title */}
+                <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800/80 text-xs">
+                  {isBorrow ? (
+                    <div className="space-y-1">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                        <BookOpen className="w-3 h-3 text-amber-400" />
+                        {tPurpose('Book Borrowing')}
+                      </span>
+                      {cleanTopic && (
+                        <p className="text-xs text-amber-100 font-bold flex items-center gap-1 truncate" title={cleanTopic}>
+                          <span>📖</span> <span>{cleanTopic}</span>
+                        </p>
+                      )}
+                    </div>
+                  ) : isReturn ? (
+                    <div className="space-y-1">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        <BookOpen className="w-3 h-3 text-emerald-400" />
+                        {tPurpose('Book Return')}
+                      </span>
+                      {cleanTopic && (
+                        <p className="text-xs text-emerald-100 font-bold flex items-center gap-1 truncate" title={cleanTopic}>
+                          <span>📗</span> <span>{cleanTopic}</span>
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="space-y-0.5">
+                      <p className="font-semibold text-slate-200">
+                        {tPurpose(purpose)}
+                      </p>
+                      {cleanTopic && cleanTopic !== purpose && (
+                        <p className="text-[11px] text-slate-400 truncate">
+                          🔬 {cleanTopic}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Meta details: Time, Duration, Status */}
+                <div className="grid grid-cols-2 gap-2 text-[11px] pt-1">
+                  <div>
+                    <span className="text-slate-500 block text-[10px]">ចូល / ចេញ៖</span>
+                    <span className="font-mono text-slate-300 font-medium">
+                      {inTime} → {outTime}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-slate-500 block text-[10px]">ថិរវេលា & ស្ថានភាព៖</span>
+                    <div className="flex items-center gap-2">
+                      <span className={`font-mono font-bold ${isActive ? 'text-teal-400' : 'text-slate-300'}`}>
+                        {durationFormatted}
+                      </span>
+                      {isActive ? (
+                        <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">
+                          {t('statusActive')}
+                        </span>
+                      ) : (
+                        <span className="px-1.5 py-0.2 rounded text-[9px] bg-slate-800 text-slate-400">
+                          {t('statusCompleted')}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons for Mobile Screen */}
+                <div className="pt-2 border-t border-slate-800/80 flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setEditingSession(session)}
+                    className="flex-1 py-2 px-3 rounded-xl text-xs font-bold bg-indigo-500/20 hover:bg-indigo-500 text-indigo-300 hover:text-white border border-indigo-500/30 transition flex items-center justify-center gap-1.5 shadow-sm"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                    <span>កែសម្រួល (Edit)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => onViewPass(user)}
+                    className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 transition"
+                    title={t('passTitle')}
+                  >
+                    <QrCode className="w-4 h-4" />
+                  </button>
+
+                  {isActive && (
+                    <button
+                      type="button"
+                      onClick={() => onForceCheckout(session.id)}
+                      className="py-2 px-3 rounded-xl text-xs font-bold bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition flex items-center justify-center gap-1 shadow-sm"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>{t('tabCheckOut')}</span>
+                    </button>
+                  )}
+                </div>
+
+              </div>
+            );
+          })
+        )}
       </div>
 
       {/* Edit Session Modal */}

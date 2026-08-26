@@ -16,7 +16,8 @@ import {
   UserPlus,
   Zap,
   ChevronRight,
-  Phone
+  Phone,
+  Edit3
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { api } from '../services/api';
@@ -242,6 +243,23 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
       setMessage({ type: 'error', text: 'Registration failed. Please check your network connection.' });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleEditProfile = () => {
+    if (savedUser) {
+      setFormData({
+        university_id: savedUser.university_id || '',
+        full_name: savedUser.full_name || '',
+        email: savedUser.email || '',
+        phone: savedUser.phone || '',
+        role_id: savedUser.role_id || (roles[0]?.id || 1),
+        department_id: savedUser.department_id || (departments[0]?.id || 1),
+        purpose_of_visit: selectedPurpose || savedUser.default_purpose || 'Study & Revision',
+        research_field: savedUser.research_field || ''
+      });
+      setSavedUser(null);
+      setMessage(null);
     }
   };
 
@@ -478,7 +496,7 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
             </div>
 
             {/* Bottom Actions */}
-            <div className="flex items-center justify-between pt-3 border-t border-slate-800 text-xs">
+            <div className="flex items-center justify-between pt-3 border-t border-slate-800 text-xs gap-2 flex-wrap">
               <button
                 onClick={() => setShowPassModal(true)}
                 className="flex items-center gap-1.5 text-teal-400 hover:text-teal-300 font-semibold transition"
@@ -487,12 +505,23 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
                 <span>{t('passTitle')}</span>
               </button>
 
-              <button
-                onClick={handleSwitchProfile}
-                className="text-slate-400 hover:text-slate-200 transition"
-              >
-                {t('mobileSwitchProfile')}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleEditProfile}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 border border-indigo-500/30 transition font-medium"
+                >
+                  <Edit3 className="w-3.5 h-3.5" />
+                  <span>កែប្រែព័ត៌មាន (Edit)</span>
+                </button>
+
+                <button
+                  onClick={handleSwitchProfile}
+                  className="text-slate-400 hover:text-slate-200 transition text-[11px]"
+                >
+                  {t('mobileSwitchProfile')}
+                </button>
+              </div>
             </div>
 
           </div>
