@@ -313,12 +313,9 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
           <div className="p-2 rounded-xl bg-teal-500/20 text-teal-300 border border-teal-500/30">
             <Smartphone className="w-4 h-4" />
           </div>
-          <div className="text-left">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-teal-400 block">
-              {t('appName')} {t('library')}
-            </span>
-            <span className="text-[11px] text-slate-400">
-              {t('mobilePortalBadge')}
+          <div className="text-left flex items-center h-full">
+            <span className="text-sm font-extrabold uppercase tracking-wider text-teal-400 block">
+              {t('appName')}
             </span>
           </div>
         </div>
