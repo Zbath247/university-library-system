@@ -539,9 +539,6 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
               <h2 className="text-lg sm:text-xl font-extrabold text-white">
                 {t('mobileFirstTimeTitle')}
               </h2>
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                {t('mobileFirstTimeSub')}
-              </p>
             </div>
 
             <form onSubmit={handleRegisterSubmit} className="space-y-3.5">
