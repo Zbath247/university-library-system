@@ -283,12 +283,12 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex flex-col items-center justify-start p-4 sm:p-6 font-sans">
       
       {/* Top Mobile Bar */}
-      <div className="w-full max-w-md flex items-center justify-between py-3 mb-3 border-b border-slate-800">
-        <div className="flex items-center gap-2">
+      <div className="w-full max-w-md flex items-center justify-center py-3 mb-3 border-b border-slate-800">
+        <div className="flex items-center gap-2 text-center">
           <div className="p-2 rounded-xl bg-teal-500/20 text-teal-300 border border-teal-500/30">
             <Smartphone className="w-4 h-4" />
           </div>
-          <div>
+          <div className="text-left">
             <span className="text-xs font-extrabold uppercase tracking-wider text-teal-400 block">
               {t('appName')} {t('library')}
             </span>
@@ -296,10 +296,6 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
               {t('mobilePortalBadge')}
             </span>
           </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          {/* Removed Language Switcher and Back to Kiosk buttons as per user request */}
         </div>
       </div>
 
