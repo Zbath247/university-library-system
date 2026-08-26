@@ -147,15 +147,6 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
           </button>
 
           <button
-            onClick={handleSeedDemo}
-            title={t('btnSeedDemo')}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 transition"
-          >
-            <Database className="w-3.5 h-3.5" />
-            <span>{t('btnSeedDemo')}</span>
-          </button>
-
-          <button
             onClick={fetchAllData}
             title={t('btnRefreshData')}
             className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700 transition"
