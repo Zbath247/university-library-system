@@ -182,28 +182,9 @@ export default function AnalyticsCharts({ analytics }) {
   return (
     <div className="space-y-6">
       
-      {/* Charts Grid Row 1 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        {/* Peak Research Hours */}
-        <div className="lg:col-span-2 p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl glass-panel flex flex-col">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-teal-500/10 text-teal-400">
-                <Clock className="w-4 h-4" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-white">{t('analyticsPeakHours')}</h4>
-                <p className="text-xs text-slate-400">{t('analyticsPeakHoursSub')}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="h-64 w-full relative">
-            <Bar data={hourlyData} options={hourlyOptions} />
-          </div>
-        </div>
-
         {/* Department Share Doughnut */}
         <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl glass-panel flex flex-col">
           <div className="flex items-center gap-2.5 mb-4">
@@ -218,30 +199,6 @@ export default function AnalyticsCharts({ analytics }) {
 
           <div className="h-64 w-full relative flex items-center justify-center">
             <Doughnut data={deptData} options={doughnutOptions} />
-          </div>
-        </div>
-
-      </div>
-
-      {/* Charts Grid Row 2 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        {/* 7-Day Trend */}
-        <div className="lg:col-span-2 p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl glass-panel flex flex-col">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400">
-                <TrendingUp className="w-4 h-4" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-white">{t('analyticsWeeklyTrends')}</h4>
-                <p className="text-xs text-slate-400">{t('analyticsWeeklyTrendsSub')}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="h-56 w-full relative">
-            <Line data={trendData} options={trendOptions} />
           </div>
         </div>
 

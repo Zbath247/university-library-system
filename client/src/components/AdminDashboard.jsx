@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
-
+import AnalyticsCharts from './AnalyticsCharts';
 import SessionsTable from './SessionsTable';
 import DigitalPassModal from './DigitalPassModal';
 import UsersDirectoryModal from './UsersDirectoryModal';
@@ -334,6 +334,8 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
         </div>
       )}
 
+      {/* Analytics Visualizations */}
+      <AnalyticsCharts analytics={analytics} />
 
       {/* Filterable Attendance & Research Session History Table */}
       <SessionsTable
