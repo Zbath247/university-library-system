@@ -453,14 +453,14 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
               <button
-                onClick={() => handleProcessScan('PROF-9011')}
+                onClick={() => handleProcessScan('DUCP2024-0101')}
                 className="p-3 rounded-2xl bg-slate-950/70 border border-purple-500/30 hover:border-purple-400 text-left transition hover:bg-purple-950/20 group"
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[10px] px-1.5 py-0.5 rounded font-bold bg-purple-500/20 text-purple-300">
                     {tRole('Professor')}
                   </span>
-                  <span className="text-[10px] font-mono text-slate-400">PROF-9011</span>
+                  <span className="text-[10px] font-mono text-slate-400">DUCP2024-0101</span>
                 </div>
                 <p className="text-xs font-bold text-white group-hover:text-purple-200 truncate">
                   Dr. Evelyn Vance
@@ -469,14 +469,14 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
               </button>
 
               <button
-                onClick={() => handleProcessScan('LEC-4402')}
+                onClick={() => handleProcessScan('DUCL2024-0201')}
                 className="p-3 rounded-2xl bg-slate-950/70 border border-emerald-500/30 hover:border-emerald-400 text-left transition hover:bg-emerald-950/20 group"
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[10px] px-1.5 py-0.5 rounded font-bold bg-emerald-500/20 text-emerald-300">
                     {tRole('Lecturer')}
                   </span>
-                  <span className="text-[10px] font-mono text-slate-400">LEC-4402</span>
+                  <span className="text-[10px] font-mono text-slate-400">DUCL2024-0201</span>
                 </div>
                 <p className="text-xs font-bold text-white group-hover:text-emerald-200 truncate">
                   Dr. Marcus Holloway
@@ -485,19 +485,19 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
               </button>
 
               <button
-                onClick={() => handleProcessScan('STU-1024')}
+                onClick={() => handleProcessScan('DUC2024-0417')}
                 className="p-3 rounded-2xl bg-slate-950/70 border border-blue-500/30 hover:border-blue-400 text-left transition hover:bg-blue-950/20 group"
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[10px] px-1.5 py-0.5 rounded font-bold bg-blue-500/20 text-blue-300">
                     {tRole('Student')}
                   </span>
-                  <span className="text-[10px] font-mono text-slate-400">STU-1024</span>
+                  <span className="text-[10px] font-mono text-slate-400">DUC2024-0417</span>
                 </div>
                 <p className="text-xs font-bold text-white group-hover:text-blue-200 truncate">
-                  Sophia Chen
+                  Mok Sambath
                 </p>
-                <p className="text-[10px] text-slate-400 truncate">{tDept('Engineering & Architecture')}</p>
+                <p className="text-[10px] text-slate-400 truncate">{tDept('Computer Science & IT')}</p>
               </button>
 
               <button
@@ -609,7 +609,7 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
                   type="text"
                   value={universityIdInput}
                   onChange={(e) => setUniversityIdInput(e.target.value)}
-                  placeholder="STU-2024-001 / PROF-9011..."
+                  placeholder="DUC2024-0417 / DUCL2024-0201..."
                   disabled={loading}
                   className="w-full pl-4 pr-28 py-3.5 rounded-2xl bg-slate-950 border border-slate-700/80 text-white font-mono uppercase placeholder-slate-500 text-sm focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition shadow-inner"
                 />

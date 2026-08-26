@@ -124,20 +124,20 @@ export default function CameraScannerModal({ isOpen, onClose, onScanSuccess }) {
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
-                onClick={() => handleSimulateScan('PROF-9011')}
+                onClick={() => handleSimulateScan('DUCP2024-0101')}
                 className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left transition text-xs"
               >
                 <span className="block font-bold text-purple-300">🎓 {tRole('Professor')}</span>
-                <span className="text-[10px] text-slate-400 font-mono">PROF-9011</span>
+                <span className="text-[10px] text-slate-400 font-mono">DUCP2024-0101</span>
               </button>
 
               <button
                 type="button"
-                onClick={() => handleSimulateScan('STU-1024')}
+                onClick={() => handleSimulateScan('DUC2024-0417')}
                 className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left transition text-xs"
               >
                 <span className="block font-bold text-blue-300">👩‍🎓 {tRole('Student')}</span>
-                <span className="text-[10px] text-slate-400 font-mono">STU-1024</span>
+                <span className="text-[10px] text-slate-400 font-mono">DUC2024-0417</span>
               </button>
 
               <button
