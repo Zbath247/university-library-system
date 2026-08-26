@@ -35,8 +35,8 @@ export default function Navbar({ activeTab, setActiveTab, activeCount }) {
               <span className="text-[10px] font-extrabold tracking-widest text-amber-300 uppercase">
                 OF CAMBODIA
               </span>
-              <span className="text-sm font-bold text-white">
-                {t('appName')} <span className="text-teal-400 font-extrabold">{t('library')}</span>
+              <span className="text-xs sm:text-sm font-extrabold text-teal-400">
+                {lang === 'km' ? 'ចូលបណ្ណាល័យ' : 'Library Entrance'}
               </span>
             </div>
           </div>

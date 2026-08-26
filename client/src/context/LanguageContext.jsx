@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const translations = {
   km: {
     // General & App
-    appName: 'UniResearch',
+    appName: 'ចូលបណ្ណាល័យ',
     library: 'បណ្ណាល័យ',
     systemTitle: 'ប្រព័ន្ធគ្រប់គ្រង និងកត់ត្រាវត្តមានបណ្ណាល័យសាកលវិទ្យាល័យ',
     versionBadge: 'ប្រព័ន្ធវត្តមាន v2.5',
@@ -265,7 +265,7 @@ const translations = {
   },
   en: {
     // General & App
-    appName: 'UniResearch',
+    appName: 'Library Portal',
     library: 'Library',
     systemTitle: 'University Library Research & Attendance Tracking System',
     versionBadge: 'ATTENDANCE v2.5',
