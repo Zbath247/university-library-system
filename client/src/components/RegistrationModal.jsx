@@ -34,7 +34,8 @@ export default function RegistrationModal({
   const popularPurposes = [
     'Study & Revision',
     'Thesis & Academic Research',
-    'Book Reading & Borrowing',
+    'Book Borrowing',
+    'Book Return',
     'Group Discussion & Project',
     'Computer & Digital Lab',
     'Printing & Document Service'

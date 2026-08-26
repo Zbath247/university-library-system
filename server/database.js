@@ -159,16 +159,16 @@ class RelationalDatabase {
 
     if (force || !this.data.sessions || this.data.sessions.length === 0) {
       const pastPurposes = [
-        { purpose: 'Senior Thesis Literature Review', topic: 'Graph Neural Networks for Drug Discovery', duration: 135 },
-        { purpose: 'Grant Proposal Archival Verification', topic: 'Clean Energy Microgrid Resilience', duration: 210 },
-        { purpose: 'Dissertation Manuscript Drafting', topic: 'Algorithmic Fairness in Automated Systems', duration: 180 },
-        { purpose: 'Journal Peer Review & Crosscheck', topic: 'Photonic Computing Architectures', duration: 95 },
-        { purpose: 'Capstone Data Collection', topic: 'Urban Heat Island Mitigation Strategies', duration: 110 },
-        { purpose: 'Statistical Meta-Analysis', topic: 'Immunotherapy Response Predictors', duration: 240 },
-        { purpose: 'Archival Case Law Synthesis', topic: 'Digital Sovereignty in Distributed Computing', duration: 150 },
-        { purpose: 'Conference Presentation Prep', topic: 'Macroeconomic Shocks in Emerging Markets', duration: 165 },
-        { purpose: 'Computational Genomics Analysis', topic: 'Comparative Genome Sequencing of Extremophiles', duration: 190 },
-        { purpose: 'Historical Text Translation', topic: 'Ancient Mesopotamian Agricultural Records', duration: 120 }
+        { purpose: 'Book Borrowing', topic: 'Academic Textbook & Reference Loan', duration: 15 },
+        { purpose: 'Book Return', topic: 'Library Book Return & Check-in', duration: 10 },
+        { purpose: 'Study & Revision', topic: 'Self-Study & Final Exam Prep', duration: 120 },
+        { purpose: 'Thesis & Academic Research', topic: 'Graph Neural Networks for Drug Discovery', duration: 135 },
+        { purpose: 'Grant Proposal & Research Review', topic: 'Clean Energy Microgrid Resilience', duration: 210 },
+        { purpose: 'PhD Dissertation Manuscript Drafting', topic: 'Algorithmic Fairness in Automated Systems', duration: 180 },
+        { purpose: 'Journal Peer Review & Archival Reference', topic: 'Photonic Computing Architectures', duration: 95 },
+        { purpose: 'Capstone Project Experimental Analysis', topic: 'Urban Heat Island Mitigation Strategies', duration: 110 },
+        { purpose: 'Computer & Digital Lab', topic: 'Online Database Search & Python Scripting', duration: 90 },
+        { purpose: 'Archival Law & Policy Research', topic: 'Digital Sovereignty in Distributed Computing', duration: 150 }
       ];
 
       const sessions = [];

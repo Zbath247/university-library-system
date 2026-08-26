@@ -83,6 +83,8 @@ const translations = {
     purposes: {
       'Study & Revision': 'ស្វ័យសិក្សា និងរំលឹកមេរៀន',
       'Thesis & Academic Research': 'ស្រាវជ្រាវនិក្ខេបបទ និងសារណា',
+      'Book Borrowing': 'ខ្ចីសៀវភៅ',
+      'Book Return': 'សងសៀវភៅ',
       'Book Reading & Borrowing': 'អាន និងខ្ចី-សងសៀវភៅ',
       'Group Discussion & Project': 'ពិភាក្សាជាក្រុម និងធ្វើគម្រោង',
       'Computer & Digital Lab': 'ប្រើប្រាស់កុំព្យូទ័រ និងបណ្ណាល័យអេឡិចត្រូនិក',
@@ -336,6 +338,8 @@ const translations = {
     purposes: {
       'Study & Revision': 'Self-Study & Revision',
       'Thesis & Academic Research': 'Thesis & Academic Research',
+      'Book Borrowing': 'Book Borrowing',
+      'Book Return': 'Book Return',
       'Book Reading & Borrowing': 'Book Reading & Borrowing',
       'Group Discussion & Project': 'Group Study & Project',
       'Computer & Digital Lab': 'Computer & Digital Lab',
