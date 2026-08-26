@@ -325,6 +325,7 @@ export default function SessionsTable({
               filteredSessions.map((session) => {
                 const user = session.user || {};
                 const isActive = session.status === 'ACTIVE';
+                const isPending = session.status === 'PENDING_APPROVAL';
                 const inTime = new Date(session.check_in_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 const inDate = new Date(session.check_in_time).toLocaleDateString([], { month: 'short', day: 'numeric' });
                 const outTime = session.check_out_time ? new Date(session.check_out_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : (isActive ? t('statusActive') : '-');
