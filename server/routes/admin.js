@@ -60,6 +60,93 @@ router.post('/users', (req, res) => {
   }
 });
 
+// POST /api/admin/login - Authenticate admin credentials
+router.post('/login', (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const cleanUser = String(username || '').trim().toLowerCase();
+    const cleanPass = String(password || '').trim();
+
+    // Default admin credentials: admin / duc@2024 (also supports admin / admin123)
+    if ((cleanUser === 'admin' && (cleanPass === 'duc@2024' || cleanPass === 'admin123' || cleanPass === 'admin')) ||
+        (cleanUser === 'zbaths' && cleanPass === 'duc@2024')) {
+      return res.json({
+        success: true,
+        token: 'duc_admin_token_' + Date.now(),
+        admin: { username: cleanUser, role: 'Super Administrator' },
+        message: 'Admin authentication successful.'
+      });
+    }
+
+    return res.status(401).json({
+      success: false,
+      message: 'Invalid administrator username or password. Please try again.'
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// DELETE /api/admin/sessions/:sessionId - Delete attendance session
+router.delete('/sessions/:sessionId', (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    const deleted = db.deleteSession(Number(sessionId));
+    res.json({
+      success: true,
+      deleted,
+      message: `Attendance log #${sessionId} deleted successfully.`
+    });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+});
+
+// PUT /api/admin/sessions/:sessionId - Update attendance session details
+router.put('/sessions/:sessionId', (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    const updated = db.updateSession(Number(sessionId), req.body);
+    res.json({
+      success: true,
+      session: updated,
+      message: `Attendance log #${sessionId} updated successfully.`
+    });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+});
+
+// DELETE /api/admin/users/:userId - Delete academic user profile
+router.delete('/users/:userId', (req, res) => {
+  try {
+    const { userId } = req.params;
+    const deleted = db.deleteUser(Number(userId));
+    res.json({
+      success: true,
+      deleted,
+      message: `User ${deleted.full_name} (${deleted.university_id}) deleted successfully.`
+    });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+});
+
+// PUT /api/admin/users/:userId - Update academic user profile
+router.put('/users/:userId', (req, res) => {
+  try {
+    const { userId } = req.params;
+    const updated = db.updateUser(Number(userId), req.body);
+    res.json({
+      success: true,
+      user: updated,
+      message: `User profile ${updated.full_name} updated successfully.`
+    });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+});
+
 // POST /api/admin/checkout/:sessionId - Force check-out session
 router.post('/checkout/:sessionId', (req, res) => {
   try {

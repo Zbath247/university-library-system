@@ -406,6 +406,61 @@ class RelationalDatabase {
     };
   }
 
+  deleteSession(sessionId) {
+    const idx = this.data.sessions.findIndex(s => s.id === Number(sessionId));
+    if (idx === -1) {
+      throw new Error('Session not found.');
+    }
+    const deleted = this.data.sessions.splice(idx, 1)[0];
+    this.save();
+    return deleted;
+  }
+
+  updateSession(sessionId, updates = {}) {
+    const session = this.data.sessions.find(s => s.id === Number(sessionId));
+    if (!session) {
+      throw new Error('Session not found.');
+    }
+    if (updates.purpose_of_visit) session.purpose_of_visit = updates.purpose_of_visit;
+    if (updates.research_topic !== undefined) session.research_topic = updates.research_topic;
+    if (updates.status) session.status = updates.status;
+    if (updates.duration_minutes !== undefined) session.duration_minutes = Number(updates.duration_minutes);
+    if (updates.check_in_time) session.check_in_time = updates.check_in_time;
+    if (updates.check_out_time !== undefined) session.check_out_time = updates.check_out_time;
+    this.save();
+    return session;
+  }
+
+  deleteUser(userId) {
+    const idx = this.data.users.findIndex(u => u.id === Number(userId));
+    if (idx === -1) {
+      throw new Error('User not found.');
+    }
+    // Delete user and cascade delete their sessions
+    const deletedUser = this.data.users.splice(idx, 1)[0];
+    this.data.sessions = this.data.sessions.filter(s => s.user_id !== Number(userId));
+    this.save();
+    return deletedUser;
+  }
+
+  updateUser(userId, updates = {}) {
+    const user = this.data.users.find(u => u.id === Number(userId));
+    if (!user) {
+      throw new Error('User not found.');
+    }
+    if (updates.full_name) user.full_name = updates.full_name.trim();
+    if (updates.university_id) user.university_id = updates.university_id.trim().toUpperCase();
+    if (updates.phone !== undefined) user.phone = updates.phone.trim();
+    if (updates.email !== undefined) user.email = updates.email.trim();
+    if (updates.role_id) user.role_id = Number(updates.role_id);
+    if (updates.department_id) user.department_id = Number(updates.department_id);
+    if (updates.research_field) user.research_field = updates.research_field.trim();
+    if (updates.default_purpose) user.default_purpose = updates.default_purpose.trim();
+    user.updated_at = new Date().toISOString();
+    this.save();
+    return this.hydrateUser(user);
+  }
+
   getSessions(filters = {}) {
     let list = this.data.sessions.map(s => {
       const user = this.findUserById(s.user_id) || {};

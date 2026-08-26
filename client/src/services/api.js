@@ -108,6 +108,47 @@ export const api = {
     return res.json();
   },
 
+  adminLogin: async (username, password) => {
+    const res = await fetch(`${API_BASE}/admin/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    return res.json();
+  },
+
+  deleteSession: async (sessionId) => {
+    const res = await fetch(`${API_BASE}/admin/sessions/${sessionId}`, {
+      method: 'DELETE'
+    });
+    return res.json();
+  },
+
+  updateSession: async (sessionId, updates) => {
+    const res = await fetch(`${API_BASE}/admin/sessions/${sessionId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates)
+    });
+    return res.json();
+  },
+
+  deleteUser: async (userId) => {
+    const res = await fetch(`${API_BASE}/admin/users/${userId}`, {
+      method: 'DELETE'
+    });
+    return res.json();
+  },
+
+  updateUser: async (userId, updates) => {
+    const res = await fetch(`${API_BASE}/admin/users/${userId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates)
+    });
+    return res.json();
+  },
+
   seedDemoData: async () => {
     const res = await fetch(`${API_BASE}/admin/seed-demo`, {
       method: 'POST'

@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import KioskMode from './components/KioskMode';
 import MobileCheckIn from './components/MobileCheckIn';
 import AdminDashboard from './components/AdminDashboard';
+import AdminLoginModal from './components/AdminLoginModal';
 import { api } from './services/api';
 import { useLanguage } from './context/LanguageContext';
 
@@ -15,8 +16,37 @@ export default function App() {
     return 'kiosk'; // 'kiosk' | 'mobile' | 'admin'
   });
 
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
+    return sessionStorage.getItem('duc_admin_auth') === 'true';
+  });
+
+  const [showAdminLoginModal, setShowAdminLoginModal] = useState(false);
   const [activeCount, setActiveCount] = useState(0);
   const { t } = useLanguage();
+
+  const handleTabSelect = (tab) => {
+    if (tab === 'admin') {
+      if (isAdminLoggedIn) {
+        setActiveTab('admin');
+      } else {
+        setShowAdminLoginModal(true);
+      }
+    } else {
+      setActiveTab(tab);
+    }
+  };
+
+  const handleAdminLoginSuccess = () => {
+    setIsAdminLoggedIn(true);
+    setActiveTab('admin');
+  };
+
+  const handleAdminLogout = () => {
+    sessionStorage.removeItem('duc_admin_auth');
+    sessionStorage.removeItem('duc_admin_token');
+    setIsAdminLoggedIn(false);
+    setActiveTab('kiosk');
+  };
 
   const fetchActiveCount = async () => {
     try {
@@ -38,10 +68,10 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-teal-500 selection:text-slate-950">
       
-      {/* Top Navbar (rendered unless pure standalone mobile frame) */}
+      {/* Top Navbar */}
       <Navbar
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleTabSelect}
         activeCount={activeCount}
       />
 
@@ -51,18 +81,34 @@ export default function App() {
           <KioskMode
             activeOccupantsCount={activeCount}
             onSessionUpdate={fetchActiveCount}
-            onOpenMobilePortal={() => setActiveTab('mobile')}
+            onOpenMobilePortal={() => handleTabSelect('mobile')}
           />
         ) : activeTab === 'mobile' ? (
           <MobileCheckIn
-            onNavigateEntrance={() => setActiveTab('kiosk')}
+            onNavigateEntrance={() => handleTabSelect('kiosk')}
           />
-        ) : (
+        ) : isAdminLoggedIn ? (
           <AdminDashboard
             onStatsUpdate={setActiveCount}
+            onLogout={handleAdminLogout}
+          />
+        ) : (
+          <KioskMode
+            activeOccupantsCount={activeCount}
+            onSessionUpdate={fetchActiveCount}
+            onOpenMobilePortal={() => handleTabSelect('mobile')}
           />
         )}
       </main>
+
+      {/* Admin Login Modal */}
+      {showAdminLoginModal && (
+        <AdminLoginModal
+          isOpen={showAdminLoginModal}
+          onClose={() => setShowAdminLoginModal(false)}
+          onLoginSuccess={handleAdminLoginSuccess}
+        />
+      )}
 
       {/* Footer */}
       <footer className="border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-500">

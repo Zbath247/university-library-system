@@ -23,7 +23,7 @@ import UsersDirectoryModal from './UsersDirectoryModal';
 import RegistrationModal from './RegistrationModal';
 import { playCheckoutChime, playSuccessChime } from '../utils/audioChime';
 
-export default function AdminDashboard({ onStatsUpdate }) {
+export default function AdminDashboard({ onStatsUpdate, onLogout }) {
   const [stats, setStats] = useState(null);
   const [analytics, setAnalytics] = useState(null);
   const [sessions, setSessions] = useState([]);
@@ -162,6 +162,18 @@ export default function AdminDashboard({ onStatsUpdate }) {
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
+
+          {/* Admin Logout Button */}
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              title="ចាកចេញពីគណនី Admin"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-500/15 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition shadow-sm"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>ចាកចេញ (Logout)</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -374,15 +386,22 @@ export default function AdminDashboard({ onStatsUpdate }) {
         user={selectedPassUser}
       />
 
-      <UsersDirectoryModal
-        isOpen={showDirectoryModal}
-        onClose={() => setShowDirectoryModal(false)}
-        users={users}
-        roles={roles}
-        departments={departments}
-        onViewPass={handleViewPass}
-        onAddUser={() => setShowAddUserModal(true)}
-      />
+      {/* Academic Directory Modal */}
+      {showDirectoryModal && (
+        <UsersDirectoryModal
+          isOpen={showDirectoryModal}
+          onClose={() => setShowDirectoryModal(false)}
+          users={users}
+          roles={roles}
+          departments={departments}
+          onViewPass={handleViewPass}
+          onAddUser={() => {
+            setShowDirectoryModal(false);
+            setShowAddUserModal(true);
+          }}
+          onUserDeleted={fetchAllData}
+        />
+      )}
 
       <RegistrationModal
         isOpen={showAddUserModal}

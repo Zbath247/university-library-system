@@ -11,10 +11,13 @@ import {
   GraduationCap,
   Building,
   RefreshCw,
-  BookOpen
+  BookOpen,
+  Edit3,
+  Trash2
 } from 'lucide-react';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
+import EditSessionModal from './EditSessionModal';
 
 export default function SessionsTable({
   sessions = [],
@@ -30,6 +33,7 @@ export default function SessionsTable({
   const [roleFilter, setRoleFilter] = useState('');
   const [deptFilter, setDeptFilter] = useState('');
   const [categoryTab, setCategoryTab] = useState('ALL'); // 'ALL', 'VISIT', 'BORROW', 'RETURN'
+  const [editingSession, setEditingSession] = useState(null);
 
   const { t, tRole, tDept, tPurpose } = useLanguage();
 
@@ -421,11 +425,20 @@ export default function SessionsTable({
                           <QrCode className="w-3.5 h-3.5 text-teal-400" />
                         </button>
 
+                        {/* Edit Record Button */}
+                        <button
+                          onClick={() => setEditingSession(session)}
+                          title="កែសម្រួលកំណត់ត្រា (Edit Record)"
+                          className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-300 transition"
+                        >
+                          <Edit3 className="w-3.5 h-3.5" />
+                        </button>
+
                         {isActive && (
                           <button
                             onClick={() => onForceCheckout(session.id)}
                             title={t('btnForceCheckout')}
-                            className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition"
+                            className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition"
                           >
                             <LogOut className="w-3 h-3" />
                             <span>{t('tabCheckOut')}</span>
@@ -441,6 +454,17 @@ export default function SessionsTable({
           </tbody>
         </table>
       </div>
+
+      {/* Edit Session Modal */}
+      {editingSession && (
+        <EditSessionModal
+          isOpen={!!editingSession}
+          session={editingSession}
+          onClose={() => setEditingSession(null)}
+          onSaveSuccess={() => onRefresh && onRefresh()}
+          onDeleteSuccess={() => onRefresh && onRefresh()}
+        />
+      )}
 
     </div>
   );
