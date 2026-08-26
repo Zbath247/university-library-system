@@ -78,8 +78,8 @@ router.post('/checkout/:sessionId', (req, res) => {
 // GET /api/admin/export/csv - Direct CSV download of attendance & research logs
 router.get('/export/csv', (req, res) => {
   try {
-    const { status, role_id, department_id, search, startDate, endDate } = req.query;
-    const sessions = db.getSessions({
+    const { status, role_id, department_id, search, startDate, endDate, category } = req.query;
+    let sessions = db.getSessions({
       status,
       role_id,
       department_id,
@@ -88,8 +88,18 @@ router.get('/export/csv', (req, res) => {
       endDate
     });
 
+    // Category filter: visit, borrow, return
+    if (category === 'BORROW' || category === 'borrow') {
+      sessions = sessions.filter(s => s.purpose_of_visit === 'Book Borrowing');
+    } else if (category === 'RETURN' || category === 'return') {
+      sessions = sessions.filter(s => s.purpose_of_visit === 'Book Return');
+    } else if (category === 'VISIT' || category === 'visit') {
+      sessions = sessions.filter(s => s.purpose_of_visit !== 'Book Borrowing' && s.purpose_of_visit !== 'Book Return');
+    }
+
     const headers = [
       'Session ID',
+      'Category (ប្រភេទទិន្នន័យ)',
       'University ID',
       'Full Name',
       'Role',
@@ -97,7 +107,7 @@ router.get('/export/csv', (req, res) => {
       'Contact Email',
       'Contact Phone',
       'Purpose of Visit',
-      'Research Topic / Field',
+      'Book Title / Research Topic (ឈ្មោះសៀវភៅ / ប្រធានបទ)',
       'Check-in Timestamp',
       'Check-out Timestamp',
       'Duration (Minutes)',
@@ -106,8 +116,16 @@ router.get('/export/csv', (req, res) => {
 
     const rows = sessions.map(s => {
       const u = s.user || {};
+      let catLabel = '១. ចូលបណ្ណាល័យ (Library Visit)';
+      if (s.purpose_of_visit === 'Book Borrowing') {
+        catLabel = '២. ខ្ចីសៀវភៅ (Book Borrowing)';
+      } else if (s.purpose_of_visit === 'Book Return') {
+        catLabel = '៣. សងសៀវភៅ (Book Return)';
+      }
+
       return [
         s.id,
+        `"${catLabel}"`,
         `"${(u.university_id || '').replace(/"/g, '""')}"`,
         `"${(u.full_name || '').replace(/"/g, '""')}"`,
         `"${(u.role_name || '').replace(/"/g, '""')}"`,
@@ -125,8 +143,13 @@ router.get('/export/csv', (req, res) => {
 
     const csvContent = [headers.join(','), ...rows].join('\r\n');
 
+    let filenamePrefix = 'library_all_attendance';
+    if (category === 'BORROW' || category === 'borrow') filenamePrefix = 'library_book_borrowing_report';
+    else if (category === 'RETURN' || category === 'return') filenamePrefix = 'library_book_return_report';
+    else if (category === 'VISIT' || category === 'visit') filenamePrefix = 'library_visits_attendance_report';
+
     res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-    res.setHeader('Content-Disposition', `attachment; filename="library_attendance_report_${new Date().toISOString().slice(0, 10)}.csv"`);
+    res.setHeader('Content-Disposition', `attachment; filename="${filenamePrefix}_${new Date().toISOString().slice(0, 10)}.csv"`);
     // Prepend UTF-8 BOM (\uFEFF) so Microsoft Excel opens Khmer and English text flawlessly
     return res.send('\uFEFF' + csvContent);
   } catch (err) {

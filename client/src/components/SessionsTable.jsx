@@ -29,12 +29,29 @@ export default function SessionsTable({
   const [statusFilter, setStatusFilter] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
   const [deptFilter, setDeptFilter] = useState('');
+  const [categoryTab, setCategoryTab] = useState('ALL'); // 'ALL', 'VISIT', 'BORROW', 'RETURN'
 
   const { t, tRole, tDept, tPurpose } = useLanguage();
+
+  // Category counts
+  const countAll = sessions.length;
+  const countVisit = sessions.filter(s => s.purpose_of_visit !== 'Book Borrowing' && s.purpose_of_visit !== 'Book Return').length;
+  const countBorrow = sessions.filter(s => s.purpose_of_visit === 'Book Borrowing').length;
+  const countReturn = sessions.filter(s => s.purpose_of_visit === 'Book Return').length;
 
   // Client-side filtering for immediate snappy responses
   const filteredSessions = sessions.filter(s => {
     const user = s.user || {};
+
+    // 1. Category segmentation
+    if (categoryTab === 'VISIT') {
+      if (s.purpose_of_visit === 'Book Borrowing' || s.purpose_of_visit === 'Book Return') return false;
+    } else if (categoryTab === 'BORROW') {
+      if (s.purpose_of_visit !== 'Book Borrowing') return false;
+    } else if (categoryTab === 'RETURN') {
+      if (s.purpose_of_visit !== 'Book Return') return false;
+    }
+
     if (statusFilter && s.status !== statusFilter) return false;
     if (roleFilter && String(user.role_id) !== String(roleFilter)) return false;
     if (deptFilter && String(user.department_id) !== String(deptFilter)) return false;
@@ -55,7 +72,8 @@ export default function SessionsTable({
       status: statusFilter,
       role_id: roleFilter,
       department_id: deptFilter,
-      search
+      search,
+      category: categoryTab !== 'ALL' ? categoryTab : undefined
     });
     window.open(exportUrl, '_blank');
   };
@@ -76,7 +94,7 @@ export default function SessionsTable({
                 {t('tabAllLogs')}
               </h3>
               <p className="text-xs text-slate-400">
-                {filteredSessions.length} / {sessions.length}
+                {filteredSessions.length} / {sessions.length} កំណត់ត្រា
               </p>
             </div>
           </div>
@@ -95,11 +113,81 @@ export default function SessionsTable({
           <button
             onClick={handleExportCsv}
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-teal-500 hover:bg-teal-400 text-slate-950 transition shadow-lg shadow-teal-500/20"
+            title={categoryTab === 'ALL' ? 'ទាញយកទិន្នន័យទាំងអស់' : `ទាញយកតែទិន្នន័យ៖ ${categoryTab}`}
           >
             <Download className="w-3.5 h-3.5" />
-            <span>{t('btnExportCsv')}</span>
+            <span>{t('btnExportCsv')} {categoryTab !== 'ALL' && `(${categoryTab === 'BORROW' ? 'ខ្ចី' : categoryTab === 'RETURN' ? 'សង' : 'ចូល'})`}</span>
           </button>
         </div>
+
+      </div>
+
+      {/* Segmented Category Filter Tabs */}
+      <div className="px-6 py-3 bg-slate-950/80 border-b border-slate-800/80 flex flex-wrap items-center gap-2">
+        
+        {/* All */}
+        <button
+          type="button"
+          onClick={() => setCategoryTab('ALL')}
+          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+            categoryTab === 'ALL'
+              ? 'bg-teal-500 text-slate-950 shadow-md shadow-teal-500/20'
+              : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
+          }`}
+        >
+          <span>📑 ទាំងអស់ (All)</span>
+          <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${categoryTab === 'ALL' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-slate-300'}`}>
+            {countAll}
+          </span>
+        </button>
+
+        {/* 1. ចូលបណ្ណាល័យ */}
+        <button
+          type="button"
+          onClick={() => setCategoryTab('VISIT')}
+          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+            categoryTab === 'VISIT'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+              : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
+          }`}
+        >
+          <span>🏛️ ១. ចូលបណ្ណាល័យ</span>
+          <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${categoryTab === 'VISIT' ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-300'}`}>
+            {countVisit}
+          </span>
+        </button>
+
+        {/* 2. ខ្ចីសៀវភៅ */}
+        <button
+          type="button"
+          onClick={() => setCategoryTab('BORROW')}
+          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+            categoryTab === 'BORROW'
+              ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+              : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
+          }`}
+        >
+          <span>📚 ២. ខ្ចីសៀវភៅ</span>
+          <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${categoryTab === 'BORROW' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-amber-300'}`}>
+            {countBorrow}
+          </span>
+        </button>
+
+        {/* 3. សងសៀវភៅ */}
+        <button
+          type="button"
+          onClick={() => setCategoryTab('RETURN')}
+          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+            categoryTab === 'RETURN'
+              ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
+              : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
+          }`}
+        >
+          <span>📗 ៣. សងសៀវភៅ</span>
+          <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${categoryTab === 'RETURN' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-emerald-300'}`}>
+            {countReturn}
+          </span>
+        </button>
 
       </div>
 
