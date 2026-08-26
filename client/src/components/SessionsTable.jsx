@@ -117,13 +117,7 @@ export default function SessionsTable({
 
         {/* Actions: Refresh, Reset & Export CSV */}
         <div className="flex items-center gap-2.5 flex-wrap">
-          <button
-            onClick={onRefresh}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-            <span>{t('btnRefreshData')}</span>
-          </button>
+
 
           {/* Reset Logs Button */}
           <button
