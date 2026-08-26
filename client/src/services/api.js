@@ -1,4 +1,7 @@
-const API_BASE = '/api';
+const API_BASE = window.location.hostname === 'localhost'
+  ? '/api'
+  : 'https://university-library-system-cegt.onrender.com/api';
+
 
 export const api = {
   // Kiosk endpoints
