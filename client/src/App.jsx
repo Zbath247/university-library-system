@@ -73,6 +73,8 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={handleTabSelect}
         activeCount={activeCount}
+        isAdminLoggedIn={isAdminLoggedIn}
+        onLogout={handleAdminLogout}
       />
 
       {/* Main Content Area */}

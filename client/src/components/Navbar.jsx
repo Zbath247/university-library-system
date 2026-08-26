@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { LayoutDashboard, ScanLine, Smartphone, Clock, Globe, Menu, X, ShieldCheck, ChevronRight, Users, Sparkles } from 'lucide-react';
+import { LayoutDashboard, ScanLine, Smartphone, Clock, Globe, Menu, X, ShieldCheck, ChevronRight, Users, Sparkles, LogOut } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
-export default function Navbar({ activeTab, setActiveTab, activeCount }) {
+export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLoggedIn, onLogout }) {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { lang, toggleLanguage, t } = useLanguage();
@@ -129,6 +129,18 @@ export default function Navbar({ activeTab, setActiveTab, activeCount }) {
                   <span className={lang === 'en' ? 'text-teal-400 font-bold' : 'text-slate-400'}>🇬🇧 EN</span>
                 </span>
               </button>
+
+              {/* Admin Logout */}
+              {isAdminLoggedIn && onLogout && (
+                <button
+                  onClick={onLogout}
+                  title="ចាកចេញពីគណនី Admin (Logout)"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-xs font-bold text-rose-400 transition-all shadow-sm"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span className="hidden sm:inline">ចាកចេញ (Logout)</span>
+                </button>
+              )}
 
               {/* Occupants Indicator (Desktop) */}
               <div className="hidden xl:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs shrink-0">
