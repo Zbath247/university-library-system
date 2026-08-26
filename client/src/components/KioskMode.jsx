@@ -297,14 +297,6 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
           </button>
         </div>
 
-        {/* Right: Simulate Phone View Button */}
-        <button
-          onClick={onOpenMobilePortal}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 border border-teal-500/30 transition shadow-sm"
-        >
-          <Smartphone className="w-4 h-4 text-teal-400" />
-          <span>{t('btnSimulateMobile')}</span>
-        </button>
 
       </div>
 
@@ -354,9 +346,6 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
               {t('entranceQrTitle')}
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed mb-8">
-              {t('entranceQrSub')}
-            </p>
 
             {/* Big Interactive Glowing QR Code Display Box */}
             <div className="flex flex-col items-center justify-center mb-8">
@@ -383,15 +372,7 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
                 </div>
               </div>
 
-              {/* URL Subtitle */}
-              <div className="mt-3 text-center">
-                <span className="text-xs font-mono text-teal-400 bg-slate-950/80 px-3 py-1 rounded-full border border-slate-800 inline-block">
-                  {mobilePortalUrl || 'http://localhost:5173/?mode=mobile'}
-                </span>
-                <p className="text-xs text-slate-400 mt-1">
-                  💡 {t('btnDemoUsersSub')}
-                </p>
-              </div>
+
             </div>
 
             {/* 2-Step Flow Explanation Cards */}
@@ -427,17 +408,6 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
 
             </div>
 
-            {/* Mobile Simulator CTA Button */}
-            <div className="mt-8">
-              <button
-                onClick={onOpenMobilePortal}
-                className="px-6 py-3.5 rounded-2xl text-sm font-bold bg-teal-500 hover:bg-teal-400 text-slate-950 shadow-xl shadow-teal-500/25 transition transform hover:scale-[1.02] flex items-center justify-center gap-2 mx-auto"
-              >
-                <Smartphone className="w-4 h-4" />
-                <span>{t('btnSimulateMobile')}</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
 
           </div>
 
