@@ -674,6 +674,12 @@ class RelationalDatabase {
       topPurposes
     };
   }
+
+  resetSessions() {
+    this.data.sessions = [];
+    this.save();
+    return { success: true, count: 0, message: 'All attendance and research logs have been reset.' };
+  }
 }
 
 const db = new RelationalDatabase();

@@ -149,9 +149,20 @@ export const api = {
     return res.json();
   },
 
-  seedDemoData: async () => {
+  resetSessions: async (password) => {
+    const res = await fetch(`${API_BASE}/admin/reset-sessions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
+    });
+    return res.json();
+  },
+
+  seedDemoData: async (password) => {
     const res = await fetch(`${API_BASE}/admin/seed-demo`, {
-      method: 'POST'
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
     });
     return res.json();
   },

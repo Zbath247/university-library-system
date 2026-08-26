@@ -11,13 +11,15 @@ import {
   GraduationCap,
   Building,
   RefreshCw,
-  BookOpen,
   Edit3,
-  Trash2
+  Trash2,
+  RotateCcw,
+  AlertTriangle
 } from 'lucide-react';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
 import EditSessionModal from './EditSessionModal';
+import ConfirmResetModal from './ConfirmResetModal';
 
 export default function SessionsTable({
   sessions = [],
@@ -34,6 +36,8 @@ export default function SessionsTable({
   const [deptFilter, setDeptFilter] = useState('');
   const [categoryTab, setCategoryTab] = useState('ALL'); // 'ALL', 'VISIT', 'BORROW', 'RETURN'
   const [editingSession, setEditingSession] = useState(null);
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [showExportPrompt, setShowExportPrompt] = useState(false);
 
   const { t, tRole, tDept, tPurpose } = useLanguage();
 
@@ -80,6 +84,7 @@ export default function SessionsTable({
       category: categoryTab !== 'ALL' ? categoryTab : undefined
     });
     window.open(exportUrl, '_blank');
+    setShowExportPrompt(true);
   };
 
   return (
@@ -104,14 +109,24 @@ export default function SessionsTable({
           </div>
         </div>
 
-        {/* Actions: Refresh & Export CSV */}
-        <div className="flex items-center gap-2.5">
+        {/* Actions: Refresh, Reset & Export CSV */}
+        <div className="flex items-center gap-2.5 flex-wrap">
           <button
             onClick={onRefresh}
             className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>{t('btnRefreshData')}</span>
+          </button>
+
+          {/* Reset Logs Button */}
+          <button
+            onClick={() => setShowResetModal(true)}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-500/15 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition shadow-sm"
+            title="សម្អាតទិន្នន័យទាំងអស់ជា ០ (ទាមទារ Password Admin)"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>សម្អាតទិន្នន័យ (Reset)</span>
           </button>
 
           <button
@@ -125,6 +140,36 @@ export default function SessionsTable({
         </div>
 
       </div>
+
+      {/* Post Export Reset Notice Banner */}
+      {showExportPrompt && (
+        <div className="p-4 bg-gradient-to-r from-amber-950/60 via-slate-900 to-rose-950/60 border-b border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 animate-slide-up">
+          <div className="flex items-center gap-2.5 text-xs text-amber-200">
+            <CheckCircle2 className="w-5 h-5 text-teal-400 shrink-0" />
+            <span>
+              <strong>បានទាញយករបាយការណ៍ជោគជ័យ!</strong> តើលោកអ្នកចង់សម្អាតទិន្នន័យ (Reset) ចាស់ទាំងអស់ដើម្បីចាប់ផ្តើមវដ្តទិន្នន័យថ្មីដែរឬទេ?
+            </span>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => setShowExportPrompt(false)}
+              className="px-3 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white transition"
+            >
+              ទុកទិន្នន័យដដែល
+            </button>
+            <button
+              onClick={() => {
+                setShowExportPrompt(false);
+                setShowResetModal(true);
+              }}
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-400 text-white shadow-md shadow-rose-500/20 transition flex items-center gap-1.5"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset ទិន្នន័យឥឡូវនេះ</span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Segmented Category Filter Tabs */}
       <div className="px-6 py-3 bg-slate-950/80 border-b border-slate-800/80 flex flex-wrap items-center gap-2">
@@ -465,6 +510,17 @@ export default function SessionsTable({
           onClose={() => setEditingSession(null)}
           onSaveSuccess={() => onRefresh && onRefresh()}
           onDeleteSuccess={() => onRefresh && onRefresh()}
+        />
+      )}
+
+      {/* Confirm Reset Modal with Admin Password */}
+      {showResetModal && (
+        <ConfirmResetModal
+          isOpen={showResetModal}
+          onClose={() => setShowResetModal(false)}
+          onSuccess={() => onRefresh && onRefresh()}
+          title="សម្អាតទិន្នន័យវត្តមានជា ០ (Reset Logs)"
+          description="សកម្មភាពនេះនឹងសម្អាតទិន្នន័យវត្តមាន និងការខ្ចី-សងទាំងអស់ ដើម្បីចាប់ផ្តើមវដ្តទិន្នន័យថ្មីជា ០។ សូមបញ្ចូលលេខសម្ងាត់ Admin ដើម្បីបញ្ជាក់៖"
         />
       )}
 

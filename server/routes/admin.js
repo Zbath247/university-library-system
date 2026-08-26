@@ -243,9 +243,38 @@ router.get('/export/csv', (req, res) => {
   }
 });
 
+// POST /api/admin/reset-sessions - Clear all attendance sessions with admin password protection
+router.post('/reset-sessions', (req, res) => {
+  try {
+    const { password } = req.body;
+    const cleanPass = String(password || '').trim();
+
+    if (cleanPass !== 'zbath@247') {
+      return res.status(401).json({
+        success: false,
+        message: 'លេខសម្ងាត់ Admin មិនត្រឹមត្រូវ! (Incorrect Admin Password)'
+      });
+    }
+
+    const result = db.resetSessions();
+    res.json({
+      success: true,
+      message: 'ទិន្នន័យវត្តមាន និងការខ្ចី-សងទាំងអស់ត្រូវបាន Reset ជាថ្មីជោគជ័យ!',
+      result
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // POST /api/admin/seed-demo - Reset/repopulate demo data
 router.post('/seed-demo', (req, res) => {
   try {
+    const { password } = req.body || {};
+    const cleanPass = String(password || '').trim();
+    if (cleanPass && cleanPass !== 'zbath@247') {
+      return res.status(401).json({ success: false, message: 'លេខសម្ងាត់ Admin មិនត្រឹមត្រូវ!' });
+    }
     db.seedInitialData(true);
     res.json({ success: true, message: 'Database reset and re-seeded with realistic demo records.' });
   } catch (err) {
