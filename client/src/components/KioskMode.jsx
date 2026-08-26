@@ -361,8 +361,8 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
                 )}
 
                 {/* Center Badge in QR */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-2.5 rounded-2xl bg-slate-950 text-teal-400 border-2 border-teal-400 shadow-xl pointer-events-none">
-                  <Smartphone className="w-6 h-6" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-2.5 rounded-2xl bg-slate-950 text-teal-400 border-2 border-teal-400 shadow-xl pointer-events-none flex items-center justify-center">
+                  <img src="/duc-logo.png" alt="DUC Logo" className="w-8 h-8 object-contain" />
                 </div>
               </div>
 
