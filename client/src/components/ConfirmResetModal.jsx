@@ -40,20 +40,20 @@ export default function ConfirmResetModal({ isOpen, onClose, onSuccess, title, d
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in">
-      <div className="relative w-full max-w-md bg-slate-900 border border-rose-500/30 rounded-3xl shadow-2xl overflow-hidden animate-slide-up">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in">
+      <div className="relative w-full max-w-md bg-slate-900 border border-rose-500/30 rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden animate-slide-up max-h-[94vh] flex flex-col">
         
         {/* Header */}
-        <div className="px-6 py-5 bg-gradient-to-r from-rose-950/80 via-slate-900 to-amber-950/80 border-b border-slate-800 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-400">
-              <ShieldAlert className="w-6 h-6" />
+        <div className="px-4 py-3.5 sm:px-6 sm:py-5 bg-gradient-to-r from-rose-950/80 via-slate-900 to-amber-950/80 border-b border-slate-800 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-400">
+              <ShieldAlert className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <h3 className="text-base font-extrabold text-white">
+              <h3 className="text-sm sm:text-base font-extrabold text-white">
                 {title || 'បញ្ជាក់ការ Reset ទិន្នន័យ'}
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-[10px] sm:text-xs text-slate-400">
                 Admin Password Verification Required
               </p>
             </div>
@@ -61,16 +61,16 @@ export default function ConfirmResetModal({ isOpen, onClose, onSuccess, title, d
 
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition"
+            className="p-1.5 sm:p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Body */}
-        <form onSubmit={handleConfirmReset} className="p-6 space-y-4">
+        <form onSubmit={handleConfirmReset} className="p-4 sm:p-6 space-y-3.5 sm:space-y-4 overflow-y-auto flex-1">
           
-          <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-200 flex items-start gap-2.5 leading-relaxed">
+          <div className="p-3 sm:p-3.5 rounded-xl sm:rounded-2xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-200 flex items-start gap-2.5 leading-relaxed">
             <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
             <span>
               {description || 'សកម្មភាពនេះនឹងសម្អាតទិន្នន័យវត្តមាន និងការខ្ចី-សងទាំងអស់ ដើម្បីចាប់ផ្តើមវដ្តទិន្នន័យថ្មីជា ០។ សូមបញ្ចូលលេខសម្ងាត់ Admin ដើម្បីបញ្ជាក់៖'}
@@ -78,7 +78,7 @@ export default function ConfirmResetModal({ isOpen, onClose, onSuccess, title, d
           </div>
 
           {errorMsg && (
-            <div className="p-3 rounded-2xl bg-rose-500/20 border border-rose-500/40 text-xs text-rose-300 font-bold flex items-center gap-2">
+            <div className="p-3 rounded-xl sm:rounded-2xl bg-rose-500/20 border border-rose-500/40 text-xs text-rose-300 font-bold flex items-center gap-2">
               <X className="w-4 h-4 text-rose-400 shrink-0" />
               <span>{errorMsg}</span>
             </div>
@@ -98,7 +98,7 @@ export default function ConfirmResetModal({ isOpen, onClose, onSuccess, title, d
                 placeholder="បញ្ចូលលេខសម្ងាត់ Admin..."
                 required
                 autoFocus
-                className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-rose-500 transition font-mono"
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-rose-500 transition font-mono"
               />
               <button
                 type="button"
@@ -111,11 +111,11 @@ export default function ConfirmResetModal({ isOpen, onClose, onSuccess, title, d
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-2 flex items-center justify-end gap-2.5">
+          <div className="pt-2 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 sm:gap-2.5">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-800 transition text-center"
             >
               បោះបង់ (Cancel)
             </button>
@@ -123,7 +123,7 @@ export default function ConfirmResetModal({ isOpen, onClose, onSuccess, title, d
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white shadow-lg shadow-rose-600/30 transition flex items-center gap-2 disabled:opacity-50"
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white shadow-lg shadow-rose-600/30 transition flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {loading ? (
                 <span>កំពុងផ្ទៀងផ្ទាត់...</span>

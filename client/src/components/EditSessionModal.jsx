@@ -122,20 +122,20 @@ export default function EditSessionModal({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">
-      <div className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden animate-slide-up max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in">
+      <div className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden animate-slide-up max-h-[94vh] flex flex-col">
         
-        {/* Header */}
-        <div className="px-6 py-5 bg-gradient-to-r from-teal-950/80 via-slate-900 to-indigo-950/80 border-b border-slate-800 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-400">
-              <Edit3 className="w-5 h-5" />
+        {/* Sticky Header */}
+        <div className="px-4 py-3.5 sm:px-6 sm:py-5 bg-gradient-to-r from-teal-950/90 via-slate-900 to-indigo-950/90 border-b border-slate-800 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-400">
+              <Edit3 className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
-              <h3 className="text-base font-extrabold text-white">
-                កែសម្រួលព័ត៌មានទាំងអស់ (Edit All Fields) #{session.id}
+              <h3 className="text-sm sm:text-base font-extrabold text-white">
+                កែសម្រួលព័ត៌មាន #{session.id}
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-[10px] sm:text-xs text-slate-400">
                 Admin Full Access Control • កែសម្រួលព័ត៌មាន User & Session
               </p>
             </div>
@@ -143,30 +143,30 @@ export default function EditSessionModal({
 
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition"
+            className="p-1.5 sm:p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Form Body (Scrollable) */}
-        <form onSubmit={handleSave} className="p-6 overflow-y-auto space-y-4 flex-1">
+        {/* Scrollable Form Body */}
+        <form onSubmit={handleSave} className="p-4 sm:p-6 overflow-y-auto space-y-3.5 sm:space-y-4 flex-1 overscroll-contain">
           
           {errorMsg && (
-            <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center gap-2 text-xs text-rose-300">
+            <div className="p-3 rounded-xl sm:rounded-2xl bg-rose-500/15 border border-rose-500/30 flex items-center gap-2 text-xs text-rose-300">
               <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
               <span>{errorMsg}</span>
             </div>
           )}
 
           {/* Section 1: User Profile Details */}
-          <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800/90 space-y-3">
-            <h4 className="text-xs font-extrabold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
+          <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-950/70 border border-slate-800/90 space-y-3">
+            <h4 className="text-[11px] sm:text-xs font-extrabold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
               <User className="w-3.5 h-3.5" />
               <span>១. ព័ត៌មានផ្ទាល់ខ្លួនរបស់សមាជិក (Member Profile)</span>
             </h4>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
               {/* Full Name */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
@@ -178,7 +178,7 @@ export default function EditSessionModal({
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="ឧ. សុខ ចាន់ដារ៉ា"
                   required
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-teal-500 font-medium"
+                  className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-500 font-medium"
                 />
               </div>
 
@@ -193,7 +193,7 @@ export default function EditSessionModal({
                   onChange={(e) => setUniversityId(e.target.value.toUpperCase())}
                   placeholder="ឧ. DUC2024-0417"
                   required
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono uppercase text-teal-300 placeholder-slate-500 focus:outline-none focus:border-teal-500 font-bold"
+                  className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm font-mono uppercase text-teal-300 placeholder-slate-500 focus:outline-none focus:border-teal-500 font-bold"
                 />
               </div>
 
@@ -208,7 +208,7 @@ export default function EditSessionModal({
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="012 345 678"
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-teal-500 font-mono"
+                  className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-500 font-mono"
                 />
               </div>
 
@@ -221,7 +221,7 @@ export default function EditSessionModal({
                 <select
                   value={roleId}
                   onChange={(e) => setRoleId(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-teal-500"
+                  className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm text-white focus:outline-none focus:border-teal-500"
                 >
                   {roles.length > 0 ? roles.map(r => (
                     <option key={r.id} value={r.id}>{tRole(r.name)}</option>
@@ -245,7 +245,7 @@ export default function EditSessionModal({
                 <select
                   value={deptId}
                   onChange={(e) => setDeptId(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-teal-500"
+                  className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm text-white focus:outline-none focus:border-teal-500"
                 >
                   {departments.length > 0 ? departments.map(d => (
                     <option key={d.id} value={d.id}>{tDept(d.name)} ({d.code})</option>
@@ -258,8 +258,8 @@ export default function EditSessionModal({
           </div>
 
           {/* Section 2: Session & Purpose Details */}
-          <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800/90 space-y-3">
-            <h4 className="text-xs font-extrabold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+          <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-950/70 border border-slate-800/90 space-y-3">
+            <h4 className="text-[11px] sm:text-xs font-extrabold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
               <BookOpen className="w-3.5 h-3.5" />
               <span>២. ព័ត៌មានការស្រាវជ្រាវ & ខ្ចី-សងសៀវភៅ (Visit & Book Details)</span>
             </h4>
@@ -272,7 +272,7 @@ export default function EditSessionModal({
               <select
                 value={purpose}
                 onChange={(e) => setPurpose(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-amber-500"
+                className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm text-white focus:outline-none focus:border-amber-500"
               >
                 {popularPurposes.map((p, idx) => (
                   <option key={idx} value={p}>{tPurpose(p)}</option>
@@ -295,11 +295,11 @@ export default function EditSessionModal({
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
                 placeholder="ឧ. Data Structures & Algorithms, កុលាបប៉ៃលិន..."
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-amber-500/40 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-medium"
+                className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-900 border border-amber-500/40 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-medium"
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
               {/* Duration */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
@@ -311,7 +311,7 @@ export default function EditSessionModal({
                   min="0"
                   value={duration}
                   onChange={(e) => setDuration(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-teal-500 font-mono"
+                  className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm text-white focus:outline-none focus:border-teal-500 font-mono"
                 />
               </div>
 
@@ -324,7 +324,7 @@ export default function EditSessionModal({
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-teal-500 font-semibold"
+                  className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm text-white focus:outline-none focus:border-teal-500 font-semibold"
                 >
                   <option value="ACTIVE">🟢 {t('statusActive')} (កំពុងនៅក្នុងបណ្ណាល័យ)</option>
                   <option value="COMPLETED">⚪ {t('statusCompleted')} (បានចាកចេញរួចរាល់)</option>
@@ -333,33 +333,33 @@ export default function EditSessionModal({
             </div>
           </div>
 
-          {/* Actions */}
-          <div className="pt-4 border-t border-slate-800 flex items-center justify-between gap-3 shrink-0">
+          {/* Sticky Actions Footer */}
+          <div className="pt-3 sm:pt-4 border-t border-slate-800 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 shrink-0">
             <button
               type="button"
               onClick={handleDelete}
               disabled={deleteLoading}
-              className="px-4 py-2.5 rounded-xl text-xs font-bold bg-rose-500/15 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition flex items-center gap-1.5 disabled:opacity-50"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold bg-rose-500/15 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition flex items-center justify-center gap-1.5 disabled:opacity-50"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>{deleteLoading ? 'កំពុងលុប...' : 'លុបកំណត់ត្រានេះ (Delete)'}</span>
             </button>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition"
+                className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-800 transition text-center"
               >
                 {t('btnCancel')}
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-5 py-2.5 rounded-xl text-xs font-bold bg-teal-500 hover:bg-teal-400 text-slate-950 transition shadow-lg shadow-teal-500/20 disabled:opacity-50 flex items-center gap-1.5"
+                className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl text-xs font-bold bg-teal-500 hover:bg-teal-400 text-slate-950 transition shadow-lg shadow-teal-500/20 disabled:opacity-50 flex items-center justify-center gap-1.5"
               >
                 <CheckCircle2 className="w-4 h-4" />
-                <span>{loading ? 'កំពុងរក្សាទុក...' : 'រក្សាទុកការកែប្រែទាំងអស់'}</span>
+                <span>{loading ? 'កំពុងរក្សាទុក...' : 'រក្សាទុកការកែប្រែ'}</span>
               </button>
             </div>
           </div>
