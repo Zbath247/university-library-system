@@ -305,9 +305,34 @@ export default function AdminDashboard({ onStatsUpdate }) {
                     </div>
 
                     <p className="text-xs font-mono text-teal-400 mb-1">{u.university_id}</p>
-                    <p className="text-xs text-slate-300 font-medium truncate mb-2">
-                      🔬 {tPurpose(session.purpose_of_visit || u.default_purpose || 'Study & Revision')}
-                    </p>
+                    {(() => {
+                      const purpose = session.purpose_of_visit || u.default_purpose || 'Study & Revision';
+                      const rawTopic = session.research_topic || u.research_field || '';
+                      const cleanTopic = rawTopic.replace(/^\[(ខ្ចី|សង)\]\s*/, '').trim();
+
+                      if (purpose === 'Book Borrowing') {
+                        return (
+                          <div className="mb-2 text-xs">
+                            <span className="text-amber-400 font-bold">📚 {tPurpose('Book Borrowing')}</span>
+                            {cleanTopic && <p className="text-[11px] text-amber-200 font-medium truncate mt-0.5">📖 {cleanTopic}</p>}
+                          </div>
+                        );
+                      }
+                      if (purpose === 'Book Return') {
+                        return (
+                          <div className="mb-2 text-xs">
+                            <span className="text-emerald-400 font-bold">📗 {tPurpose('Book Return')}</span>
+                            {cleanTopic && <p className="text-[11px] text-emerald-200 font-medium truncate mt-0.5">📥 {cleanTopic}</p>}
+                          </div>
+                        );
+                      }
+                      return (
+                        <p className="text-xs text-slate-300 font-medium truncate mb-2">
+                          🔬 {tPurpose(purpose)}
+                          {cleanTopic && cleanTopic !== purpose && <span className="text-slate-400 text-[11px]"> ({cleanTopic})</span>}
+                        </p>
+                      );
+                    })()}
                   </div>
 
                   <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">

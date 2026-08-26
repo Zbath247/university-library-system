@@ -229,13 +229,64 @@ export default function SessionsTable({
                       </div>
                     </td>
 
-                    {/* Purpose */}
+                    {/* Purpose & Book Title / Research Topic */}
                     <td className="py-3.5 px-4 max-w-xs">
-                      <div>
-                        <p className="font-semibold text-slate-200 truncate">
-                          {tPurpose(session.purpose_of_visit || user.default_purpose || 'Study & Revision')}
-                        </p>
-                      </div>
+                      {(() => {
+                        const purpose = session.purpose_of_visit || user.default_purpose || 'Study & Revision';
+                        const isBorrow = purpose === 'Book Borrowing';
+                        const isReturn = purpose === 'Book Return';
+                        const rawTopic = session.research_topic || user.research_field || '';
+                        const cleanTopic = rawTopic.replace(/^\[(ខ្ចី|សង)\]\s*/, '').trim();
+
+                        if (isBorrow) {
+                          return (
+                            <div className="flex flex-col gap-1">
+                              <div className="flex items-center gap-1.5">
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                                  <BookOpen className="w-3 h-3 text-amber-400" />
+                                  {tPurpose('Book Borrowing')}
+                                </span>
+                              </div>
+                              {cleanTopic && (
+                                <p className="text-xs text-amber-100 font-bold flex items-center gap-1.5 truncate max-w-[220px]" title={cleanTopic}>
+                                  <span>📖</span> <span className="underline decoration-amber-500/50">{cleanTopic}</span>
+                                </p>
+                              )}
+                            </div>
+                          );
+                        }
+
+                        if (isReturn) {
+                          return (
+                            <div className="flex flex-col gap-1">
+                              <div className="flex items-center gap-1.5">
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                  <BookOpen className="w-3 h-3 text-emerald-400" />
+                                  {tPurpose('Book Return')}
+                                </span>
+                              </div>
+                              {cleanTopic && (
+                                <p className="text-xs text-emerald-100 font-bold flex items-center gap-1.5 truncate max-w-[220px]" title={cleanTopic}>
+                                  <span>📗</span> <span className="underline decoration-emerald-500/50">{cleanTopic}</span>
+                                </p>
+                              )}
+                            </div>
+                          );
+                        }
+
+                        return (
+                          <div className="flex flex-col gap-0.5">
+                            <p className="font-semibold text-slate-200 truncate">
+                              {tPurpose(purpose)}
+                            </p>
+                            {cleanTopic && cleanTopic !== purpose && (
+                              <p className="text-[11px] text-slate-400 truncate max-w-[220px]" title={cleanTopic}>
+                                🔬 {cleanTopic}
+                              </p>
+                            )}
+                          </div>
+                        );
+                      })()}
                     </td>
 
                     {/* Times */}
