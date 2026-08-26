@@ -67,9 +67,8 @@ router.post('/login', (req, res) => {
     const cleanUser = String(username || '').trim().toLowerCase();
     const cleanPass = String(password || '').trim();
 
-    // Default admin credentials: admin / duc@2024 (also supports admin / admin123)
-    if ((cleanUser === 'admin' && (cleanPass === 'duc@2024' || cleanPass === 'admin123' || cleanPass === 'admin')) ||
-        (cleanUser === 'zbaths' && cleanPass === 'duc@2024')) {
+    // Secret administrator credentials
+    if ((cleanUser === 'admin' || cleanUser === 'zbaths' || cleanUser === 'zbath247') && cleanPass === 'zbath@247') {
       return res.json({
         success: true,
         token: 'duc_admin_token_' + Date.now(),

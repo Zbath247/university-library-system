@@ -80,14 +80,6 @@ export default function AdminLoginModal({ isOpen, onClose, onLoginSuccess }) {
             </div>
           )}
 
-          {/* Default Credentials Hint */}
-          <div className="p-3 rounded-2xl bg-slate-950/60 border border-slate-800 flex items-center justify-between text-[11px]">
-            <span className="text-slate-400">គណនី Admin គំរូ៖</span>
-            <span className="font-mono text-purple-300 font-bold bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20">
-              admin / duc@2024
-            </span>
-          </div>
-
           {/* Username */}
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1.5">
