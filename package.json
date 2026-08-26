@@ -1,0 +1,14 @@
+{
+  "name": "university-library-attendance-system",
+  "version": "1.0.0",
+  "description": "University Library Research & Attendance Tracking System",
+  "scripts": {
+    "start": "node server/server.js",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "build": "cd client && npm run build"
+  },
+  "keywords": ["university", "library", "attendance", "research", "kiosk", "analytics"],
+  "author": "Full-Stack System Architect",
+  "license": "ISC"
+}

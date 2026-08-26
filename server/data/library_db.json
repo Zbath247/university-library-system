@@ -1,0 +1,578 @@
+{
+  "roles": [
+    {
+      "id": 1,
+      "name": "Student",
+      "badge_color": "#2563EB",
+      "description": "Undergraduate & Postgraduate Students"
+    },
+    {
+      "id": 2,
+      "name": "Lecturer",
+      "badge_color": "#059669",
+      "description": "Teaching Faculty & Course Instructors"
+    },
+    {
+      "id": 3,
+      "name": "Professor",
+      "badge_color": "#7C3AED",
+      "description": "Tenured & Principal Academic Researchers"
+    },
+    {
+      "id": 4,
+      "name": "Research Scholar",
+      "badge_color": "#D97706",
+      "description": "PhD Candidates & Postdoctoral Fellows"
+    }
+  ],
+  "departments": [
+    {
+      "id": 1,
+      "name": "Computer Science & AI",
+      "code": "CS",
+      "faculty": "Faculty of Information Technology"
+    },
+    {
+      "id": 2,
+      "name": "Biomedical Engineering & Health Sciences",
+      "code": "BME",
+      "faculty": "Faculty of Engineering & Medicine"
+    },
+    {
+      "id": 3,
+      "name": "Data Science & Analytics",
+      "code": "DSA",
+      "faculty": "Faculty of Computing & Mathematics"
+    },
+    {
+      "id": 4,
+      "name": "Civil & Environmental Engineering",
+      "code": "CEE",
+      "faculty": "Faculty of Engineering"
+    },
+    {
+      "id": 5,
+      "name": "Economics, Finance & Banking",
+      "code": "ECO",
+      "faculty": "Faculty of Business & Management"
+    },
+    {
+      "id": 6,
+      "name": "Molecular Biology & Genetics",
+      "code": "MBG",
+      "faculty": "Faculty of Science"
+    },
+    {
+      "id": 7,
+      "name": "Law, Ethics & International Policy",
+      "code": "LAW",
+      "faculty": "Faculty of Social Sciences & Law"
+    },
+    {
+      "id": 8,
+      "name": "Architecture & Urban Planning",
+      "code": "ARCH",
+      "faculty": "Faculty of Built Environment"
+    },
+    {
+      "id": 9,
+      "name": "Physics & Quantum Computing",
+      "code": "PHY",
+      "faculty": "Faculty of Natural Sciences"
+    },
+    {
+      "id": 10,
+      "name": "Humanities & World Literature",
+      "code": "HUM",
+      "faculty": "Faculty of Arts & Humanities"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "university_id": "PROF-9011",
+      "full_name": "Dr. Evelyn Vance",
+      "email": "evelyn.vance@university.edu",
+      "phone": "+1 (555) 234-5678",
+      "role_id": 3,
+      "department_id": 1,
+      "research_field": "Deep Reinforcement Learning in Autonomous Robotics",
+      "default_purpose": "Grant Research & Paper Peer Review",
+      "created_at": "2026-07-27T01:59:29.882Z"
+    },
+    {
+      "id": 2,
+      "university_id": "PROF-8820",
+      "full_name": "Dr. Arthur Sterling",
+      "email": "arthur.sterling@university.edu",
+      "phone": "+1 (555) 345-6789",
+      "role_id": 3,
+      "department_id": 2,
+      "research_field": "CRISPR Gene Editing & Neurobiology Diagnostics",
+      "default_purpose": "Clinical Trial Meta-Analysis",
+      "created_at": "2026-08-01T01:59:29.882Z"
+    },
+    {
+      "id": 3,
+      "university_id": "LEC-4402",
+      "full_name": "Dr. Marcus Holloway",
+      "email": "marcus.h@university.edu",
+      "phone": "+1 (555) 456-7890",
+      "role_id": 2,
+      "department_id": 3,
+      "research_field": "Time-Series Forecasting in High-Frequency Markets",
+      "default_purpose": "Course Curriculum & Journal Writing",
+      "created_at": "2026-08-06T01:59:29.882Z"
+    },
+    {
+      "id": 4,
+      "university_id": "LEC-5120",
+      "full_name": "Sarah Lin, M.Sc.",
+      "email": "sarah.lin@university.edu",
+      "phone": "+1 (555) 567-8901",
+      "role_id": 2,
+      "department_id": 7,
+      "research_field": "International Human Rights & Cyber-Jurisdiction",
+      "default_purpose": "Legal Precedent Archival Study",
+      "created_at": "2026-08-11T01:59:29.882Z"
+    },
+    {
+      "id": 5,
+      "university_id": "STU-1024",
+      "full_name": "Sophia Chen",
+      "email": "sophia.chen@student.university.edu",
+      "phone": "+1 (555) 678-9012",
+      "role_id": 1,
+      "department_id": 1,
+      "research_field": "Neural Network Acceleration on Edge Hardware",
+      "default_purpose": "Senior Thesis Literature Review",
+      "created_at": "2026-08-16T01:59:29.882Z"
+    },
+    {
+      "id": 6,
+      "university_id": "STU-2048",
+      "full_name": "Liam Patel",
+      "email": "liam.patel@student.university.edu",
+      "phone": "+1 (555) 789-0123",
+      "role_id": 1,
+      "department_id": 6,
+      "research_field": "Epigenetic Biomarkers in Early Oncology Detection",
+      "default_purpose": "Capstone Experimental Synthesis",
+      "created_at": "2026-08-18T01:59:29.882Z"
+    },
+    {
+      "id": 7,
+      "university_id": "SCH-7701",
+      "full_name": "Elena Rostova",
+      "email": "elena.rostova@university.edu",
+      "phone": "+1 (555) 890-1234",
+      "role_id": 4,
+      "department_id": 9,
+      "research_field": "Quantum Error Correction in Topological Qubits",
+      "default_purpose": "PhD Dissertation Writing",
+      "created_at": "2026-08-21T01:59:29.882Z"
+    },
+    {
+      "id": 8,
+      "university_id": "DUC2024-0714",
+      "full_name": "mok  sambath",
+      "email": "moksambath329@gmail.com",
+      "phone": "0962756352",
+      "role_id": 1,
+      "department_id": 1,
+      "research_field": "Learning",
+      "default_purpose": "Senior Thesis Literature Review",
+      "created_at": "2026-08-26T02:22:49.625Z",
+      "updated_at": "2026-08-26T02:22:49.625Z"
+    },
+    {
+      "id": 9,
+      "university_id": "DUC2024-0417",
+      "full_name": "ម៉ុក​ សម្បត្តិ",
+      "email": "duc20240417@university.edu.kh",
+      "phone": "",
+      "role_id": 1,
+      "department_id": 1,
+      "research_field": "General Academic Research",
+      "default_purpose": "Study & Revision",
+      "created_at": "2026-08-26T03:09:20.977Z",
+      "updated_at": "2026-08-26T03:09:20.977Z"
+    }
+  ],
+  "sessions": [
+    {
+      "id": 34,
+      "user_id": 9,
+      "check_in_time": "2026-08-26T03:09:20.978Z",
+      "check_out_time": null,
+      "purpose_of_visit": "Study & Revision",
+      "research_topic": "General Academic Research",
+      "duration_minutes": 0,
+      "status": "ACTIVE",
+      "created_at": "2026-08-26T03:09:20.978Z"
+    },
+    {
+      "id": 33,
+      "user_id": 5,
+      "check_in_time": "2026-08-26T02:53:37.968Z",
+      "check_out_time": null,
+      "purpose_of_visit": "Senior Thesis Literature Review",
+      "research_topic": "Neural Network Acceleration on Edge Hardware",
+      "duration_minutes": 0,
+      "status": "ACTIVE",
+      "created_at": "2026-08-26T02:53:37.968Z"
+    },
+    {
+      "id": 32,
+      "user_id": 8,
+      "check_in_time": "2026-08-26T02:22:49.626Z",
+      "check_out_time": "2026-08-26T02:45:28.300Z",
+      "purpose_of_visit": "Senior Thesis Literature Review",
+      "research_topic": "Learning",
+      "duration_minutes": 23,
+      "status": "COMPLETED",
+      "created_at": "2026-08-26T02:22:49.626Z"
+    },
+    {
+      "id": 1,
+      "user_id": 1,
+      "check_in_time": "2026-08-19T03:00:00.000Z",
+      "check_out_time": "2026-08-19T04:35:00.000Z",
+      "purpose_of_visit": "Capstone Data Collection",
+      "research_topic": "Urban Heat Island Mitigation Strategies",
+      "duration_minutes": 95,
+      "status": "COMPLETED",
+      "created_at": "2026-08-19T03:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "user_id": 2,
+      "check_in_time": "2026-08-19T06:18:00.000Z",
+      "check_out_time": "2026-08-19T10:10:00.000Z",
+      "purpose_of_visit": "Statistical Meta-Analysis",
+      "research_topic": "Immunotherapy Response Predictors",
+      "duration_minutes": 232,
+      "status": "COMPLETED",
+      "created_at": "2026-08-19T06:18:00.000Z"
+    },
+    {
+      "id": 3,
+      "user_id": 3,
+      "check_in_time": "2026-08-19T09:36:00.000Z",
+      "check_out_time": "2026-08-19T12:05:00.000Z",
+      "purpose_of_visit": "Archival Case Law Synthesis",
+      "research_topic": "Digital Sovereignty in Distributed Computing",
+      "duration_minutes": 149,
+      "status": "COMPLETED",
+      "created_at": "2026-08-19T09:36:00.000Z"
+    },
+    {
+      "id": 4,
+      "user_id": 4,
+      "check_in_time": "2026-08-19T12:54:00.000Z",
+      "check_out_time": "2026-08-19T15:45:00.000Z",
+      "purpose_of_visit": "Conference Presentation Prep",
+      "research_topic": "Macroeconomic Shocks in Emerging Markets",
+      "duration_minutes": 171,
+      "status": "COMPLETED",
+      "created_at": "2026-08-19T12:54:00.000Z"
+    },
+    {
+      "id": 5,
+      "user_id": 5,
+      "check_in_time": "2026-08-20T01:00:00.000Z",
+      "check_out_time": "2026-08-20T03:45:00.000Z",
+      "purpose_of_visit": "Dissertation Manuscript Drafting",
+      "research_topic": "Algorithmic Fairness in Automated Systems",
+      "duration_minutes": 165,
+      "status": "COMPLETED",
+      "created_at": "2026-08-20T01:00:00.000Z"
+    },
+    {
+      "id": 6,
+      "user_id": 6,
+      "check_in_time": "2026-08-20T04:18:00.000Z",
+      "check_out_time": "2026-08-20T05:45:00.000Z",
+      "purpose_of_visit": "Journal Peer Review & Crosscheck",
+      "research_topic": "Photonic Computing Architectures",
+      "duration_minutes": 87,
+      "status": "COMPLETED",
+      "created_at": "2026-08-20T04:18:00.000Z"
+    },
+    {
+      "id": 7,
+      "user_id": 7,
+      "check_in_time": "2026-08-20T07:36:00.000Z",
+      "check_out_time": "2026-08-20T09:25:00.000Z",
+      "purpose_of_visit": "Capstone Data Collection",
+      "research_topic": "Urban Heat Island Mitigation Strategies",
+      "duration_minutes": 109,
+      "status": "COMPLETED",
+      "created_at": "2026-08-20T07:36:00.000Z"
+    },
+    {
+      "id": 8,
+      "user_id": 2,
+      "check_in_time": "2026-08-21T03:00:00.000Z",
+      "check_out_time": "2026-08-21T05:00:00.000Z",
+      "purpose_of_visit": "Senior Thesis Literature Review",
+      "research_topic": "Graph Neural Networks for Drug Discovery",
+      "duration_minutes": 120,
+      "status": "COMPLETED",
+      "created_at": "2026-08-21T03:00:00.000Z"
+    },
+    {
+      "id": 9,
+      "user_id": 3,
+      "check_in_time": "2026-08-21T06:18:00.000Z",
+      "check_out_time": "2026-08-21T09:40:00.000Z",
+      "purpose_of_visit": "Grant Proposal Archival Verification",
+      "research_topic": "Clean Energy Microgrid Resilience",
+      "duration_minutes": 202,
+      "status": "COMPLETED",
+      "created_at": "2026-08-21T06:18:00.000Z"
+    },
+    {
+      "id": 10,
+      "user_id": 4,
+      "check_in_time": "2026-08-21T09:36:00.000Z",
+      "check_out_time": "2026-08-21T12:35:00.000Z",
+      "purpose_of_visit": "Dissertation Manuscript Drafting",
+      "research_topic": "Algorithmic Fairness in Automated Systems",
+      "duration_minutes": 179,
+      "status": "COMPLETED",
+      "created_at": "2026-08-21T09:36:00.000Z"
+    },
+    {
+      "id": 11,
+      "user_id": 5,
+      "check_in_time": "2026-08-21T12:54:00.000Z",
+      "check_out_time": "2026-08-21T14:35:00.000Z",
+      "purpose_of_visit": "Journal Peer Review & Crosscheck",
+      "research_topic": "Photonic Computing Architectures",
+      "duration_minutes": 101,
+      "status": "COMPLETED",
+      "created_at": "2026-08-21T12:54:00.000Z"
+    },
+    {
+      "id": 12,
+      "user_id": 6,
+      "check_in_time": "2026-08-21T15:12:00.000Z",
+      "check_out_time": "2026-08-21T17:15:00.000Z",
+      "purpose_of_visit": "Capstone Data Collection",
+      "research_topic": "Urban Heat Island Mitigation Strategies",
+      "duration_minutes": 123,
+      "status": "COMPLETED",
+      "created_at": "2026-08-21T15:12:00.000Z"
+    },
+    {
+      "id": 13,
+      "user_id": 6,
+      "check_in_time": "2026-08-22T01:00:00.000Z",
+      "check_out_time": "2026-08-22T03:55:00.000Z",
+      "purpose_of_visit": "Computational Genomics Analysis",
+      "research_topic": "Comparative Genome Sequencing of Extremophiles",
+      "duration_minutes": 175,
+      "status": "COMPLETED",
+      "created_at": "2026-08-22T01:00:00.000Z"
+    },
+    {
+      "id": 14,
+      "user_id": 7,
+      "check_in_time": "2026-08-22T04:18:00.000Z",
+      "check_out_time": "2026-08-22T06:10:00.000Z",
+      "purpose_of_visit": "Historical Text Translation",
+      "research_topic": "Ancient Mesopotamian Agricultural Records",
+      "duration_minutes": 112,
+      "status": "COMPLETED",
+      "created_at": "2026-08-22T04:18:00.000Z"
+    },
+    {
+      "id": 15,
+      "user_id": 1,
+      "check_in_time": "2026-08-22T07:36:00.000Z",
+      "check_out_time": "2026-08-22T09:50:00.000Z",
+      "purpose_of_visit": "Senior Thesis Literature Review",
+      "research_topic": "Graph Neural Networks for Drug Discovery",
+      "duration_minutes": 134,
+      "status": "COMPLETED",
+      "created_at": "2026-08-22T07:36:00.000Z"
+    },
+    {
+      "id": 16,
+      "user_id": 2,
+      "check_in_time": "2026-08-22T10:54:00.000Z",
+      "check_out_time": "2026-08-22T14:30:00.000Z",
+      "purpose_of_visit": "Grant Proposal Archival Verification",
+      "research_topic": "Clean Energy Microgrid Resilience",
+      "duration_minutes": 216,
+      "status": "COMPLETED",
+      "created_at": "2026-08-22T10:54:00.000Z"
+    },
+    {
+      "id": 17,
+      "user_id": 3,
+      "check_in_time": "2026-08-23T03:00:00.000Z",
+      "check_out_time": "2026-08-23T05:15:00.000Z",
+      "purpose_of_visit": "Archival Case Law Synthesis",
+      "research_topic": "Digital Sovereignty in Distributed Computing",
+      "duration_minutes": 135,
+      "status": "COMPLETED",
+      "created_at": "2026-08-23T03:00:00.000Z"
+    },
+    {
+      "id": 18,
+      "user_id": 4,
+      "check_in_time": "2026-08-23T06:18:00.000Z",
+      "check_out_time": "2026-08-23T08:55:00.000Z",
+      "purpose_of_visit": "Conference Presentation Prep",
+      "research_topic": "Macroeconomic Shocks in Emerging Markets",
+      "duration_minutes": 157,
+      "status": "COMPLETED",
+      "created_at": "2026-08-23T06:18:00.000Z"
+    },
+    {
+      "id": 19,
+      "user_id": 5,
+      "check_in_time": "2026-08-23T09:36:00.000Z",
+      "check_out_time": "2026-08-23T12:45:00.000Z",
+      "purpose_of_visit": "Computational Genomics Analysis",
+      "research_topic": "Comparative Genome Sequencing of Extremophiles",
+      "duration_minutes": 189,
+      "status": "COMPLETED",
+      "created_at": "2026-08-23T09:36:00.000Z"
+    },
+    {
+      "id": 20,
+      "user_id": 7,
+      "check_in_time": "2026-08-24T01:00:00.000Z",
+      "check_out_time": "2026-08-24T02:35:00.000Z",
+      "purpose_of_visit": "Capstone Data Collection",
+      "research_topic": "Urban Heat Island Mitigation Strategies",
+      "duration_minutes": 95,
+      "status": "COMPLETED",
+      "created_at": "2026-08-24T01:00:00.000Z"
+    },
+    {
+      "id": 21,
+      "user_id": 1,
+      "check_in_time": "2026-08-24T04:18:00.000Z",
+      "check_out_time": "2026-08-24T08:10:00.000Z",
+      "purpose_of_visit": "Statistical Meta-Analysis",
+      "research_topic": "Immunotherapy Response Predictors",
+      "duration_minutes": 232,
+      "status": "COMPLETED",
+      "created_at": "2026-08-24T04:18:00.000Z"
+    },
+    {
+      "id": 22,
+      "user_id": 2,
+      "check_in_time": "2026-08-24T07:36:00.000Z",
+      "check_out_time": "2026-08-24T10:05:00.000Z",
+      "purpose_of_visit": "Archival Case Law Synthesis",
+      "research_topic": "Digital Sovereignty in Distributed Computing",
+      "duration_minutes": 149,
+      "status": "COMPLETED",
+      "created_at": "2026-08-24T07:36:00.000Z"
+    },
+    {
+      "id": 23,
+      "user_id": 3,
+      "check_in_time": "2026-08-24T10:54:00.000Z",
+      "check_out_time": "2026-08-24T13:45:00.000Z",
+      "purpose_of_visit": "Conference Presentation Prep",
+      "research_topic": "Macroeconomic Shocks in Emerging Markets",
+      "duration_minutes": 171,
+      "status": "COMPLETED",
+      "created_at": "2026-08-24T10:54:00.000Z"
+    },
+    {
+      "id": 24,
+      "user_id": 4,
+      "check_in_time": "2026-08-24T13:12:00.000Z",
+      "check_out_time": "2026-08-24T16:35:00.000Z",
+      "purpose_of_visit": "Computational Genomics Analysis",
+      "research_topic": "Comparative Genome Sequencing of Extremophiles",
+      "duration_minutes": 203,
+      "status": "COMPLETED",
+      "created_at": "2026-08-24T13:12:00.000Z"
+    },
+    {
+      "id": 25,
+      "user_id": 4,
+      "check_in_time": "2026-08-25T03:00:00.000Z",
+      "check_out_time": "2026-08-25T05:45:00.000Z",
+      "purpose_of_visit": "Dissertation Manuscript Drafting",
+      "research_topic": "Algorithmic Fairness in Automated Systems",
+      "duration_minutes": 165,
+      "status": "COMPLETED",
+      "created_at": "2026-08-25T03:00:00.000Z"
+    },
+    {
+      "id": 26,
+      "user_id": 5,
+      "check_in_time": "2026-08-25T06:18:00.000Z",
+      "check_out_time": "2026-08-25T07:45:00.000Z",
+      "purpose_of_visit": "Journal Peer Review & Crosscheck",
+      "research_topic": "Photonic Computing Architectures",
+      "duration_minutes": 87,
+      "status": "COMPLETED",
+      "created_at": "2026-08-25T06:18:00.000Z"
+    },
+    {
+      "id": 27,
+      "user_id": 6,
+      "check_in_time": "2026-08-25T09:36:00.000Z",
+      "check_out_time": "2026-08-25T11:25:00.000Z",
+      "purpose_of_visit": "Capstone Data Collection",
+      "research_topic": "Urban Heat Island Mitigation Strategies",
+      "duration_minutes": 109,
+      "status": "COMPLETED",
+      "created_at": "2026-08-25T09:36:00.000Z"
+    },
+    {
+      "id": 28,
+      "user_id": 7,
+      "check_in_time": "2026-08-25T12:54:00.000Z",
+      "check_out_time": "2026-08-25T17:00:00.000Z",
+      "purpose_of_visit": "Statistical Meta-Analysis",
+      "research_topic": "Immunotherapy Response Predictors",
+      "duration_minutes": 246,
+      "status": "COMPLETED",
+      "created_at": "2026-08-25T12:54:00.000Z"
+    },
+    {
+      "id": 29,
+      "user_id": 1,
+      "check_in_time": "2026-08-26T00:34:29.882Z",
+      "check_out_time": null,
+      "purpose_of_visit": "Grant Research & Paper Peer Review",
+      "research_topic": "Deep Reinforcement Learning in Autonomous Robotics",
+      "duration_minutes": 85,
+      "status": "ACTIVE",
+      "created_at": "2026-08-26T00:34:29.882Z"
+    },
+    {
+      "id": 30,
+      "user_id": 3,
+      "check_in_time": "2026-08-25T23:34:29.882Z",
+      "check_out_time": null,
+      "purpose_of_visit": "Course Curriculum & Journal Writing",
+      "research_topic": "Time-Series Forecasting in High-Frequency Markets",
+      "duration_minutes": 145,
+      "status": "ACTIVE",
+      "created_at": "2026-08-25T23:34:29.882Z"
+    },
+    {
+      "id": 31,
+      "user_id": 5,
+      "check_in_time": "2026-08-26T01:27:29.882Z",
+      "check_out_time": "2026-08-26T02:53:12.189Z",
+      "purpose_of_visit": "Senior Thesis Literature Review",
+      "research_topic": "Neural Network Acceleration on Edge Hardware",
+      "duration_minutes": 86,
+      "status": "COMPLETED",
+      "created_at": "2026-08-26T01:27:29.882Z"
+    }
+  ]
+}
