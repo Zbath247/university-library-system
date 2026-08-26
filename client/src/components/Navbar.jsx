@@ -26,7 +26,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount }) {
           <div className="flex items-center justify-between h-16 sm:h-20">
             
             {/* Left: Mobile 3-Bar Hamburger Button + Logo & Title */}
-            <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               
               {/* 3-Bar Hamburger Menu Button (☰ Like YouTube) for Mobile */}
               <button
@@ -44,25 +44,25 @@ export default function Navbar({ activeTab, setActiveTab, activeCount }) {
 
               {/* Logo & University Name */}
               <div
-                className="flex items-center gap-2.5 cursor-pointer min-w-0"
+                className="flex items-center gap-2.5 sm:gap-3 cursor-pointer shrink-0 select-none"
                 onClick={() => handleNavClick('kiosk')}
               >
-                <div className="h-10 w-10 sm:h-14 sm:w-14 flex items-center justify-center shrink-0">
+                <div className="h-11 w-11 sm:h-14 sm:w-14 flex items-center justify-center shrink-0">
                   <img 
                     src="/duc-logo.png" 
                     alt="DUC Logo" 
-                    className="h-10 w-10 sm:h-14 sm:w-14 object-contain drop-shadow-md"
+                    className="h-11 w-11 sm:h-14 sm:w-14 object-contain drop-shadow-md"
                     onError={(e) => { e.target.style.display='none'; }}
                   />
                 </div>
-                <div className="flex flex-col justify-center leading-tight min-w-0">
-                  <span className="text-[9px] sm:text-[10px] font-extrabold tracking-wider sm:tracking-widest text-amber-400 uppercase truncate">
+                <div className="flex flex-col justify-center leading-tight">
+                  <span className="text-[10px] sm:text-xs font-extrabold tracking-wider text-amber-400 uppercase whitespace-nowrap">
                     DIGITAL UNIVERSITY
                   </span>
-                  <span className="text-[9px] sm:text-[10px] font-extrabold tracking-wider sm:tracking-widest text-amber-300 uppercase truncate">
+                  <span className="text-[10px] sm:text-xs font-extrabold tracking-wider text-amber-300 uppercase whitespace-nowrap">
                     OF CAMBODIA
                   </span>
-                  <span className="text-xs sm:text-sm font-extrabold text-teal-400 truncate">
+                  <span className="text-xs sm:text-sm font-extrabold text-teal-400 whitespace-nowrap">
                     {lang === 'km' ? 'ចូលបណ្ណាល័យ' : 'Library Entrance'}
                   </span>
                 </div>
@@ -71,45 +71,45 @@ export default function Navbar({ activeTab, setActiveTab, activeCount }) {
             </div>
 
             {/* Desktop Navigation Tabs (Hidden on Mobile) */}
-            <div className="hidden md:flex items-center gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
+            <div className="hidden md:flex items-center gap-1 sm:gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 shrink-0">
               
               {/* Entrance Kiosk Screen */}
               <button
                 onClick={() => handleNavClick('kiosk')}
-                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
                   activeTab === 'kiosk'
                     ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 shadow-md shadow-teal-500/20 font-bold'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
                 }`}
               >
-                <ScanLine className="w-4 h-4" />
-                <span>{t('navKiosk')}</span>
+                <ScanLine className="w-3.5 h-3.5" />
+                <span className="whitespace-nowrap">{t('navKiosk')}</span>
               </button>
 
               {/* Mobile Portal Simulation */}
               <button
                 onClick={() => handleNavClick('mobile')}
-                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
                   activeTab === 'mobile'
                     ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/20 font-bold'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
                 }`}
               >
-                <Smartphone className="w-4 h-4" />
-                <span>{t('navMobilePortal')}</span>
+                <Smartphone className="w-3.5 h-3.5" />
+                <span className="whitespace-nowrap">{t('navMobilePortal')}</span>
               </button>
 
               {/* Admin Dashboard */}
               <button
                 onClick={() => handleNavClick('admin')}
-                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
                   activeTab === 'admin'
                     ? 'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-500/20 font-bold'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
                 }`}
               >
-                <LayoutDashboard className="w-4 h-4" />
-                <span>{t('navAdmin')}</span>
+                <LayoutDashboard className="w-3.5 h-3.5" />
+                <span className="whitespace-nowrap">{t('navAdmin')}</span>
               </button>
             </div>
 
@@ -120,7 +120,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount }) {
               <button
                 onClick={toggleLanguage}
                 title="Switch Language / ផ្លាស់ប្ដូរភាសា"
-                className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-[11px] sm:text-xs font-semibold text-slate-200 transition-all shadow-sm"
+                className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-xs font-semibold text-slate-200 transition-all shadow-sm"
               >
                 <Globe className="w-3.5 h-3.5 text-teal-400" />
                 <span className="flex items-center gap-1">
@@ -131,7 +131,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount }) {
               </button>
 
               {/* Occupants Indicator (Desktop) */}
-              <div className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs">
+              <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs shrink-0">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-500"></span>
@@ -141,7 +141,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount }) {
               </div>
 
               {/* Time (Desktop) */}
-              <div className="hidden xl:flex items-center gap-2 text-xs font-mono text-slate-300 bg-slate-900/60 px-3 py-1.5 rounded-xl border border-slate-800/60">
+              <div className="hidden 2xl:flex items-center gap-2 text-xs font-mono text-slate-300 bg-slate-900/60 px-3 py-1.5 rounded-xl border border-slate-800/60 shrink-0">
                 <Clock className="w-3.5 h-3.5 text-slate-400" />
                 <span>
                   {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
