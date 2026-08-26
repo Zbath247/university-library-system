@@ -60,6 +60,11 @@ export const api = {
     return res.json();
   },
 
+  getSessionStatus: async (sessionId) => {
+    const res = await fetch(`${API_BASE}/kiosk/session/${sessionId}`);
+    return res.json();
+  },
+
   getBadge: async (universityId) => {
     const res = await fetch(`${API_BASE}/kiosk/badge/${encodeURIComponent(universityId)}`);
     return res.json();

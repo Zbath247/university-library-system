@@ -83,6 +83,8 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
   // Sync active session if user is saved
   useEffect(() => {
     let isMounted = true;
+    let pollingTimer;
+
     async function syncStatus() {
       if (!savedUser?.university_id) return;
       try {
@@ -99,7 +101,30 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
       }
     }
     syncStatus();
-  }, [savedUser?.university_id]);
+
+    // Setup polling if the session is pending
+    if (activeSession?.status === 'PENDING_APPROVAL') {
+      pollingTimer = setInterval(async () => {
+        try {
+          const res = await api.getSessionStatus(activeSession.id);
+          if (res.success && res.session) {
+            setActiveSession(res.session);
+            if (res.session.status === 'REJECTED') {
+              setMessage({ type: 'error', text: 'សំណើរបស់អ្នកត្រូវបានបដិសេធ (Request Rejected)' });
+              setActiveSession(null);
+            } else if (res.session.status === 'ACTIVE') {
+              setMessage({ type: 'success', text: 'សំណើត្រូវបានអនុម័ត! (Request Approved!)' });
+            }
+          }
+        } catch (err) {}
+      }, 2000);
+    }
+
+    return () => {
+      isMounted = false;
+      if (pollingTimer) clearInterval(pollingTimer);
+    };
+  }, [savedUser?.university_id, activeSession?.status, activeSession?.id]);
 
   // Handle One-Tap Check-In for returning user
   const handleOneTapCheckIn = async () => {
@@ -368,10 +393,17 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
               <div className="mt-3 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
                 <span className="text-slate-400">{t('colStatus')}:</span>
                 {activeSession ? (
-                  <span className="font-semibold text-teal-300 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
-                    {t('mobileCurrentlyInside')}
-                  </span>
+                  activeSession.status === 'PENDING_APPROVAL' ? (
+                    <span className="font-semibold text-amber-300 flex items-center gap-1.5">
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      រង់ចាំការអនុម័ត (Pending)
+                    </span>
+                  ) : (
+                    <span className="font-semibold text-teal-300 flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
+                      {t('mobileCurrentlyInside')}
+                    </span>
+                  )
                 ) : (
                   <span className="text-slate-400 font-medium">
                     {t('mobileNotInside')}
@@ -460,20 +492,27 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
                   )}
                 </button>
               ) : (
-                <button
-                  onClick={handleOneTapCheckOut}
-                  disabled={loading}
-                  className="w-full group relative py-4 px-6 rounded-2xl font-black text-base tracking-wide bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-400 hover:to-red-500 text-white shadow-xl shadow-rose-500/25 transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-50"
-                >
-                  {loading ? (
+                activeSession.status === 'PENDING_APPROVAL' ? (
+                  <div className="w-full py-4 px-6 rounded-2xl font-black text-sm tracking-wide bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center gap-3">
                     <RefreshCw className="w-6 h-6 animate-spin" />
-                  ) : (
-                    <>
-                      <LogOut className="w-6 h-6" />
-                      <span className="font-extrabold">{t('mobileOneTapCheckOut')}</span>
-                    </>
-                  )}
-                </button>
+                    <span className="font-extrabold">កំពុងរង់ចាំ Admin អនុម័ត...</span>
+                  </div>
+                ) : (
+                  <button
+                    onClick={handleOneTapCheckOut}
+                    disabled={loading}
+                    className="w-full group relative py-4 px-6 rounded-2xl font-black text-base tracking-wide bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-400 hover:to-red-500 text-white shadow-xl shadow-rose-500/25 transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-50"
+                  >
+                    {loading ? (
+                      <RefreshCw className="w-6 h-6 animate-spin" />
+                    ) : (
+                      <>
+                        <LogOut className="w-6 h-6" />
+                        <span className="font-extrabold">{t('mobileOneTapCheckOut')}</span>
+                      </>
+                    )}
+                  </button>
+                )
               )}
             </div>
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { CheckCircle2, QrCode, LogOut, Clock, BookOpen, GraduationCap, X, Sparkles, Building } from 'lucide-react';
+import { CheckCircle2, QrCode, LogOut, Clock, BookOpen, GraduationCap, X, Sparkles, Building, RefreshCw, XCircle } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { api } from '../services/api';
 
 export default function WelcomeCard({
   user,
@@ -12,55 +13,89 @@ export default function WelcomeCard({
   onDismiss
 }) {
   const [countdown, setCountdown] = useState(12);
+  const [currentSession, setCurrentSession] = useState(session);
   const { t, tRole, tDept, tPurpose } = useLanguage();
 
+  const isPending = currentSession?.status === 'PENDING_APPROVAL';
+  const isRejected = currentSession?.status === 'REJECTED';
+
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCountdown(prev => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          onDismiss();
-          return 0;
+    let pollingTimer;
+    let countdownTimer;
+
+    if (isPending) {
+      pollingTimer = setInterval(async () => {
+        try {
+          const res = await api.getSessionStatus(currentSession.id);
+          if (res.success) {
+            setCurrentSession(res.session);
+          }
+        } catch (err) {
+          console.error(err);
         }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [onDismiss]);
+      }, 2000);
+    } else {
+      // If it's active or rejected, we count down and close
+      countdownTimer = setInterval(() => {
+        setCountdown(prev => {
+          if (prev <= 1) {
+            clearInterval(countdownTimer);
+            onDismiss();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      if (pollingTimer) clearInterval(pollingTimer);
+      if (countdownTimer) clearInterval(countdownTimer);
+    };
+  }, [isPending, currentSession?.id, onDismiss]);
 
   if (!user) return null;
 
-  const checkInTimeStr = session?.check_in_time
-    ? new Date(session.check_in_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  const checkInTimeStr = currentSession?.check_in_time
+    ? new Date(currentSession.check_in_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     : new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-  const isPending = session?.status === 'PENDING_APPROVAL';
 
   return (
     <div className="relative w-full max-w-xl mx-auto rounded-3xl bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border-2 border-teal-500/40 shadow-2xl shadow-teal-500/10 overflow-hidden animate-slide-up">
       
       {/* Top Banner */}
       <div className={`px-6 py-4 flex items-center justify-between ${
-        isPending
+        isRejected
+          ? 'bg-rose-500/15 border-b border-rose-500/30 text-rose-300'
+          : isPending
           ? 'bg-amber-500/15 border-b border-amber-500/30 text-amber-300'
           : isAlreadyActive
             ? 'bg-amber-500/15 border-b border-amber-500/30 text-amber-300'
             : 'bg-teal-500/15 border-b border-teal-500/30 text-teal-300'
       }`}>
         <div className="flex items-center gap-2.5">
-          <div className={`p-1.5 rounded-xl ${isPending || isAlreadyActive ? 'bg-amber-500/20 text-amber-400' : 'bg-teal-500/20 text-teal-400'}`}>
-            <CheckCircle2 className="w-5 h-5" />
+          <div className={`p-1.5 rounded-xl ${
+            isRejected ? 'bg-rose-500/20 text-rose-400' 
+            : isPending || isAlreadyActive ? 'bg-amber-500/20 text-amber-400' 
+            : 'bg-teal-500/20 text-teal-400'
+          }`}>
+            {isRejected ? <XCircle className="w-5 h-5" /> 
+             : isPending ? <RefreshCw className="w-5 h-5 animate-spin" /> 
+             : <CheckCircle2 className="w-5 h-5" />}
           </div>
           <div>
             <h4 className="text-sm font-bold tracking-tight text-white">
-              {isPending ? 'Pending Admin Approval' : isAlreadyActive ? t('welcomeActiveTitle') : isNewUser ? t('welcomeRegisteredTitle') : t('checkInSuccess')}
+              {isRejected ? 'Request Rejected' 
+               : isPending ? 'Pending Admin Approval' 
+               : isAlreadyActive ? t('welcomeActiveTitle') 
+               : isNewUser ? t('welcomeRegisteredTitle') 
+               : t('checkInSuccess')}
             </h4>
             <p className="text-[11px] opacity-80">
-              {isPending
-                ? 'Please wait for the librarian to approve your request.'
-                : isAlreadyActive
-                  ? `${t('alreadyActiveMsg')} ${checkInTimeStr}`
-                  : `${t('colEntryTime')}: ${checkInTimeStr}`}
+              {isRejected ? 'Your request has been rejected by the admin.'
+               : isPending ? 'Please wait for the librarian to approve your request.'
+               : isAlreadyActive ? `${t('alreadyActiveMsg')} ${checkInTimeStr}`
+               : `${t('colEntryTime')}: ${checkInTimeStr}`}
             </p>
           </div>
         </div>

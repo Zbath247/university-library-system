@@ -34,8 +34,14 @@ router.post('/lookup', async (req, res) => {
       });
     }
 
-    // Check if user has an active checked-in session
-    const activeSession = db.getActiveSessionForUser(user.id);
+    // Check if user has an active or pending session
+    let activeSession = db.getActiveSessionForUser(user.id);
+    if (!activeSession) {
+      const pendingSession = db.data.sessions.find(s => s.user_id === user.id && s.status === 'PENDING_APPROVAL');
+      if (pendingSession) {
+        activeSession = { ...pendingSession, user };
+      }
+    }
 
     return res.json({
       success: true,
@@ -240,6 +246,20 @@ router.get('/badge/:university_id', async (req, res) => {
       user,
       qrDataUrl
     });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// GET /api/kiosk/session/:id - Get session status for polling
+router.get('/session/:id', (req, res) => {
+  try {
+    const sessionId = Number(req.params.id);
+    const session = db.data.sessions.find(s => s.id === sessionId);
+    if (!session) {
+      return res.status(404).json({ success: false, message: 'Session not found' });
+    }
+    res.json({ success: true, session });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
