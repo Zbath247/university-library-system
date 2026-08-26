@@ -3,6 +3,7 @@ import { X, UserPlus, GraduationCap, Building, Sparkles, Mail, Phone, BookOpen, 
 import confetti from 'canvas-confetti';
 import { playSuccessChime, playErrorSound } from '../utils/audioChime';
 import { useLanguage } from '../context/LanguageContext';
+import { api } from '../services/api';
 
 export default function RegistrationModal({
   isOpen,
@@ -30,6 +31,8 @@ export default function RegistrationModal({
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [bookTitle, setBookTitle] = useState('');
+  const [agreementAgreed, setAgreementAgreed] = useState(false);
 
   const popularPurposes = [
     'Study & Revision',
@@ -66,16 +69,34 @@ export default function RegistrationModal({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const isBookAction = formData.purpose_of_visit === 'Book Borrowing' || formData.purpose_of_visit === 'Book Return';
+    if (isBookAction) {
+      if (!bookTitle.trim()) {
+        setErrorMsg(t('bookTitleRequiredError'));
+        playErrorSound();
+        return;
+      }
+      if (!agreementAgreed) {
+        setErrorMsg(t('agreementRequiredError'));
+        playErrorSound();
+        return;
+      }
+    }
+
     setLoading(true);
     setErrorMsg('');
 
     try {
-      const response = await fetch('/api/kiosk/register-and-checkin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      const data = await response.json();
+      const finalField = isBookAction && bookTitle.trim()
+        ? `[${formData.purpose_of_visit === 'Book Borrowing' ? 'ខ្ចី' : 'សង'}] ${bookTitle.trim()}`
+        : formData.research_field || 'Academic Research';
+
+      const payload = {
+        ...formData,
+        research_field: finalField
+      };
+
+      const data = await api.registerAndCheckin(payload);
 
       if (!data.success) {
         throw new Error(data.message || 'Registration failed.');
@@ -329,7 +350,10 @@ export default function RegistrationModal({
                     <button
                       type="button"
                       key={idx}
-                      onClick={() => setFormData(prev => ({ ...prev, purpose_of_visit: p }))}
+                      onClick={() => {
+                        setFormData(prev => ({ ...prev, purpose_of_visit: p }));
+                        setAgreementAgreed(false);
+                      }}
                       className={`text-[11px] px-2.5 py-1 rounded-lg border transition ${
                         formData.purpose_of_visit === p
                           ? 'bg-indigo-500/20 border-indigo-500/50 text-indigo-300 font-medium'
@@ -341,6 +365,37 @@ export default function RegistrationModal({
                   ))}
                 </div>
               </div>
+
+              {/* Book Details & Confirmation for Borrow / Return */}
+              {(formData.purpose_of_visit === 'Book Borrowing' || formData.purpose_of_visit === 'Book Return') && (
+                <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30">
+                  <label className="block text-xs font-bold text-amber-300 mb-1.5 flex items-center gap-1.5">
+                    <BookOpen className="w-4 h-4 text-amber-400" />
+                    <span>{formData.purpose_of_visit === 'Book Borrowing' ? 'ឈ្មោះសៀវភៅ / ចំណងជើងដែលត្រូវខ្ចី *' : 'ឈ្មោះសៀវភៅ / ចំណងជើងដែលត្រូវសង *'}</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={bookTitle}
+                    onChange={(e) => setBookTitle(e.target.value)}
+                    placeholder={formData.purpose_of_visit === 'Book Borrowing' ? t('bookTitleBorrowPlaceholder') : t('bookTitleReturnPlaceholder')}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-amber-500/40 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-medium"
+                    required
+                  />
+
+                  {/* Agreement Confirmation Checkbox */}
+                  <label className="mt-3 flex items-start gap-2.5 cursor-pointer select-none bg-slate-950/70 p-3 rounded-xl border border-amber-500/20">
+                    <input
+                      type="checkbox"
+                      checked={agreementAgreed}
+                      onChange={(e) => setAgreementAgreed(e.target.checked)}
+                      className="mt-0.5 rounded border-slate-700 bg-slate-900 text-amber-500 focus:ring-amber-500 h-4 w-4"
+                    />
+                    <span className="text-xs text-amber-200/90 leading-snug font-medium">
+                      {formData.purpose_of_visit === 'Book Borrowing' ? t('bookAgreementBorrow') : t('bookAgreementReturn')}
+                    </span>
+                  </label>
+                </div>
+              )}
 
             </div>
           )}

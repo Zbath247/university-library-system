@@ -36,6 +36,8 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
   const [loading, setLoading] = useState(false);
   const [activeSession, setActiveSession] = useState(null);
   const [selectedPurpose, setSelectedPurpose] = useState('Study & Revision');
+  const [bookTitle, setBookTitle] = useState('');
+  const [agreementAgreed, setAgreementAgreed] = useState(false);
   const [message, setMessage] = useState(null);
   const [showPassModal, setShowPassModal] = useState(false);
 
@@ -100,17 +102,36 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
   // Handle One-Tap Check-In for returning user
   const handleOneTapCheckIn = async () => {
     if (!savedUser) return;
+
+    const isBookAction = selectedPurpose === 'Book Borrowing' || selectedPurpose === 'Book Return';
+    if (isBookAction) {
+      if (!bookTitle.trim()) {
+        setMessage({ type: 'error', text: t('bookTitleRequiredError') });
+        return;
+      }
+      if (!agreementAgreed) {
+        setMessage({ type: 'error', text: t('agreementRequiredError') });
+        return;
+      }
+    }
+
     setLoading(true);
     setMessage(null);
     try {
+      const topic = isBookAction && bookTitle.trim()
+        ? `[${selectedPurpose === 'Book Borrowing' ? 'ខ្ចី' : 'សង'}] ${bookTitle.trim()}`
+        : savedUser.research_field || 'Academic Research';
+
       const res = await api.checkin(
         savedUser.university_id,
         selectedPurpose,
-        savedUser.research_field,
+        topic,
         savedUser
       );
       if (res.success) {
         setActiveSession(res.session);
+        setBookTitle('');
+        setAgreementAgreed(false);
         setMessage({
           type: 'success',
           text: t('mobileCheckInSuccess')
@@ -168,14 +189,32 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
       setMessage({ type: 'error', text: t('inputRequired') });
       return;
     }
+
+    const isBookAction = formData.purpose_of_visit === 'Book Borrowing' || formData.purpose_of_visit === 'Book Return';
+    if (isBookAction) {
+      if (!bookTitle.trim()) {
+        setMessage({ type: 'error', text: t('bookTitleRequiredError') });
+        return;
+      }
+      if (!agreementAgreed) {
+        setMessage({ type: 'error', text: t('agreementRequiredError') });
+        return;
+      }
+    }
+
     setLoading(true);
     setMessage(null);
     try {
+      const finalTopic = isBookAction && bookTitle.trim()
+        ? `[${formData.purpose_of_visit === 'Book Borrowing' ? 'ខ្ចី' : 'សង'}] ${bookTitle.trim()}`
+        : formData.research_field || 'Academic Research';
+
       const payload = {
         ...formData,
         role_id: Number(formData.role_id) || (roles[0]?.id || 1),
         department_id: Number(formData.department_id) || (departments[0]?.id || 1),
         purpose_of_visit: formData.purpose_of_visit || selectedPurpose,
+        research_field: finalTopic,
         email: formData.email || `${formData.university_id.toLowerCase().replace(/[^a-z0-9]/g, '')}@university.edu.kh`
       };
 
@@ -184,6 +223,8 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
         setSavedUser(res.user);
         localStorage.setItem('saved_library_user', JSON.stringify(res.user));
         setActiveSession(res.session);
+        setBookTitle('');
+        setAgreementAgreed(false);
         setMessage({
           type: 'success',
           text: `${t('mobileCheckInSuccess')} ${t('mobileSaveSuccessMsg')}`
@@ -349,7 +390,10 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
                     <button
                       key={idx}
                       type="button"
-                      onClick={() => setSelectedPurpose(p)}
+                      onClick={() => {
+                        setSelectedPurpose(p);
+                        setAgreementAgreed(false);
+                      }}
                       className={`px-3 py-2 rounded-xl text-xs font-medium text-left border transition flex items-center justify-between ${
                         selectedPurpose === p
                           ? 'bg-teal-500/15 border-teal-500 text-teal-200 shadow-sm'
@@ -361,6 +405,37 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
                     </button>
                   ))}
                 </div>
+
+                {/* Specific Book Details & Agreement Section */}
+                {(selectedPurpose === 'Book Borrowing' || selectedPurpose === 'Book Return') && (
+                  <div className="mt-3 p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30">
+                    <label className="block text-xs font-bold text-amber-300 mb-1.5 flex items-center gap-1.5">
+                      <BookOpen className="w-4 h-4 text-amber-400" />
+                      <span>{selectedPurpose === 'Book Borrowing' ? 'ឈ្មោះសៀវភៅ / ចំណងជើងដែលត្រូវខ្ចី *' : 'ឈ្មោះសៀវភៅ / ចំណងជើងដែលត្រូវសង *'}</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={bookTitle}
+                      onChange={(e) => setBookTitle(e.target.value)}
+                      placeholder={selectedPurpose === 'Book Borrowing' ? t('bookTitleBorrowPlaceholder') : t('bookTitleReturnPlaceholder')}
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-amber-500/40 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-medium"
+                      required
+                    />
+
+                    {/* Agreement Confirmation Checkbox */}
+                    <label className="mt-3 flex items-start gap-2.5 cursor-pointer select-none bg-slate-950/70 p-2.5 rounded-xl border border-amber-500/20">
+                      <input
+                        type="checkbox"
+                        checked={agreementAgreed}
+                        onChange={(e) => setAgreementAgreed(e.target.checked)}
+                        className="mt-0.5 rounded border-slate-700 bg-slate-900 text-amber-500 focus:ring-amber-500 h-4 w-4"
+                      />
+                      <span className="text-[11px] text-amber-200/90 leading-snug font-medium">
+                        {selectedPurpose === 'Book Borrowing' ? t('bookAgreementBorrow') : t('bookAgreementReturn')}
+                      </span>
+                    </label>
+                  </div>
+                )}
               </div>
             )}
 
@@ -510,7 +585,10 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
                 </label>
                 <select
                   value={formData.purpose_of_visit}
-                  onChange={(e) => setFormData(prev => ({ ...prev, purpose_of_visit: e.target.value }))}
+                  onChange={(e) => {
+                    setFormData(prev => ({ ...prev, purpose_of_visit: e.target.value }));
+                    setAgreementAgreed(false);
+                  }}
                   className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
                 >
                   {popularPurposes.map((p, idx) => (
@@ -518,6 +596,37 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
                   ))}
                 </select>
               </div>
+
+              {/* Book Details & Agreement for First-Time registration */}
+              {(formData.purpose_of_visit === 'Book Borrowing' || formData.purpose_of_visit === 'Book Return') && (
+                <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30">
+                  <label className="block text-xs font-bold text-amber-300 mb-1.5 flex items-center gap-1.5">
+                    <BookOpen className="w-4 h-4 text-amber-400" />
+                    <span>{formData.purpose_of_visit === 'Book Borrowing' ? 'ឈ្មោះសៀវភៅ / ចំណងជើងដែលត្រូវខ្ចី *' : 'ឈ្មោះសៀវភៅ / ចំណងជើងដែលត្រូវសង *'}</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={bookTitle}
+                    onChange={(e) => setBookTitle(e.target.value)}
+                    placeholder={formData.purpose_of_visit === 'Book Borrowing' ? t('bookTitleBorrowPlaceholder') : t('bookTitleReturnPlaceholder')}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-amber-500/40 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-medium"
+                    required
+                  />
+
+                  {/* Agreement Confirmation Checkbox */}
+                  <label className="mt-3 flex items-start gap-2.5 cursor-pointer select-none bg-slate-950/70 p-2.5 rounded-xl border border-amber-500/20">
+                    <input
+                      type="checkbox"
+                      checked={agreementAgreed}
+                      onChange={(e) => setAgreementAgreed(e.target.checked)}
+                      className="mt-0.5 rounded border-slate-700 bg-slate-900 text-amber-500 focus:ring-amber-500 h-4 w-4"
+                    />
+                    <span className="text-[11px] text-amber-200/90 leading-snug font-medium">
+                      {formData.purpose_of_visit === 'Book Borrowing' ? t('bookAgreementBorrow') : t('bookAgreementReturn')}
+                    </span>
+                  </label>
+                </div>
+              )}
 
               {/* Submit Button */}
               <button
