@@ -268,7 +268,7 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
     <div className="max-w-5xl mx-auto px-4 py-6 sm:py-10">
       
       {/* Top Toggle Switcher: Entrance QR Screen vs Manual Scanner Mode */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
         
         {/* Left: Mode Buttons */}
         <div className="bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 flex items-center gap-1.5 shadow-xl">
