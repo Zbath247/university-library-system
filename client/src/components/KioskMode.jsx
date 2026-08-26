@@ -454,9 +454,6 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
             <div className="max-w-md mx-auto">
               <div className="flex items-center gap-2 mb-2 justify-between text-xs text-slate-400">
                 <span>{t('inputPlaceholder')}</span>
-                <span className="font-mono text-teal-400 flex items-center gap-1">
-                  <Zap className="w-3 h-3" /> {t('scannerReady')}
-                </span>
               </div>
 
               <form onSubmit={handleFormSubmit} className="relative flex items-center">
