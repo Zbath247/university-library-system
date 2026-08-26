@@ -121,32 +121,14 @@ export default function CameraScannerModal({ isOpen, onClose, onScanSuccess }) {
             <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2 text-center">
               {t('cameraSimulationTitle')}
             </p>
-            <div className="grid grid-cols-3 gap-2">
-              <button
-                type="button"
-                onClick={() => handleSimulateScan('DUCP2024-0101')}
-                className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left transition text-xs"
-              >
-                <span className="block font-bold text-purple-300">🎓 {tRole('Professor')}</span>
-                <span className="text-[10px] text-slate-400 font-mono">DUCP2024-0101</span>
-              </button>
-
+            <div className="flex justify-center">
               <button
                 type="button"
                 onClick={() => handleSimulateScan('DUC2024-0417')}
-                className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left transition text-xs"
+                className="w-full max-w-xs p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-center transition text-xs"
               >
                 <span className="block font-bold text-blue-300">👩‍🎓 {tRole('Student')}</span>
                 <span className="text-[10px] text-slate-400 font-mono">DUC2024-0417</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleSimulateScan(`NEW-${Math.floor(1000 + Math.random() * 9000)}`)}
-                className="p-2.5 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 text-left transition text-xs"
-              >
-                <span className="block font-bold text-teal-300">✨ {t('btnRegister')}</span>
-                <span className="text-[10px] text-teal-400/80 font-mono">{t('unregisteredBadge')}</span>
               </button>
             </div>
           </div>
