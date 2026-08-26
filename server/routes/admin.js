@@ -125,9 +125,10 @@ router.get('/export/csv', (req, res) => {
 
     const csvContent = [headers.join(','), ...rows].join('\r\n');
 
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', `attachment; filename=library_research_attendance_${new Date().toISOString().slice(0, 10)}.csv`);
-    return res.send(csvContent);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="library_attendance_report_${new Date().toISOString().slice(0, 10)}.csv"`);
+    // Prepend UTF-8 BOM (\uFEFF) so Microsoft Excel opens Khmer and English text flawlessly
+    return res.send('\uFEFF' + csvContent);
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
