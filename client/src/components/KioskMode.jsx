@@ -24,7 +24,6 @@ import QRCode from 'qrcode';
 import { api } from '../services/api';
 import { playBeep, playSuccessChime, playCheckoutChime, playErrorSound } from '../utils/audioChime';
 import { useLanguage } from '../context/LanguageContext';
-import RegistrationModal from './RegistrationModal';
 import WelcomeCard from './WelcomeCard';
 import CheckoutCard from './CheckoutCard';
 import DigitalPassModal from './DigitalPassModal';
@@ -179,8 +178,11 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
         const lookup = await api.lookupId(cleanId);
         
         if (!lookup.registered) {
-          setUnregisteredId(cleanId);
-          setShowRegModal(true);
+          playErrorSound();
+          setStatusMessage({
+            type: 'error',
+            text: `អត្តលេខ ${cleanId} មិនទាន់មានក្នុងប្រព័ន្ធឡើយ! សូមទាក់ទង Admin/បណ្ណារក្សដើម្បីចុះឈ្មោះ។ (Unregistered ID: ${cleanId}. Please contact Admin to register.)`
+          });
         } else {
           if (lookup.activeSession) {
             setWelcomeData({
@@ -501,19 +503,19 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
               </button>
 
               <button
-                onClick={() => handleProcessScan(`NEW-STU-${Math.floor(1000 + Math.random() * 9000)}`)}
+                onClick={() => handleProcessScan('DUCR2024-0501')}
                 className="p-3 rounded-2xl bg-slate-950/70 border border-teal-500/30 hover:border-teal-400 text-left transition hover:bg-teal-950/20 group"
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[10px] px-1.5 py-0.5 rounded font-bold bg-teal-500/20 text-teal-300">
-                    {t('newVisitorBadge')}
+                    {tRole('Researcher')}
                   </span>
-                  <span className="text-[10px] font-mono text-teal-400">{t('unregisteredBadge')}</span>
+                  <span className="text-[10px] font-mono text-slate-400">DUCR2024-0501</span>
                 </div>
                 <p className="text-xs font-bold text-white group-hover:text-teal-200 truncate">
-                  {t('firstTimeAttendee')}
+                  Elena Rostova
                 </p>
-                <p className="text-[10px] text-slate-400 truncate">{t('triggerRegFlow')}</p>
+                <p className="text-[10px] text-slate-400 truncate">{tDept('Physics & Quantum Computing')}</p>
               </button>
             </div>
           </div>
@@ -652,15 +654,6 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
       )}
 
       {/* Modals */}
-      <RegistrationModal
-        isOpen={showRegModal}
-        onClose={() => setShowRegModal(false)}
-        initialId={unregisteredId}
-        roles={roles}
-        departments={departments}
-        onSuccess={handleRegistrationSuccess}
-      />
-
       <CameraScannerModal
         isOpen={showCameraModal}
         onClose={() => setShowCameraModal(false)}
