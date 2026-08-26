@@ -52,18 +52,19 @@ class RelationalDatabase {
       ];
     }
 
-    if (force || !this.data.departments || this.data.departments.length === 0) {
+    if (true || force || !this.data.departments || this.data.departments.length === 0) {
       this.data.departments = [
-        { id: 1, name: 'Computer Science & AI', code: 'CS', faculty: 'Faculty of Information Technology' },
-        { id: 2, name: 'Biomedical Engineering & Health Sciences', code: 'BME', faculty: 'Faculty of Engineering & Medicine' },
-        { id: 3, name: 'Data Science & Analytics', code: 'DSA', faculty: 'Faculty of Computing & Mathematics' },
-        { id: 4, name: 'Civil & Environmental Engineering', code: 'CEE', faculty: 'Faculty of Engineering' },
-        { id: 5, name: 'Economics, Finance & Banking', code: 'ECO', faculty: 'Faculty of Business & Management' },
-        { id: 6, name: 'Molecular Biology & Genetics', code: 'MBG', faculty: 'Faculty of Science' },
-        { id: 7, name: 'Law, Ethics & International Policy', code: 'LAW', faculty: 'Faculty of Social Sciences & Law' },
-        { id: 8, name: 'Architecture & Urban Planning', code: 'ARCH', faculty: 'Faculty of Built Environment' },
-        { id: 9, name: 'Physics & Quantum Computing', code: 'PHY', faculty: 'Faculty of Natural Sciences' },
-        { id: 10, name: 'Humanities & World Literature', code: 'HUM', faculty: 'Faculty of Arts & Humanities' }
+        { id: 1, name: 'ក្រាហ្វិកឌីហ្សាញ', code: 'GD', faculty: 'សិល្បៈ និងរចនា' },
+        { id: 2, name: 'ទីផ្សារឌីជីថល', code: 'DM', faculty: 'គ្រប់គ្រងធុរកិច្ច' },
+        { id: 3, name: 'ប្រព័ន្ធផ្សព្វផ្សាយសង្គម', code: 'SM', faculty: 'ទំនាក់ទំនង' },
+        { id: 4, name: 'ព័ត៌មានវិទ្យា', code: 'IT', faculty: 'វិទ្យាសាស្ត្រកុំព្យូទ័រ' },
+        { id: 5, name: 'នីតិសាធារណ:', code: 'PL', faculty: 'ច្បាប់ និងនីតិសាស្ត្រ' },
+        { id: 6, name: 'រដ្ឋបាលសាធារណៈ', code: 'PA', faculty: 'រដ្ឋបាលសាធារណៈ' },
+        { id: 7, name: 'ក្សេត្រសាស្ត្រ និងសាកវប្បកម្ម', code: 'AH', faculty: 'កសិកម្ម' },
+        { id: 8, name: 'វិស្វកម្មសំណង់ស៊ីវិល', code: 'CE', faculty: 'វិស្វកម្ម' },
+        { id: 9, name: 'ស្ថាបត្យកម្ម', code: 'ARC', faculty: 'ស្ថាបត្យកម្ម និងនគរូបនីយកម្ម' },
+        { id: 10, name: 'បង្រៀនភាសាអង់គ្លេស', code: 'TE', faculty: 'ភាសាបរទេស' },
+        { id: 11, name: 'សេដ្ឋកិច្ចនីជីថល', code: 'DE', faculty: 'សេដ្ឋកិច្ច' }
       ];
     }
 
