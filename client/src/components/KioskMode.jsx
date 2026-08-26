@@ -415,14 +415,6 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
           </div>
 
           <div className="relative z-10 text-center max-w-2xl mx-auto">
-            
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-sans">
-              {kioskMode === 'CHECK_IN' ? t('kioskTitle') : t('kioskDepartureTitle')}
-            </h2>
-
-            <p className="text-xs sm:text-sm text-slate-400 mt-2 mb-6 leading-relaxed">
-              {kioskMode === 'CHECK_IN' ? t('kioskSub') : t('kioskDepartureSub')}
-            </p>
 
             {/* Interactive Scan Target Box */}
             <div
