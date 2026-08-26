@@ -164,7 +164,8 @@ router.post('/checkin', async (req, res) => {
 // POST /api/kiosk/checkout - Check-out / End session
 router.post('/checkout', (req, res) => {
   try {
-    const { session_id, university_id } = req.body;
+    const session_id = req.body.session_id || req.body.sessionId;
+    const university_id = req.body.university_id || req.body.universityId;
 
     let checkoutTarget = session_id;
     if (!checkoutTarget && university_id) {

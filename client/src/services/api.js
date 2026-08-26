@@ -41,7 +41,9 @@ export const api = {
     return res.json();
   },
 
-  checkout: async ({ sessionId, universityId }) => {
+  checkout: async (params = {}) => {
+    const sessionId = params.sessionId || params.session_id;
+    const universityId = params.universityId || params.university_id;
     const res = await fetch(`${API_BASE}/kiosk/checkout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

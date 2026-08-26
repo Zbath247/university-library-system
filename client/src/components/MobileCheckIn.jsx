@@ -131,7 +131,10 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
     setLoading(true);
     setMessage(null);
     try {
-      const res = await api.checkout({ university_id: savedUser.university_id });
+      const res = await api.checkout({
+        universityId: savedUser.university_id,
+        sessionId: activeSession?.id
+      });
       if (res.success) {
         setActiveSession(null);
         setMessage({
