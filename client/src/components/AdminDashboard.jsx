@@ -168,8 +168,8 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
         </div>
       </div>
 
-      {/* 4 Primary KPI Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {/* Primary KPI Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         
         {/* Card 1: Active Occupants */}
         <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900 to-slate-950 border border-teal-500/30 shadow-xl glass-panel relative overflow-hidden">
@@ -223,28 +223,6 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
 
           <p className="text-[11px] text-slate-400 mt-3 pt-3 border-t border-slate-800/80">
             {t('totalMembersCount')}: <strong className="text-white font-mono">{stats?.totalAllTimeSessions ?? 0}</strong>
-          </p>
-        </div>
-
-        {/* Card 3: Avg Duration */}
-        <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl glass-panel">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
-              {t('statAvgDuration')}
-            </span>
-            <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400">
-              <Clock className="w-4 h-4" />
-            </div>
-          </div>
-
-          <div className="flex items-baseline gap-2">
-            <span className="text-4xl font-black text-white font-mono tracking-tight">
-              {Math.floor((stats?.avgDurationMinutes || 0) / 60)}h {(stats?.avgDurationMinutes || 0) % 60}m
-            </span>
-          </div>
-
-          <p className="text-[11px] text-slate-400 mt-3 pt-3 border-t border-slate-800/80">
-            {t('statusCompleted')}
           </p>
         </div>
 
