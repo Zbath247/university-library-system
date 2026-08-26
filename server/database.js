@@ -427,8 +427,27 @@ class RelationalDatabase {
     if (updates.duration_minutes !== undefined) session.duration_minutes = Number(updates.duration_minutes);
     if (updates.check_in_time) session.check_in_time = updates.check_in_time;
     if (updates.check_out_time !== undefined) session.check_out_time = updates.check_out_time;
+
+    // Also update linked user profile if user details were edited
+    if (session.user_id) {
+      const user = this.data.users.find(u => u.id === session.user_id);
+      if (user) {
+        if (updates.full_name) user.full_name = updates.full_name.trim();
+        if (updates.university_id) user.university_id = updates.university_id.trim().toUpperCase();
+        if (updates.phone !== undefined) user.phone = updates.phone.trim();
+        if (updates.email !== undefined) user.email = updates.email.trim();
+        if (updates.role_id) user.role_id = Number(updates.role_id);
+        if (updates.department_id) user.department_id = Number(updates.department_id);
+        user.updated_at = new Date().toISOString();
+      }
+    }
+
     this.save();
-    return session;
+    const user = this.findUserById(session.user_id);
+    return {
+      ...session,
+      user
+    };
   }
 
   deleteUser(userId) {

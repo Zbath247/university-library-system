@@ -460,6 +460,8 @@ export default function SessionsTable({
         <EditSessionModal
           isOpen={!!editingSession}
           session={editingSession}
+          roles={roles}
+          departments={departments}
           onClose={() => setEditingSession(null)}
           onSaveSuccess={() => onRefresh && onRefresh()}
           onDeleteSuccess={() => onRefresh && onRefresh()}

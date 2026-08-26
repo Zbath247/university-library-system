@@ -1,33 +1,79 @@
-import React, { useState } from 'react';
-import { X, Edit3, Trash2, CheckCircle2, BookOpen, Clock, AlertCircle, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Edit3, Trash2, CheckCircle2, BookOpen, Clock, AlertCircle, User, Phone, GraduationCap, Building, Activity } from 'lucide-react';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
 import { playSuccessChime, playErrorSound } from '../utils/audioChime';
 
-export default function EditSessionModal({ isOpen, onClose, session, onSaveSuccess, onDeleteSuccess }) {
+export default function EditSessionModal({
+  isOpen,
+  onClose,
+  session,
+  roles = [],
+  departments = [],
+  onSaveSuccess,
+  onDeleteSuccess
+}) {
   if (!isOpen || !session) return null;
 
   const { t, tRole, tDept, tPurpose } = useLanguage();
   const user = session.user || {};
 
+  // Form states for all session & user details
+  const [fullName, setFullName] = useState(user.full_name || '');
+  const [universityId, setUniversityId] = useState(user.university_id || '');
+  const [phone, setPhone] = useState(user.phone || '');
+  const [roleId, setRoleId] = useState(user.role_id || (roles[0]?.id || 1));
+  const [deptId, setDeptId] = useState(user.department_id || (departments[0]?.id || 1));
+  
   const [purpose, setPurpose] = useState(session.purpose_of_visit || 'Study & Revision');
   const [topic, setTopic] = useState(session.research_topic || '');
   const [duration, setDuration] = useState(session.duration_minutes || 0);
+  const [status, setStatus] = useState(session.status || 'COMPLETED');
+
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
+  // Sync state if session changes
+  useEffect(() => {
+    if (session) {
+      const u = session.user || {};
+      setFullName(u.full_name || '');
+      setUniversityId(u.university_id || '');
+      setPhone(u.phone || '');
+      setRoleId(u.role_id || (roles[0]?.id || 1));
+      setDeptId(u.department_id || (departments[0]?.id || 1));
+      setPurpose(session.purpose_of_visit || 'Study & Revision');
+      setTopic(session.research_topic || '');
+      setDuration(session.duration_minutes || 0);
+      setStatus(session.status || 'COMPLETED');
+    }
+  }, [session]);
+
   const handleSave = async (e) => {
     e.preventDefault();
+    if (!fullName.trim() || !universityId.trim()) {
+      setErrorMsg('សូមបំពេញឈ្មោះ និងអត្តលេខសម្គាល់!');
+      playErrorSound();
+      return;
+    }
+
     setLoading(true);
     setErrorMsg('');
 
     try {
       const res = await api.updateSession(session.id, {
+        full_name: fullName.trim(),
+        university_id: universityId.trim().toUpperCase(),
+        phone: phone.trim(),
+        role_id: Number(roleId),
+        department_id: Number(deptId),
         purpose_of_visit: purpose,
-        research_topic: topic,
-        duration_minutes: Number(duration)
+        research_topic: topic.trim(),
+        duration_minutes: Number(duration),
+        status: status
       });
+
       if (res.success) {
         playSuccessChime();
         onSaveSuccess(res.session);
@@ -36,7 +82,7 @@ export default function EditSessionModal({ isOpen, onClose, session, onSaveSucce
         throw new Error(res.message || 'Update failed.');
       }
     } catch (err) {
-      setErrorMsg(err.message);
+      setErrorMsg(err.message || 'ការកែប្រែមិនជោគជ័យ!');
       playErrorSound();
     } finally {
       setLoading(false);
@@ -44,7 +90,7 @@ export default function EditSessionModal({ isOpen, onClose, session, onSaveSucce
   };
 
   const handleDelete = async () => {
-    if (!window.confirm(`តើអ្នកពិតជាចង់លុបកំណត់ត្រា #${session.id} របស់ ${user.full_name || 'Visitor'} មែនទេ?`)) {
+    if (!window.confirm(`តើអ្នកពិតជាចង់លុបកំណត់ត្រា #${session.id} របស់ ${fullName || 'Visitor'} មែនទេ?`)) {
       return;
     }
     setDeleteLoading(true);
@@ -59,7 +105,7 @@ export default function EditSessionModal({ isOpen, onClose, session, onSaveSucce
         throw new Error(res.message || 'Delete failed.');
       }
     } catch (err) {
-      setErrorMsg(err.message);
+      setErrorMsg(err.message || 'Delete failed.');
       playErrorSound();
     } finally {
       setDeleteLoading(false);
@@ -77,20 +123,20 @@ export default function EditSessionModal({ isOpen, onClose, session, onSaveSucce
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">
-      <div className="relative w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden animate-slide-up">
+      <div className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden animate-slide-up max-h-[90vh] flex flex-col">
         
         {/* Header */}
-        <div className="relative px-6 py-5 bg-gradient-to-r from-teal-950/80 via-slate-900 to-indigo-950/80 border-b border-slate-800 flex items-center justify-between">
+        <div className="px-6 py-5 bg-gradient-to-r from-teal-950/80 via-slate-900 to-indigo-950/80 border-b border-slate-800 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-400">
               <Edit3 className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">
-                កែសម្រួលកំណត់ត្រាវត្តមាន #{session.id}
+              <h3 className="text-base font-extrabold text-white">
+                កែសម្រួលព័ត៌មានទាំងអស់ (Edit All Fields) #{session.id}
               </h3>
               <p className="text-xs text-slate-400">
-                {user.full_name} ({user.university_id})
+                Admin Full Access Control • កែសម្រួលព័ត៌មាន User & Session
               </p>
             </div>
           </div>
@@ -103,8 +149,8 @@ export default function EditSessionModal({ isOpen, onClose, session, onSaveSucce
           </button>
         </div>
 
-        {/* Body */}
-        <form onSubmit={handleSave} className="p-6 space-y-4">
+        {/* Form Body (Scrollable) */}
+        <form onSubmit={handleSave} className="p-6 overflow-y-auto space-y-4 flex-1">
           
           {errorMsg && (
             <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center gap-2 text-xs text-rose-300">
@@ -113,90 +159,207 @@ export default function EditSessionModal({ isOpen, onClose, session, onSaveSucce
             </div>
           )}
 
-          {/* Member Details */}
-          <div className="p-3 rounded-2xl bg-slate-950/60 border border-slate-800 grid grid-cols-2 gap-2 text-xs">
-            <div>
-              <span className="text-slate-500 block text-[11px]">សមាជិក៖</span>
-              <span className="font-bold text-white">{user.full_name}</span>
+          {/* Section 1: User Profile Details */}
+          <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800/90 space-y-3">
+            <h4 className="text-xs font-extrabold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
+              <User className="w-3.5 h-3.5" />
+              <span>១. ព័ត៌មានផ្ទាល់ខ្លួនរបស់សមាជិក (Member Profile)</span>
+            </h4>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Full Name */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  គោត្តនាម និងនាម (Full Name) *
+                </label>
+                <input
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="ឧ. សុខ ចាន់ដារ៉ា"
+                  required
+                  className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-teal-500 font-medium"
+                />
+              </div>
+
+              {/* University ID */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  អត្តលេខ (University ID) *
+                </label>
+                <input
+                  type="text"
+                  value={universityId}
+                  onChange={(e) => setUniversityId(e.target.value.toUpperCase())}
+                  placeholder="ឧ. DUC2024-0417"
+                  required
+                  className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono uppercase text-teal-300 placeholder-slate-500 focus:outline-none focus:border-teal-500 font-bold"
+                />
+              </div>
+
+              {/* Phone Number */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
+                  <Phone className="w-3 h-3 text-slate-400" />
+                  <span>លេខទូរស័ព្ទ (Phone Number)</span>
+                </label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="012 345 678"
+                  className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-teal-500 font-mono"
+                />
+              </div>
+
+              {/* Academic Role */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
+                  <GraduationCap className="w-3 h-3 text-slate-400" />
+                  <span>តួនាទី (Academic Role)</span>
+                </label>
+                <select
+                  value={roleId}
+                  onChange={(e) => setRoleId(e.target.value)}
+                  className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-teal-500"
+                >
+                  {roles.length > 0 ? roles.map(r => (
+                    <option key={r.id} value={r.id}>{tRole(r.name)}</option>
+                  )) : (
+                    <>
+                      <option value="1">និស្សិត (Student)</option>
+                      <option value="2">សាស្ត្រាចារ្យ (Lecturer)</option>
+                      <option value="3">សាស្ត្រាចារ្យជាន់ខ្ពស់ (Professor)</option>
+                      <option value="4">អ្នកស្រាវជ្រាវ (Researcher)</option>
+                    </>
+                  )}
+                </select>
+              </div>
+
+              {/* Department */}
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
+                  <Building className="w-3 h-3 text-slate-400" />
+                  <span>មហាវិទ្យាល័យ / ដេប៉ាតឺម៉ង់ (Department)</span>
+                </label>
+                <select
+                  value={deptId}
+                  onChange={(e) => setDeptId(e.target.value)}
+                  className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-teal-500"
+                >
+                  {departments.length > 0 ? departments.map(d => (
+                    <option key={d.id} value={d.id}>{tDept(d.name)} ({d.code})</option>
+                  )) : (
+                    <option value="1">Computer Science & IT (CS)</option>
+                  )}
+                </select>
+              </div>
             </div>
+          </div>
+
+          {/* Section 2: Session & Purpose Details */}
+          <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800/90 space-y-3">
+            <h4 className="text-xs font-extrabold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>២. ព័ត៌មានការស្រាវជ្រាវ & ខ្ចី-សងសៀវភៅ (Visit & Book Details)</span>
+            </h4>
+
+            {/* Purpose */}
             <div>
-              <span className="text-slate-500 block text-[11px]">តួនាទី / ដេប៉ាតឺម៉ង់៖</span>
-              <span className="font-medium text-slate-300">{tRole(user.role_name)} - {tDept(user.department_name)}</span>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                គោលបំណង (Purpose of Visit) *
+              </label>
+              <select
+                value={purpose}
+                onChange={(e) => setPurpose(e.target.value)}
+                className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-amber-500"
+              >
+                {popularPurposes.map((p, idx) => (
+                  <option key={idx} value={p}>{tPurpose(p)}</option>
+                ))}
+              </select>
             </div>
-          </div>
 
-          {/* Purpose */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-              គោលបំណង (Purpose) *
-            </label>
-            <select
-              value={purpose}
-              onChange={(e) => setPurpose(e.target.value)}
-              className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-teal-500"
-            >
-              {popularPurposes.map((p, idx) => (
-                <option key={idx} value={p}>{tPurpose(p)}</option>
-              ))}
-            </select>
-          </div>
+            {/* Book Title / Research Topic */}
+            <div>
+              <label className="block text-xs font-semibold text-amber-300 mb-1 flex items-center gap-1.5">
+                <BookOpen className="w-3.5 h-3.5 text-amber-400" />
+                <span>
+                  {purpose === 'Book Borrowing' ? 'ឈ្មោះសៀវភៅដែលបានខ្ចី (Book Title)' :
+                   purpose === 'Book Return' ? 'ឈ្មោះសៀវភៅដែលបានសង (Book Title)' :
+                   'ប្រធានបទស្រាវជ្រាវ ឬឈ្មោះសៀវភៅ (Topic / Title)'}
+                </span>
+              </label>
+              <input
+                type="text"
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
+                placeholder="ឧ. Data Structures & Algorithms, កុលាបប៉ៃលិន..."
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-amber-500/40 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-medium"
+              />
+            </div>
 
-          {/* Book Title / Research Topic */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-amber-400" />
-              <span>ឈ្មោះសៀវភៅ ឬប្រធានបទស្រាវជ្រាវ (Book Title / Topic)</span>
-            </label>
-            <input
-              type="text"
-              value={topic}
-              onChange={(e) => setTopic(e.target.value)}
-              placeholder="ឧ. [ខ្ចី] Data Structures & Algorithms..."
-              className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-teal-500 font-medium"
-            />
-          </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Duration */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-teal-400" />
+                  <span>ថិរវេលា (នាទី / Minutes)</span>
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-teal-500 font-mono"
+                />
+              </div>
 
-          {/* Duration in Minutes */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-teal-400" />
-              <span>ថិរវេលា (នាទី / Minutes)</span>
-            </label>
-            <input
-              type="number"
-              min="0"
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-              className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-teal-500 font-mono"
-            />
+              {/* Status */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
+                  <Activity className="w-3 h-3 text-teal-400" />
+                  <span>ស្ថានភាព (Status)</span>
+                </label>
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  className="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-teal-500 font-semibold"
+                >
+                  <option value="ACTIVE">🟢 {t('statusActive')} (កំពុងនៅក្នុងបណ្ណាល័យ)</option>
+                  <option value="COMPLETED">⚪ {t('statusCompleted')} (បានចាកចេញរួចរាល់)</option>
+                </select>
+              </div>
+            </div>
           </div>
 
           {/* Actions */}
-          <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-3">
+          <div className="pt-4 border-t border-slate-800 flex items-center justify-between gap-3 shrink-0">
             <button
               type="button"
               onClick={handleDelete}
               disabled={deleteLoading}
-              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-500/15 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 transition flex items-center gap-1.5 disabled:opacity-50"
+              className="px-4 py-2.5 rounded-xl text-xs font-bold bg-rose-500/15 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition flex items-center gap-1.5 disabled:opacity-50"
             >
               <Trash2 className="w-3.5 h-3.5" />
-              <span>{deleteLoading ? 'កំពុងលុប...' : 'លុបកំណត់ត្រា (Delete)'}</span>
+              <span>{deleteLoading ? 'កំពុងលុប...' : 'លុបកំណត់ត្រានេះ (Delete)'}</span>
             </button>
 
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition"
+                className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition"
               >
                 {t('btnCancel')}
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-4 py-2 rounded-xl text-xs font-bold bg-teal-500 hover:bg-teal-400 text-slate-950 transition shadow-lg shadow-teal-500/20 disabled:opacity-50"
+                className="px-5 py-2.5 rounded-xl text-xs font-bold bg-teal-500 hover:bg-teal-400 text-slate-950 transition shadow-lg shadow-teal-500/20 disabled:opacity-50 flex items-center gap-1.5"
               >
-                {loading ? 'កំពុងរក្សាទុក...' : 'រក្សាទុកការកែប្រែ'}
+                <CheckCircle2 className="w-4 h-4" />
+                <span>{loading ? 'កំពុងរក្សាទុក...' : 'រក្សាទុកការកែប្រែទាំងអស់'}</span>
               </button>
             </div>
           </div>
