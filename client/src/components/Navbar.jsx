@@ -21,18 +21,18 @@ export default function Navbar({ activeTab, setActiveTab, activeCount }) {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-20">
+      <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/95 backdrop-blur-xl">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20 sm:h-24 gap-3 lg:gap-6">
             
-            {/* Left: Mobile 3-Bar Hamburger Button + Logo & Title */}
-            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Left: Mobile Hamburger (☰) + University Logo & Title */}
+            <div className="flex items-center gap-3 shrink-0">
               
               {/* 3-Bar Hamburger Menu Button (☰ Like YouTube) for Mobile */}
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 focus:outline-none transition active:scale-95 shrink-0"
+                className="md:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 focus:outline-none transition active:scale-95 shrink-0"
                 aria-label="Toggle Menu"
               >
                 {mobileMenuOpen ? (
@@ -44,25 +44,25 @@ export default function Navbar({ activeTab, setActiveTab, activeCount }) {
 
               {/* Logo & University Name */}
               <div
-                className="flex items-center gap-2.5 sm:gap-3 cursor-pointer shrink-0 select-none"
+                className="flex items-center gap-3 cursor-pointer shrink-0 select-none group"
                 onClick={() => handleNavClick('kiosk')}
               >
-                <div className="h-11 w-11 sm:h-14 sm:w-14 flex items-center justify-center shrink-0">
+                <div className="h-12 w-12 sm:h-16 sm:w-16 flex items-center justify-center shrink-0">
                   <img 
                     src="/duc-logo.png" 
                     alt="DUC Logo" 
-                    className="h-11 w-11 sm:h-14 sm:w-14 object-contain drop-shadow-md"
+                    className="h-12 w-12 sm:h-16 sm:w-16 object-contain drop-shadow-lg group-hover:scale-105 transition"
                     onError={(e) => { e.target.style.display='none'; }}
                   />
                 </div>
                 <div className="flex flex-col justify-center leading-tight">
-                  <span className="text-[10px] sm:text-xs font-extrabold tracking-wider text-amber-400 uppercase whitespace-nowrap">
+                  <span className="text-[11px] sm:text-xs font-extrabold tracking-widest text-amber-400 uppercase whitespace-nowrap">
                     DIGITAL UNIVERSITY
                   </span>
-                  <span className="text-[10px] sm:text-xs font-extrabold tracking-wider text-amber-300 uppercase whitespace-nowrap">
+                  <span className="text-[11px] sm:text-xs font-extrabold tracking-widest text-amber-300 uppercase whitespace-nowrap">
                     OF CAMBODIA
                   </span>
-                  <span className="text-xs sm:text-sm font-extrabold text-teal-400 whitespace-nowrap">
+                  <span className="text-xs sm:text-sm font-black text-teal-400 whitespace-nowrap tracking-wide">
                     {lang === 'km' ? 'ចូលបណ្ណាល័យ' : 'Library Entrance'}
                   </span>
                 </div>
@@ -70,59 +70,59 @@ export default function Navbar({ activeTab, setActiveTab, activeCount }) {
 
             </div>
 
-            {/* Desktop Navigation Tabs (Hidden on Mobile) */}
-            <div className="hidden md:flex items-center gap-1 sm:gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 shrink-0">
+            {/* Desktop Navigation Tabs (Clean & Compact to avoid any overlap) */}
+            <div className="hidden md:flex items-center gap-1.5 bg-slate-900/95 p-1.5 rounded-2xl border border-slate-800 shadow-inner">
               
               {/* Entrance Kiosk Screen */}
               <button
                 onClick={() => handleNavClick('kiosk')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
                   activeTab === 'kiosk'
-                    ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 shadow-md shadow-teal-500/20 font-bold'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                    ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 shadow-md shadow-teal-500/20'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                 }`}
               >
-                <ScanLine className="w-3.5 h-3.5" />
+                <ScanLine className="w-4 h-4" />
                 <span className="whitespace-nowrap">{t('navKiosk')}</span>
               </button>
 
               {/* Mobile Portal Simulation */}
               <button
                 onClick={() => handleNavClick('mobile')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
                   activeTab === 'mobile'
-                    ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/20 font-bold'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                    ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/20'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                 }`}
               >
-                <Smartphone className="w-3.5 h-3.5" />
+                <Smartphone className="w-4 h-4" />
                 <span className="whitespace-nowrap">{t('navMobilePortal')}</span>
               </button>
 
               {/* Admin Dashboard */}
               <button
                 onClick={() => handleNavClick('admin')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
                   activeTab === 'admin'
-                    ? 'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-500/20 font-bold'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                    ? 'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-500/20'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                 }`}
               >
-                <LayoutDashboard className="w-3.5 h-3.5" />
+                <LayoutDashboard className="w-4 h-4" />
                 <span className="whitespace-nowrap">{t('navAdmin')}</span>
               </button>
             </div>
 
-            {/* Right Controls: Language Switcher & Status */}
-            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Right Controls: Language Switcher & Indicators */}
+            <div className="flex items-center gap-2.5 shrink-0">
               
               {/* Language Switcher Toggle */}
               <button
                 onClick={toggleLanguage}
                 title="Switch Language / ផ្លាស់ប្ដូរភាសា"
-                className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-xs font-semibold text-slate-200 transition-all shadow-sm"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-xs font-bold text-slate-200 transition-all shadow-sm"
               >
-                <Globe className="w-3.5 h-3.5 text-teal-400" />
+                <Globe className="w-4 h-4 text-teal-400" />
                 <span className="flex items-center gap-1">
                   <span className={lang === 'km' ? 'text-teal-400 font-bold' : 'text-slate-400'}>🇰🇭 ខ្មែរ</span>
                   <span className="text-slate-600">|</span>
@@ -131,7 +131,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount }) {
               </button>
 
               {/* Occupants Indicator (Desktop) */}
-              <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs shrink-0">
+              <div className="hidden xl:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs shrink-0">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-500"></span>
@@ -141,7 +141,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount }) {
               </div>
 
               {/* Time (Desktop) */}
-              <div className="hidden 2xl:flex items-center gap-2 text-xs font-mono text-slate-300 bg-slate-900/60 px-3 py-1.5 rounded-xl border border-slate-800/60 shrink-0">
+              <div className="hidden 2xl:flex items-center gap-2 text-xs font-mono text-slate-300 bg-slate-900/60 px-3 py-2 rounded-xl border border-slate-800/60 shrink-0">
                 <Clock className="w-3.5 h-3.5 text-slate-400" />
                 <span>
                   {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
