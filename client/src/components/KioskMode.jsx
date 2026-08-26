@@ -336,15 +336,6 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
 
           <div className="relative z-10 text-center max-w-3xl mx-auto">
             
-            {/* Header Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-teal-500/10 border border-teal-500/30 text-teal-300 mb-4 shadow-sm">
-              <Sparkles className="w-4 h-4 text-teal-400" />
-              <span>{t('entranceQrTitle')}</span>
-            </div>
-
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-sans mb-2">
-              {t('entranceQrTitle')}
-            </h1>
 
 
             {/* Big Interactive Glowing QR Code Display Box */}
@@ -375,38 +366,6 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
 
             </div>
 
-            {/* 2-Step Flow Explanation Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto text-left">
-              
-              <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/90 flex items-start gap-3">
-                <div className="w-8 h-8 rounded-xl bg-teal-500/20 text-teal-300 border border-teal-500/30 flex items-center justify-center font-bold text-sm shrink-0">
-                  1
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-white mb-0.5">
-                    {t('firstTimeAttendee')} (លើកទី១)
-                  </h4>
-                  <p className="text-[11px] text-slate-400 leading-relaxed">
-                    {t('mobileFirstTimeSub')}
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/90 flex items-start gap-3">
-                <div className="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center justify-center font-bold text-sm shrink-0">
-                  2
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-white mb-0.5">
-                    {t('mobileReturningTitle')} (លើកទី២/រាល់ថ្ងៃ)
-                  </h4>
-                  <p className="text-[11px] text-slate-400 leading-relaxed">
-                    {t('mobileReturningSub')}
-                  </p>
-                </div>
-              </div>
-
-            </div>
 
 
           </div>
