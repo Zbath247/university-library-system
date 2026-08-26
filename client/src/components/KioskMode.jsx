@@ -336,11 +336,6 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
 
           <div className="relative z-10 text-center max-w-3xl mx-auto">
             
-            {/* Header Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-teal-500/10 border border-teal-500/30 text-teal-300 mb-4 shadow-sm">
-              <Sparkles className="w-4 h-4 text-teal-400" />
-              <span>{t('entranceQrTitle')}</span>
-            </div>
 
             <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-sans mb-8">
               {t('entranceQrTitle')}
