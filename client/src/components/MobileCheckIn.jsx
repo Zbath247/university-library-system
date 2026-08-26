@@ -15,7 +15,8 @@ import {
   ShieldCheck,
   UserPlus,
   Zap,
-  ChevronRight
+  ChevronRight,
+  Phone
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { api } from '../services/api';
@@ -544,6 +545,24 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
                   required
                   className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm font-mono uppercase text-teal-300 placeholder-slate-500 focus:outline-none focus:border-teal-500"
                 />
+              </div>
+
+              {/* Phone Number */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center justify-between">
+                  <span>{t('phone')}</span>
+                  <span className="text-[10px] text-teal-400 font-normal">សម្រាប់ទំនាក់ទំនង</span>
+                </label>
+                <div className="relative">
+                  <Phone className="w-4 h-4 text-slate-500 absolute left-3.5 top-3 pointer-events-none" />
+                  <input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                    placeholder={t('phonePlaceholder') || '012 345 678'}
+                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-500 font-mono"
+                  />
+                </div>
               </div>
 
               {/* Role */}
