@@ -11,6 +11,7 @@ import {
   GraduationCap,
   Building,
   RefreshCw,
+  BookOpen,
   Edit3,
   Trash2,
   RotateCcw,
@@ -30,6 +31,10 @@ export default function SessionsTable({
   onForceCheckout,
   onViewPass
 }) {
+  const safeSessions = Array.isArray(sessions) ? sessions : [];
+  const safeRoles = Array.isArray(roles) ? roles : [];
+  const safeDepts = Array.isArray(departments) ? departments : [];
+
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
@@ -42,13 +47,14 @@ export default function SessionsTable({
   const { t, tRole, tDept, tPurpose } = useLanguage();
 
   // Category counts
-  const countAll = sessions.length;
-  const countVisit = sessions.filter(s => s.purpose_of_visit !== 'Book Borrowing' && s.purpose_of_visit !== 'Book Return').length;
-  const countBorrow = sessions.filter(s => s.purpose_of_visit === 'Book Borrowing').length;
-  const countReturn = sessions.filter(s => s.purpose_of_visit === 'Book Return').length;
+  const countAll = safeSessions.length;
+  const countVisit = safeSessions.filter(s => s && s.purpose_of_visit !== 'Book Borrowing' && s.purpose_of_visit !== 'Book Return').length;
+  const countBorrow = safeSessions.filter(s => s && s.purpose_of_visit === 'Book Borrowing').length;
+  const countReturn = safeSessions.filter(s => s && s.purpose_of_visit === 'Book Return').length;
 
   // Client-side filtering for immediate snappy responses
-  const filteredSessions = sessions.filter(s => {
+  const filteredSessions = safeSessions.filter(s => {
+    if (!s) return false;
     const user = s.user || {};
 
     // 1. Category segmentation
@@ -103,7 +109,7 @@ export default function SessionsTable({
                 {t('tabAllLogs')}
               </h3>
               <p className="text-xs text-slate-400">
-                {filteredSessions.length} / {sessions.length} កំណត់ត្រា
+                {filteredSessions.length} / {safeSessions.length} កំណត់ត្រា
               </p>
             </div>
           </div>
