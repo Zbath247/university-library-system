@@ -29,6 +29,8 @@ export default function SessionsTable({
   loading = false,
   onRefresh,
   onForceCheckout,
+  onApproveSession,
+  onRejectSession,
   onViewPass
 }) {
   const safeSessions = Array.isArray(sessions) ? sessions : [];
@@ -433,7 +435,7 @@ export default function SessionsTable({
                           {inTime} <span className="text-slate-500">({inDate})</span>
                         </span>
                         <span className="font-mono text-[10px] text-slate-400">
-                          → {outTime}
+                          {isPending ? 'Waiting for approval' : `→ ${outTime}`}
                         </span>
                       </div>
                     </td>
@@ -447,10 +449,19 @@ export default function SessionsTable({
 
                     {/* Status */}
                     <td className="py-3.5 px-4">
-                      {isActive ? (
+                      {isPending ? (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
+                          <span>Pending Approval</span>
+                        </span>
+                      ) : isActive ? (
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-teal-500/15 text-teal-300 border border-teal-500/30">
                           <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-ping" />
                           <span>{t('statusActive')}</span>
+                        </span>
+                      ) : session.status === 'REJECTED' ? (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-rose-500/15 text-rose-400 border border-rose-500/30">
+                          Rejected
                         </span>
                       ) : (
                         <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-400">
@@ -479,6 +490,27 @@ export default function SessionsTable({
                           <Edit3 className="w-3.5 h-3.5" />
                         </button>
 
+                        {/* Approve/Reject Buttons if Pending */}
+                        {isPending && (
+                          <>
+                            <button
+                              onClick={() => onApproveSession && onApproveSession(session.id)}
+                              title="Approve Request"
+                              className="p-1.5 rounded-lg bg-teal-500/20 hover:bg-teal-500 text-teal-400 hover:text-white transition"
+                            >
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => onRejectSession && onRejectSession(session.id)}
+                              title="Reject Request"
+                              className="p-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500 text-rose-400 hover:text-white transition"
+                            >
+                              <AlertTriangle className="w-3.5 h-3.5" />
+                            </button>
+                          </>
+                        )}
+
+                        {/* Force Check-Out */}
                         {isActive && (
                           <button
                             onClick={() => onForceCheckout(session.id)}

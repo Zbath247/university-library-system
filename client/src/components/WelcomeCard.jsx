@@ -34,27 +34,33 @@ export default function WelcomeCard({
     ? new Date(session.check_in_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     : new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+  const isPending = session?.status === 'PENDING_APPROVAL';
+
   return (
     <div className="relative w-full max-w-xl mx-auto rounded-3xl bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border-2 border-teal-500/40 shadow-2xl shadow-teal-500/10 overflow-hidden animate-slide-up">
       
       {/* Top Banner */}
       <div className={`px-6 py-4 flex items-center justify-between ${
-        isAlreadyActive
+        isPending
           ? 'bg-amber-500/15 border-b border-amber-500/30 text-amber-300'
-          : 'bg-teal-500/15 border-b border-teal-500/30 text-teal-300'
+          : isAlreadyActive
+            ? 'bg-amber-500/15 border-b border-amber-500/30 text-amber-300'
+            : 'bg-teal-500/15 border-b border-teal-500/30 text-teal-300'
       }`}>
         <div className="flex items-center gap-2.5">
-          <div className={`p-1.5 rounded-xl ${isAlreadyActive ? 'bg-amber-500/20 text-amber-400' : 'bg-teal-500/20 text-teal-400'}`}>
+          <div className={`p-1.5 rounded-xl ${isPending || isAlreadyActive ? 'bg-amber-500/20 text-amber-400' : 'bg-teal-500/20 text-teal-400'}`}>
             <CheckCircle2 className="w-5 h-5" />
           </div>
           <div>
             <h4 className="text-sm font-bold tracking-tight text-white">
-              {isAlreadyActive ? t('welcomeActiveTitle') : isNewUser ? t('welcomeRegisteredTitle') : t('checkInSuccess')}
+              {isPending ? 'Pending Admin Approval' : isAlreadyActive ? t('welcomeActiveTitle') : isNewUser ? t('welcomeRegisteredTitle') : t('checkInSuccess')}
             </h4>
             <p className="text-[11px] opacity-80">
-              {isAlreadyActive
-                ? `${t('alreadyActiveMsg')} ${checkInTimeStr}`
-                : `${t('colEntryTime')}: ${checkInTimeStr}`}
+              {isPending
+                ? 'Please wait for the librarian to approve your request.'
+                : isAlreadyActive
+                  ? `${t('alreadyActiveMsg')} ${checkInTimeStr}`
+                  : `${t('colEntryTime')}: ${checkInTimeStr}`}
             </p>
           </div>
         </div>

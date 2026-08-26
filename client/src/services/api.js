@@ -108,6 +108,20 @@ export const api = {
     return res.json();
   },
 
+  adminApproveSession: async (sessionId) => {
+    const res = await fetch(`${API_BASE}/admin/approve-session/${sessionId}`, {
+      method: 'POST'
+    });
+    return res.json();
+  },
+
+  adminRejectSession: async (sessionId) => {
+    const res = await fetch(`${API_BASE}/admin/reject-session/${sessionId}`, {
+      method: 'POST'
+    });
+    return res.json();
+  },
+
   adminLogin: async (username, password) => {
     const res = await fetch(`${API_BASE}/admin/login`, {
       method: 'POST',

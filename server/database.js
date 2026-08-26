@@ -368,6 +368,9 @@ class RelationalDatabase {
 
     const now = new Date();
     const nextId = this.data.sessions.length > 0 ? Math.max(...this.data.sessions.map(s => s.id)) + 1 : 1;
+    const requiresApproval = (purposeOfVisit === 'Book Borrowing' || purposeOfVisit === 'Book Return');
+    const initialStatus = requiresApproval ? 'PENDING_APPROVAL' : 'ACTIVE';
+
     const newSession = {
       id: nextId,
       user_id: Number(userId),
@@ -376,7 +379,7 @@ class RelationalDatabase {
       purpose_of_visit: purposeOfVisit || user.default_purpose || 'Academic Research',
       research_topic: researchTopic || user.research_field || 'Academic Research',
       duration_minutes: 0,
-      status: 'ACTIVE',
+      status: initialStatus,
       created_at: now.toISOString()
     };
 
@@ -421,6 +424,37 @@ class RelationalDatabase {
     return {
       ...session,
       user
+    };
+  }
+
+  approveSession(sessionId) {
+    const session = this.data.sessions.find(s => s.id === Number(sessionId));
+    if (!session) throw new Error('Session not found.');
+    if (session.status !== 'PENDING_APPROVAL') throw new Error('Session is not pending approval.');
+
+    session.status = 'ACTIVE';
+    // Update check-in time to now, since it was pending
+    session.check_in_time = new Date().toISOString();
+    this.save();
+    
+    return {
+      ...session,
+      user: this.findUserById(session.user_id)
+    };
+  }
+
+  rejectSession(sessionId) {
+    const session = this.data.sessions.find(s => s.id === Number(sessionId));
+    if (!session) throw new Error('Session not found.');
+    if (session.status !== 'PENDING_APPROVAL') throw new Error('Session is not pending approval.');
+
+    session.status = 'REJECTED';
+    session.check_out_time = new Date().toISOString();
+    this.save();
+    
+    return {
+      ...session,
+      user: this.findUserById(session.user_id)
     };
   }
 

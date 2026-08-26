@@ -161,6 +161,36 @@ router.post('/checkout/:sessionId', (req, res) => {
   }
 });
 
+// POST /api/admin/approve-session/:sessionId - Approve pending book borrow/return
+router.post('/approve-session/:sessionId', (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    const session = db.approveSession(Number(sessionId));
+    res.json({
+      success: true,
+      session,
+      message: `Session for ${session.user ? session.user.full_name : 'Visitor'} approved successfully.`
+    });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+});
+
+// POST /api/admin/reject-session/:sessionId - Reject pending book borrow/return
+router.post('/reject-session/:sessionId', (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    const session = db.rejectSession(Number(sessionId));
+    res.json({
+      success: true,
+      session,
+      message: `Session for ${session.user ? session.user.full_name : 'Visitor'} rejected.`
+    });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+});
+
 // GET /api/admin/export/csv - Direct CSV download of attendance & research logs
 router.get('/export/csv', (req, res) => {
   try {

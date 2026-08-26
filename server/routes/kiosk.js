@@ -103,13 +103,18 @@ router.post('/register-and-checkin', async (req, res) => {
       console.warn('QR Code generation warning:', qrErr);
     }
 
+    const session = sessionResult.session;
+    const isPending = session.status === 'PENDING_APPROVAL';
+    
     return res.json({
       success: true,
       isNewUser: true,
       user: newUser,
-      session: sessionResult.session,
+      session: session,
       qrDataUrl,
-      message: `Welcome to the University Library, ${newUser.full_name}! Registration and check-in completed.`
+      message: isPending 
+        ? `Welcome, ${newUser.full_name}! Your request to borrow/return is pending admin approval.`
+        : `Welcome to the University Library, ${newUser.full_name}! Registration and check-in completed.`
     });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
@@ -163,12 +168,16 @@ router.post('/checkin', async (req, res) => {
       });
     }
 
+    const isPending = sessionResult.session.status === 'PENDING_APPROVAL';
+
     return res.json({
       success: true,
       alreadyActive: false,
       user,
       session: sessionResult.session,
-      message: `Welcome back, ${user.full_name} — Check-in successful. Happy researching!`
+      message: isPending 
+        ? `Welcome back, ${user.full_name}. Your request to borrow/return is pending admin approval.`
+        : `Welcome back, ${user.full_name} — Check-in successful. Happy researching!`
     });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

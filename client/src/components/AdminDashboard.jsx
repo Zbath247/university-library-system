@@ -88,6 +88,28 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
     }
   };
 
+  const handleApproveSession = async (sessionId) => {
+    try {
+      const res = await api.adminApproveSession(sessionId);
+      if (res.success) {
+        fetchAllData();
+      }
+    } catch (err) {
+      alert(err.message || 'Approval failed.');
+    }
+  };
+
+  const handleRejectSession = async (sessionId) => {
+    try {
+      const res = await api.adminRejectSession(sessionId);
+      if (res.success) {
+        fetchAllData();
+      }
+    } catch (err) {
+      alert(err.message || 'Rejection failed.');
+    }
+  };
+
   const handleSeedDemo = async () => {
     if (window.confirm('Reset database and re-seed with 35+ realistic academic research sessions & active members?')) {
       try {
@@ -345,6 +367,8 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
         loading={loading}
         onRefresh={fetchAllData}
         onForceCheckout={handleForceCheckout}
+        onApproveSession={handleApproveSession}
+        onRejectSession={handleRejectSession}
         onViewPass={handleViewPass}
       />
 
