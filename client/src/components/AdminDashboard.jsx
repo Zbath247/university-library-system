@@ -111,20 +111,20 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
   const activeSessions = sessions.filter(s => s.status === 'ACTIVE');
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-4 sm:space-y-8 animate-fade-in">
       
       {/* Top Banner & Quick Controls */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-slate-900/80 p-6 rounded-3xl border border-slate-800 shadow-xl glass-panel">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 sm:gap-4 bg-slate-900/80 p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-800 shadow-xl glass-panel">
         <div>
-          <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl font-extrabold text-white tracking-tight">
+          <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+            <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
               {t('adminTitle')}
             </h1>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            <span className="px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
               {t('liveMonitorBadge')}
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5 sm:mt-1">
             {t('adminSub')}
           </p>
         </div>
