@@ -122,8 +122,8 @@ export default function EditSessionModal({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden animate-slide-up max-h-[88dvh] sm:max-h-[92vh] flex flex-col my-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 bg-slate-950/90 backdrop-blur-md animate-fade-in">
+      <div className="relative w-full h-[100dvh] sm:h-auto sm:max-h-[90vh] max-w-2xl bg-slate-900 border-0 sm:border sm:border-slate-800 rounded-none sm:rounded-3xl shadow-2xl overflow-hidden animate-slide-up flex flex-col">
         
         {/* Sticky Header */}
         <div className="px-4 py-3.5 sm:px-6 sm:py-5 bg-gradient-to-r from-teal-950/90 via-slate-900 to-indigo-950/90 border-b border-slate-800 flex items-center justify-between shrink-0">
@@ -339,7 +339,7 @@ export default function EditSessionModal({
           </div>
 
           {/* Sticky Actions Footer - Always Visible on Mobile */}
-          <div className="px-4 py-3 sm:px-6 sm:py-4 bg-slate-950/95 border-t border-slate-800 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-2.5 shrink-0">
+          <div className="px-4 py-3.5 sm:px-6 sm:py-4 bg-slate-950 border-t border-slate-800 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-2.5 shrink-0 pb-8 sm:pb-4">
             <button
               type="button"
               onClick={handleDelete}
