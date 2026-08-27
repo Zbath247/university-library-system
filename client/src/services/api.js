@@ -1,6 +1,6 @@
 const API_BASE = window.location.hostname === 'localhost'
   ? '/api'
-  : 'https://university-library-system-cegt.onrender.com/api';
+  : 'https://library-backend-frhg.onrender.com/api';
 
 
 export const api = {
