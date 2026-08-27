@@ -1,59 +1,27 @@
-const fs = require('fs');
-const path = require('path');
+const User = require('./models/User');
+const Session = require('./models/Session');
+const Role = require('./models/Role');
+const Department = require('./models/Department');
 
-const DATA_DIR = path.join(__dirname, 'data');
-const DB_FILE = path.join(DATA_DIR, 'library_db.json');
-
-// Ensure data directory exists
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-}
-
-class RelationalDatabase {
+class DatabaseWrapper {
   constructor() {
-    this.data = {
-      roles: [],
-      departments: [],
-      users: [],
-      sessions: []
-    };
-    this.init();
+    this.seedReferenceData();
   }
 
-  init() {
-    if (fs.existsSync(DB_FILE)) {
-      try {
-        const raw = fs.readFileSync(DB_FILE, 'utf8');
-        this.data = JSON.parse(raw);
-      } catch (err) {
-        console.error('Error reading database file, re-initializing...', err);
-        this.seedInitialData();
-      }
-    } else {
-      this.seedInitialData();
-    }
-  }
-
-  save() {
-    try {
-      fs.writeFileSync(DB_FILE, JSON.stringify(this.data, null, 2), 'utf8');
-    } catch (err) {
-      console.error('Error saving database file:', err);
-    }
-  }
-
-  seedInitialData(force = false) {
-    if (force || !this.data.roles || this.data.roles.length === 0) {
-      this.data.roles = [
+  async seedReferenceData() {
+    const rolesCount = await Role.countDocuments();
+    if (rolesCount === 0) {
+      await Role.insertMany([
         { id: 1, name: 'Student', badge_color: '#2563EB', description: 'Undergraduate & Postgraduate Students' },
         { id: 2, name: 'Lecturer', badge_color: '#059669', description: 'Teaching Faculty & Course Instructors' },
         { id: 3, name: 'Professor', badge_color: '#7C3AED', description: 'Tenured & Principal Academic Researchers' },
         { id: 4, name: 'Research Scholar', badge_color: '#D97706', description: 'PhD Candidates & Postdoctoral Fellows' }
-      ];
+      ]);
     }
 
-    if (true || force || !this.data.departments || this.data.departments.length === 0) {
-      this.data.departments = [
+    const deptCount = await Department.countDocuments();
+    if (deptCount === 0) {
+      await Department.insertMany([
         { id: 1, name: 'ក្រាហ្វិកឌីហ្សាញ', code: 'GD', faculty: 'សិល្បៈ និងរចនា' },
         { id: 2, name: 'ទីផ្សារឌីជីថល', code: 'DM', faculty: 'គ្រប់គ្រងធុរកិច្ច' },
         { id: 3, name: 'ប្រព័ន្ធផ្សព្វផ្សាយសង្គម', code: 'SM', faculty: 'ទំនាក់ទំនង' },
@@ -65,226 +33,47 @@ class RelationalDatabase {
         { id: 9, name: 'ស្ថាបត្យកម្ម', code: 'ARC', faculty: 'ស្ថាបត្យកម្ម និងនគរូបនីយកម្ម' },
         { id: 10, name: 'បង្រៀនភាសាអង់គ្លេស', code: 'TE', faculty: 'ភាសាបរទេស' },
         { id: 11, name: 'សេដ្ឋកិច្ចនីជីថល', code: 'DE', faculty: 'សេដ្ឋកិច្ច' }
-      ];
+      ]);
     }
-
-    if (force || !this.data.users || this.data.users.length === 0) {
-      const sampleUsers = [
-        {
-          id: 1,
-          university_id: 'DUCP2024-0101',
-          full_name: 'Dr. Evelyn Vance',
-          email: 'evelyn.vance@duc.edu.kh',
-          phone: '+855 12 234 567',
-          role_id: 3,
-          department_id: 1,
-          research_field: 'Deep Reinforcement Learning in Autonomous Robotics',
-          default_purpose: 'Grant Research & Paper Peer Review',
-          created_at: new Date(Date.now() - 30 * 86400000).toISOString()
-        },
-        {
-          id: 2,
-          university_id: 'DUCP2024-0102',
-          full_name: 'Dr. Arthur Sterling',
-          email: 'arthur.sterling@duc.edu.kh',
-          phone: '+855 12 345 678',
-          role_id: 3,
-          department_id: 2,
-          research_field: 'CRISPR Gene Editing & Neurobiology Diagnostics',
-          default_purpose: 'Clinical Trial Meta-Analysis',
-          created_at: new Date(Date.now() - 25 * 86400000).toISOString()
-        },
-        {
-          id: 3,
-          university_id: 'DUCL2024-0201',
-          full_name: 'Dr. Marcus Holloway',
-          email: 'marcus.h@duc.edu.kh',
-          phone: '+855 12 456 789',
-          role_id: 2,
-          department_id: 3,
-          research_field: 'Time-Series Forecasting in High-Frequency Markets',
-          default_purpose: 'Course Curriculum & Journal Writing',
-          created_at: new Date(Date.now() - 20 * 86400000).toISOString()
-        },
-        {
-          id: 4,
-          university_id: 'DUCL2024-0202',
-          full_name: 'Sarah Lin, M.Sc.',
-          email: 'sarah.lin@duc.edu.kh',
-          phone: '+855 12 567 890',
-          role_id: 2,
-          department_id: 7,
-          research_field: 'International Human Rights & Cyber-Jurisdiction',
-          default_purpose: 'Legal Precedent Archival Study',
-          created_at: new Date(Date.now() - 15 * 86400000).toISOString()
-        },
-        {
-          id: 5,
-          university_id: 'DUC2024-0301',
-          full_name: 'Sophia Chen',
-          email: 'sophia.chen@student.duc.edu.kh',
-          phone: '+855 12 678 901',
-          role_id: 1,
-          department_id: 1,
-          research_field: 'Neural Network Acceleration on Edge Hardware',
-          default_purpose: 'Senior Thesis Literature Review',
-          created_at: new Date(Date.now() - 10 * 86400000).toISOString()
-        },
-        {
-          id: 6,
-          university_id: 'DUC2024-0417',
-          full_name: 'Mok Sambath',
-          email: 'mok.sambath@student.duc.edu.kh',
-          phone: '+855 12 789 012',
-          role_id: 1,
-          department_id: 1,
-          research_field: 'Web Development & Digital Systems',
-          default_purpose: 'Academic Research & Study',
-          created_at: new Date(Date.now() - 8 * 86400000).toISOString()
-        },
-        {
-          id: 7,
-          university_id: 'DUCR2024-0501',
-          full_name: 'Elena Rostova',
-          email: 'elena.rostova@duc.edu.kh',
-          phone: '+855 12 890 123',
-          role_id: 4,
-          department_id: 9,
-          research_field: 'Quantum Error Correction in Topological Qubits',
-          default_purpose: 'PhD Dissertation Writing',
-          created_at: new Date(Date.now() - 5 * 86400000).toISOString()
-        }
-      ];
-      this.data.users = sampleUsers;
-    }
-
-    if (force || !this.data.sessions || this.data.sessions.length === 0) {
-      const pastPurposes = [
-        { purpose: 'Book Borrowing', topic: 'Academic Textbook & Reference Loan', duration: 15 },
-        { purpose: 'Book Return', topic: 'Library Book Return & Check-in', duration: 10 },
-        { purpose: 'Study & Revision', topic: 'Self-Study & Final Exam Prep', duration: 120 },
-        { purpose: 'Thesis & Academic Research', topic: 'Graph Neural Networks for Drug Discovery', duration: 135 },
-        { purpose: 'Grant Proposal & Research Review', topic: 'Clean Energy Microgrid Resilience', duration: 210 },
-        { purpose: 'PhD Dissertation Manuscript Drafting', topic: 'Algorithmic Fairness in Automated Systems', duration: 180 },
-        { purpose: 'Journal Peer Review & Archival Reference', topic: 'Photonic Computing Architectures', duration: 95 },
-        { purpose: 'Capstone Project Experimental Analysis', topic: 'Urban Heat Island Mitigation Strategies', duration: 110 },
-        { purpose: 'Computer & Digital Lab', topic: 'Online Database Search & Python Scripting', duration: 90 },
-        { purpose: 'Archival Law & Policy Research', topic: 'Digital Sovereignty in Distributed Computing', duration: 150 }
-      ];
-
-      const sessions = [];
-      let sessionId = 1;
-      const now = new Date();
-
-      // Seed 25 historical sessions across past 7 days
-      for (let day = 7; day >= 1; day--) {
-        const count = 3 + (day % 3);
-        for (let i = 0; i < count; i++) {
-          const userIdx = (day * 3 + i) % this.data.users.length;
-          const user = this.data.users[userIdx];
-          const template = pastPurposes[(day * 2 + i) % pastPurposes.length];
-          const hour = 8 + (i * 3) + ((day * 2) % 4);
-          const checkIn = new Date(now.getTime() - day * 86400000);
-          checkIn.setHours(hour, (i * 18) % 60, 0, 0);
-
-          const duration = template.duration + ((i * 7) % 30) - 15;
-          const checkOut = new Date(checkIn.getTime() + duration * 60000);
-
-          sessions.push({
-            id: sessionId++,
-            user_id: user.id,
-            check_in_time: checkIn.toISOString(),
-            check_out_time: checkOut.toISOString(),
-            purpose_of_visit: template.purpose,
-            research_topic: template.topic,
-            duration_minutes: duration,
-            status: 'COMPLETED',
-            created_at: checkIn.toISOString()
-          });
-        }
-      }
-
-      // Seed 3 currently ACTIVE sessions today
-      const active1 = new Date(now.getTime() - 85 * 60000);
-      sessions.push({
-        id: sessionId++,
-        user_id: 1, // Dr. Evelyn Vance (Professor)
-        check_in_time: active1.toISOString(),
-        check_out_time: null,
-        purpose_of_visit: 'Grant Research & Paper Peer Review',
-        research_topic: 'Deep Reinforcement Learning in Autonomous Robotics',
-        duration_minutes: 85,
-        status: 'ACTIVE',
-        created_at: active1.toISOString()
-      });
-
-      const active2 = new Date(now.getTime() - 145 * 60000);
-      sessions.push({
-        id: sessionId++,
-        user_id: 3, // Dr. Marcus Holloway (Lecturer)
-        check_in_time: active2.toISOString(),
-        check_out_time: null,
-        purpose_of_visit: 'Course Curriculum & Journal Writing',
-        research_topic: 'Time-Series Forecasting in High-Frequency Markets',
-        duration_minutes: 145,
-        status: 'ACTIVE',
-        created_at: active2.toISOString()
-      });
-
-      const active3 = new Date(now.getTime() - 32 * 60000);
-      sessions.push({
-        id: sessionId++,
-        user_id: 5, // Sophia Chen (Student)
-        check_in_time: active3.toISOString(),
-        check_out_time: null,
-        purpose_of_visit: 'Senior Thesis Literature Review',
-        research_topic: 'Neural Network Acceleration on Edge Hardware',
-        duration_minutes: 32,
-        status: 'ACTIVE',
-        created_at: active3.toISOString()
-      });
-
-      this.data.sessions = sessions;
-    }
-
-    this.save();
   }
 
   // --- QUERY METHODS ---
 
-  getRoles() {
-    return this.data.roles;
+  async getRoles() {
+    return await Role.find({}).lean();
   }
 
-  getDepartments() {
-    return this.data.departments;
+  async getDepartments() {
+    return await Department.find({}).lean();
   }
 
-  findRoleById(id) {
-    return this.data.roles.find(r => r.id === Number(id));
+  async findRoleById(id) {
+    return await Role.findOne({ id: Number(id) }).lean();
   }
 
-  findDepartmentById(id) {
-    return this.data.departments.find(d => d.id === Number(id));
+  async findDepartmentById(id) {
+    return await Department.findOne({ id: Number(id) }).lean();
   }
 
-  findUserByUniversityId(rawId) {
+  async findUserByUniversityId(rawId) {
     if (!rawId) return null;
     const cleanId = String(rawId).trim().toUpperCase();
-    const user = this.data.users.find(u => u.university_id.toUpperCase() === cleanId);
+    // Case insensitive exact match
+    const user = await User.findOne({ university_id: { $regex: new RegExp('^' + cleanId + '$', 'i') } }).lean();
     if (!user) return null;
-    return this.hydrateUser(user);
+    return await this.hydrateUser(user);
   }
 
-  findUserById(id) {
-    const user = this.data.users.find(u => u.id === Number(id));
+  async findUserById(id) {
+    const user = await User.findOne({ id: Number(id) }).lean();
     if (!user) return null;
-    return this.hydrateUser(user);
+    return await this.hydrateUser(user);
   }
 
-  hydrateUser(user) {
-    const role = this.findRoleById(user.role_id) || { name: 'Unknown', badge_color: '#6B7280' };
-    const dept = this.findDepartmentById(user.department_id) || { name: 'General', code: 'GEN', faculty: 'University' };
+  async hydrateUser(user) {
+    if (!user) return null;
+    const role = await this.findRoleById(user.role_id) || { name: 'Unknown', badge_color: '#6B7280' };
+    const dept = await this.findDepartmentById(user.department_id) || { name: 'General', code: 'GEN', faculty: 'University' };
     return {
       ...user,
       role_name: role.name,
@@ -295,13 +84,19 @@ class RelationalDatabase {
     };
   }
 
-  getAllUsers() {
-    return this.data.users.map(u => this.hydrateUser(u));
+  async getAllUsers() {
+    const users = await User.find({}).lean();
+    const hydrated = [];
+    for (let u of users) {
+      hydrated.push(await this.hydrateUser(u));
+    }
+    return hydrated;
   }
 
-  createUser(payload) {
+  async createUser(payload) {
     const cleanId = String(payload.university_id).trim().toUpperCase();
-    const existing = this.data.users.find(u => u.university_id.toUpperCase() === cleanId);
+    const existing = await User.findOne({ university_id: { $regex: new RegExp('^' + cleanId + '$', 'i') } });
+    
     if (existing) {
       if (payload.full_name) existing.full_name = payload.full_name.trim();
       if (payload.email) existing.email = payload.email.trim();
@@ -311,13 +106,16 @@ class RelationalDatabase {
       if (payload.research_field) existing.research_field = payload.research_field.trim();
       if (payload.default_purpose) existing.default_purpose = payload.default_purpose.trim();
       else if (payload.purpose_of_visit) existing.default_purpose = payload.purpose_of_visit.trim();
+      
       existing.updated_at = new Date().toISOString();
-      this.save();
-      return this.hydrateUser(existing);
+      await existing.save();
+      return await this.hydrateUser(existing.toObject());
     }
 
-    const nextId = this.data.users.length > 0 ? Math.max(...this.data.users.map(u => u.id)) + 1 : 1;
-    const newUser = {
+    const lastUser = await User.findOne().sort({ id: -1 });
+    const nextId = lastUser ? lastUser.id + 1 : 1;
+
+    const newUser = new User({
       id: nextId,
       university_id: cleanId,
       full_name: payload.full_name.trim(),
@@ -329,38 +127,37 @@ class RelationalDatabase {
       default_purpose: payload.default_purpose ? payload.default_purpose.trim() : (payload.purpose_of_visit || 'Academic Research'),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
-    };
+    });
 
-    this.data.users.push(newUser);
-    this.save();
-    return this.hydrateUser(newUser);
+    await newUser.save();
+    return await this.hydrateUser(newUser.toObject());
   }
 
-  getActiveSessionForUser(userId) {
-    const session = this.data.sessions.find(s => s.user_id === Number(userId) && s.status === 'ACTIVE');
+  async getActiveSessionForUser(userId) {
+    const session = await Session.findOne({ user_id: Number(userId), status: 'ACTIVE' }).lean();
     if (!session) return null;
-    const user = this.findUserById(userId);
+    const user = await this.findUserById(userId);
     return {
       ...session,
       user
     };
   }
 
-  createSession(userId, purposeOfVisit, researchTopic) {
-    const user = this.findUserById(userId);
+  async createSession(userId, purposeOfVisit, researchTopic) {
+    const user = await this.findUserById(userId);
     if (!user) throw new Error('User not found.');
 
-    // Check if user is already checked in
-    const existingActive = this.getActiveSessionForUser(userId);
+    const existingActive = await this.getActiveSessionForUser(userId);
     if (existingActive) {
-      if (purposeOfVisit) existingActive.purpose_of_visit = purposeOfVisit;
-      if (researchTopic) existingActive.research_topic = researchTopic;
-      const actualSession = this.data.sessions.find(s => s.id === existingActive.id);
-      if (actualSession) {
-        if (purposeOfVisit) actualSession.purpose_of_visit = purposeOfVisit;
-        if (researchTopic) actualSession.research_topic = researchTopic;
+      if (purposeOfVisit || researchTopic) {
+        const updateDoc = {};
+        if (purposeOfVisit) updateDoc.purpose_of_visit = purposeOfVisit;
+        if (researchTopic) updateDoc.research_topic = researchTopic;
+        await Session.updateOne({ id: existingActive.id }, { $set: updateDoc });
+        
+        if (purposeOfVisit) existingActive.purpose_of_visit = purposeOfVisit;
+        if (researchTopic) existingActive.research_topic = researchTopic;
       }
-      this.save();
       return {
         alreadyActive: true,
         session: existingActive
@@ -368,11 +165,12 @@ class RelationalDatabase {
     }
 
     const now = new Date();
-    const nextId = this.data.sessions.length > 0 ? Math.max(...this.data.sessions.map(s => s.id)) + 1 : 1;
+    const lastSession = await Session.findOne().sort({ id: -1 });
+    const nextId = lastSession ? lastSession.id + 1 : 1;
     const requiresApproval = (purposeOfVisit === 'Book Borrowing' || purposeOfVisit === 'Book Return');
     const initialStatus = requiresApproval ? 'PENDING_APPROVAL' : 'ACTIVE';
 
-    const newSession = {
+    const newSession = new Session({
       id: nextId,
       user_id: Number(userId),
       check_in_time: now.toISOString(),
@@ -382,144 +180,133 @@ class RelationalDatabase {
       duration_minutes: 0,
       status: initialStatus,
       created_at: now.toISOString()
-    };
+    });
 
-    this.data.sessions.unshift(newSession);
-    this.save();
+    await newSession.save();
 
     return {
       alreadyActive: false,
       session: {
-        ...newSession,
+        ...newSession.toObject(),
         user
       }
     };
   }
 
-  checkOutSession(sessionIdOrUserId) {
+  async checkOutSession(sessionIdOrUserId) {
     const now = new Date();
-    let session = null;
+    let sessionDoc = null;
 
     if (typeof sessionIdOrUserId === 'number' || !isNaN(Number(sessionIdOrUserId))) {
-      session = this.data.sessions.find(s => s.id === Number(sessionIdOrUserId));
+      sessionDoc = await Session.findOne({ id: Number(sessionIdOrUserId) });
     }
     
-    if (!session) {
-      // Try finding active session by user_id
-      session = this.data.sessions.find(s => s.user_id === Number(sessionIdOrUserId) && s.status === 'ACTIVE');
+    if (!sessionDoc) {
+      sessionDoc = await Session.findOne({ user_id: Number(sessionIdOrUserId), status: 'ACTIVE' });
     }
 
-    if (!session) {
+    if (!sessionDoc) {
       throw new Error('Active session not found.');
     }
 
-    const checkInDate = new Date(session.check_in_time);
+    const checkInDate = new Date(sessionDoc.check_in_time);
     const durationMins = Math.max(1, Math.round((now.getTime() - checkInDate.getTime()) / 60000));
 
-    session.check_out_time = now.toISOString();
-    session.duration_minutes = durationMins;
-    session.status = 'COMPLETED';
+    sessionDoc.check_out_time = now.toISOString();
+    sessionDoc.duration_minutes = durationMins;
+    sessionDoc.status = 'COMPLETED';
+    await sessionDoc.save();
 
-    this.save();
-    const user = this.findUserById(session.user_id);
+    const user = await this.findUserById(sessionDoc.user_id);
     return {
-      ...session,
+      ...sessionDoc.toObject(),
       user
     };
   }
 
-  approveSession(sessionId) {
-    const session = this.data.sessions.find(s => s.id === Number(sessionId));
+  async approveSession(sessionId) {
+    const session = await Session.findOne({ id: Number(sessionId) });
     if (!session) throw new Error('Session not found.');
     if (session.status !== 'PENDING_APPROVAL') throw new Error('Session is not pending approval.');
 
     session.status = 'ACTIVE';
-    // Update check-in time to now, since it was pending
     session.check_in_time = new Date().toISOString();
-    this.save();
+    await session.save();
     
     return {
-      ...session,
-      user: this.findUserById(session.user_id)
+      ...session.toObject(),
+      user: await this.findUserById(session.user_id)
     };
   }
 
-  rejectSession(sessionId) {
-    const session = this.data.sessions.find(s => s.id === Number(sessionId));
+  async rejectSession(sessionId) {
+    const session = await Session.findOne({ id: Number(sessionId) });
     if (!session) throw new Error('Session not found.');
     if (session.status !== 'PENDING_APPROVAL') throw new Error('Session is not pending approval.');
 
     session.status = 'REJECTED';
     session.check_out_time = new Date().toISOString();
-    this.save();
+    await session.save();
     
     return {
-      ...session,
-      user: this.findUserById(session.user_id)
+      ...session.toObject(),
+      user: await this.findUserById(session.user_id)
     };
   }
 
-  deleteSession(sessionId) {
-    const idx = this.data.sessions.findIndex(s => s.id === Number(sessionId));
-    if (idx === -1) {
-      throw new Error('Session not found.');
-    }
-    const deleted = this.data.sessions.splice(idx, 1)[0];
-    this.save();
+  async deleteSession(sessionId) {
+    const deleted = await Session.findOneAndDelete({ id: Number(sessionId) });
+    if (!deleted) throw new Error('Session not found.');
     return deleted;
   }
 
-  updateSession(sessionId, updates = {}) {
-    const session = this.data.sessions.find(s => s.id === Number(sessionId));
-    if (!session) {
-      throw new Error('Session not found.');
-    }
+  async updateSession(sessionId, updates = {}) {
+    const session = await Session.findOne({ id: Number(sessionId) });
+    if (!session) throw new Error('Session not found.');
+    
     if (updates.purpose_of_visit) session.purpose_of_visit = updates.purpose_of_visit;
     if (updates.research_topic !== undefined) session.research_topic = updates.research_topic;
     if (updates.status) session.status = updates.status;
     if (updates.duration_minutes !== undefined) session.duration_minutes = Number(updates.duration_minutes);
     if (updates.check_in_time) session.check_in_time = updates.check_in_time;
     if (updates.check_out_time !== undefined) session.check_out_time = updates.check_out_time;
+    await session.save();
 
-    // Also update linked user profile if user details were edited
     if (session.user_id) {
-      const user = this.data.users.find(u => u.id === session.user_id);
+      const user = await User.findOne({ id: session.user_id });
       if (user) {
-        if (updates.full_name) user.full_name = updates.full_name.trim();
-        if (updates.university_id) user.university_id = updates.university_id.trim().toUpperCase();
-        if (updates.phone !== undefined) user.phone = updates.phone.trim();
-        if (updates.email !== undefined) user.email = updates.email.trim();
-        if (updates.role_id) user.role_id = Number(updates.role_id);
-        if (updates.department_id) user.department_id = Number(updates.department_id);
-        user.updated_at = new Date().toISOString();
+        let userUpdated = false;
+        if (updates.full_name) { user.full_name = updates.full_name.trim(); userUpdated = true; }
+        if (updates.university_id) { user.university_id = updates.university_id.trim().toUpperCase(); userUpdated = true; }
+        if (updates.phone !== undefined) { user.phone = updates.phone.trim(); userUpdated = true; }
+        if (updates.email !== undefined) { user.email = updates.email.trim(); userUpdated = true; }
+        if (updates.role_id) { user.role_id = Number(updates.role_id); userUpdated = true; }
+        if (updates.department_id) { user.department_id = Number(updates.department_id); userUpdated = true; }
+        if (userUpdated) {
+          user.updated_at = new Date().toISOString();
+          await user.save();
+        }
       }
     }
 
-    this.save();
-    const user = this.findUserById(session.user_id);
+    const userObj = await this.findUserById(session.user_id);
     return {
-      ...session,
-      user
+      ...session.toObject(),
+      user: userObj
     };
   }
 
-  deleteUser(userId) {
-    const idx = this.data.users.findIndex(u => u.id === Number(userId));
-    if (idx === -1) {
-      throw new Error('User not found.');
-    }
-    // Delete user and cascade delete their sessions
-    const deletedUser = this.data.users.splice(idx, 1)[0];
-    this.data.sessions = this.data.sessions.filter(s => s.user_id !== Number(userId));
-    this.save();
+  async deleteUser(userId) {
+    const deletedUser = await User.findOneAndDelete({ id: Number(userId) });
+    if (!deletedUser) throw new Error('User not found.');
+    await Session.deleteMany({ user_id: Number(userId) });
     return deletedUser;
   }
 
-  updateUser(userId, updates = {}) {
-    const user = this.data.users.find(u => u.id === Number(userId));
-    if (!user) {
-      throw new Error('User not found.');
-    }
+  async updateUser(userId, updates = {}) {
+    const user = await User.findOne({ id: Number(userId) });
+    if (!user) throw new Error('User not found.');
+    
     if (updates.full_name) user.full_name = updates.full_name.trim();
     if (updates.university_id) user.university_id = updates.university_id.trim().toUpperCase();
     if (updates.phone !== undefined) user.phone = updates.phone.trim();
@@ -528,39 +315,45 @@ class RelationalDatabase {
     if (updates.department_id) user.department_id = Number(updates.department_id);
     if (updates.research_field) user.research_field = updates.research_field.trim();
     if (updates.default_purpose) user.default_purpose = updates.default_purpose.trim();
+    
     user.updated_at = new Date().toISOString();
-    this.save();
-    return this.hydrateUser(user);
+    await user.save();
+    return await this.hydrateUser(user.toObject());
   }
 
-  getSessions(filters = {}) {
-    let list = this.data.sessions.map(s => {
-      const user = this.findUserById(s.user_id) || {};
-      // Calculate live duration if active
+  async getSessions(filters = {}) {
+    let query = {};
+    if (filters.status) query.status = filters.status;
+    if (filters.startDate || filters.endDate) {
+      query.check_in_time = {};
+      if (filters.startDate) query.check_in_time.$gte = new Date(filters.startDate).toISOString();
+      if (filters.endDate) query.check_in_time.$lte = new Date(filters.endDate).toISOString();
+    }
+
+    const sessions = await Session.find(query).sort({ check_in_time: -1 }).lean();
+    let list = [];
+    
+    // We need hydrated users
+    for (let s of sessions) {
+      const user = await this.findUserById(s.user_id) || {};
       let duration = s.duration_minutes;
       if (s.status === 'ACTIVE') {
         const checkIn = new Date(s.check_in_time);
         duration = Math.max(1, Math.round((Date.now() - checkIn.getTime()) / 60000));
       }
-      return {
+      list.push({
         ...s,
         duration_minutes: duration,
         user
-      };
-    });
-
-    if (filters.status) {
-      list = list.filter(s => s.status === filters.status);
+      });
     }
 
     if (filters.role_id) {
       list = list.filter(s => s.user && s.user.role_id === Number(filters.role_id));
     }
-
     if (filters.department_id) {
       list = list.filter(s => s.user && s.user.department_id === Number(filters.department_id));
     }
-
     if (filters.search) {
       const q = filters.search.toLowerCase();
       list = list.filter(s => {
@@ -574,31 +367,14 @@ class RelationalDatabase {
       });
     }
 
-    if (filters.startDate) {
-      const start = new Date(filters.startDate).getTime();
-      list = list.filter(s => new Date(s.check_in_time).getTime() >= start);
-    }
-
-    if (filters.endDate) {
-      const end = new Date(filters.endDate).getTime();
-      list = list.filter(s => new Date(s.check_in_time).getTime() <= end);
-    }
-
-    // Sort newest check-in first
-    list.sort((a, b) => new Date(b.check_in_time) - new Date(a.check_in_time));
     return list;
   }
 
-  getDashboardStats() {
-    const allSessions = this.getSessions();
+  async getDashboardStats() {
+    const allSessions = await this.getSessions();
     const activeSessions = allSessions.filter(s => s.status === 'ACTIVE');
     
-    // Active counts by role
-    let activeStudents = 0;
-    let activeLecturers = 0;
-    let activeProfessors = 0;
-    let activeScholars = 0;
-
+    let activeStudents = 0, activeLecturers = 0, activeProfessors = 0, activeScholars = 0;
     activeSessions.forEach(s => {
       const roleId = s.user ? s.user.role_id : 0;
       if (roleId === 1) activeStudents++;
@@ -607,65 +383,51 @@ class RelationalDatabase {
       else if (roleId === 4) activeScholars++;
     });
 
-    // Today's sessions
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const todaySessions = allSessions.filter(s => new Date(s.check_in_time).getTime() >= today.getTime());
 
-    // Average duration of completed sessions
     const completedSessions = allSessions.filter(s => s.status === 'COMPLETED');
     const totalDuration = completedSessions.reduce((acc, s) => acc + (s.duration_minutes || 0), 0);
     const avgDuration = completedSessions.length > 0 ? Math.round(totalDuration / completedSessions.length) : 0;
 
-    // Peak research hour computation
     const hourCounts = new Array(24).fill(0);
     allSessions.forEach(s => {
       const hour = new Date(s.check_in_time).getHours();
       hourCounts[hour]++;
     });
-    let peakHour = 0;
-    let maxHourCount = 0;
+    let peakHour = 0, maxHourCount = 0;
     hourCounts.forEach((count, h) => {
-      if (count > maxHourCount) {
-        maxHourCount = count;
-        peakHour = h;
-      }
+      if (count > maxHourCount) { maxHourCount = count; peakHour = h; }
     });
+
+    const totalUsers = await User.countDocuments();
 
     return {
       activeCount: activeSessions.length,
-      activeBreakdown: {
-        students: activeStudents,
-        lecturers: activeLecturers,
-        professors: activeProfessors,
-        scholars: activeScholars
-      },
+      activeBreakdown: { students: activeStudents, lecturers: activeLecturers, professors: activeProfessors, scholars: activeScholars },
       todayVisits: todaySessions.length,
       avgDurationMinutes: avgDuration,
       peakHour: `${peakHour.toString().padStart(2, '0')}:00 - ${(peakHour + 1).toString().padStart(2, '0')}:00`,
-      totalRegisteredUsers: this.data.users.length,
+      totalRegisteredUsers: totalUsers,
       totalAllTimeSessions: allSessions.length
     };
   }
 
-  getAnalyticsData() {
-    const allSessions = this.getSessions();
+  async getAnalyticsData() {
+    const allSessions = await this.getSessions();
     
-    // 1. Hourly Distribution (08:00 to 22:00)
     const hourlyLabels = [];
     const hourlyData = [];
     for (let h = 8; h <= 21; h++) {
       const label = `${h.toString().padStart(2, '0')}:00`;
       hourlyLabels.push(label);
-      const count = allSessions.filter(s => new Date(s.check_in_time).getHours() === h).length;
-      hourlyData.push(count);
+      hourlyData.push(allSessions.filter(s => new Date(s.check_in_time).getHours() === h).length);
     }
 
-    // 2. Department Breakdown
+    const depts = await this.getDepartments();
     const deptMap = {};
-    this.data.departments.forEach(d => {
-      deptMap[d.id] = { name: d.name, code: d.code, count: 0 };
-    });
+    depts.forEach(d => { deptMap[d.id] = { name: d.name, code: d.code, count: 0 }; });
     allSessions.forEach(s => {
       if (s.user && s.user.department_id && deptMap[s.user.department_id]) {
         deptMap[s.user.department_id].count++;
@@ -673,12 +435,9 @@ class RelationalDatabase {
     });
     const departmentDistribution = Object.values(deptMap).sort((a, b) => b.count - a.count);
 
-    // 3. Role Breakdown
     const roleMap = { 1: 0, 2: 0, 3: 0, 4: 0 };
     allSessions.forEach(s => {
-      if (s.user && s.user.role_id) {
-        roleMap[s.user.role_id] = (roleMap[s.user.role_id] || 0) + 1;
-      }
+      if (s.user && s.user.role_id) roleMap[s.user.role_id] = (roleMap[s.user.role_id] || 0) + 1;
     });
     const rolesDistribution = [
       { name: 'Students', count: roleMap[1] || 0, color: '#3B82F6' },
@@ -687,28 +446,19 @@ class RelationalDatabase {
       { name: 'Research Scholars', count: roleMap[4] || 0, color: '#F59E0B' }
     ];
 
-    // 4. Last 7 Days Attendance Trend
-    const trendLabels = [];
-    const trendData = [];
+    const trendLabels = [], trendData = [];
     const now = new Date();
     for (let d = 6; d >= 0; d--) {
       const date = new Date(now.getTime() - d * 86400000);
-      const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      trendLabels.push(dateStr);
-
-      const dayStart = new Date(date);
-      dayStart.setHours(0, 0, 0, 0);
-      const dayEnd = new Date(date);
-      dayEnd.setHours(23, 59, 59, 999);
-
-      const count = allSessions.filter(s => {
+      trendLabels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+      const dayStart = new Date(date); dayStart.setHours(0, 0, 0, 0);
+      const dayEnd = new Date(date); dayEnd.setHours(23, 59, 59, 999);
+      trendData.push(allSessions.filter(s => {
         const time = new Date(s.check_in_time).getTime();
         return time >= dayStart.getTime() && time <= dayEnd.getTime();
-      }).length;
-      trendData.push(count);
+      }).length);
     }
 
-    // 5. Purpose & Research Topic Cloud / Highlights
     const purposeCounts = {};
     allSessions.forEach(s => {
       const p = s.purpose_of_visit || 'General Research';
@@ -728,13 +478,11 @@ class RelationalDatabase {
     };
   }
 
-  resetSessions() {
-    this.data.sessions = [];
-    this.save();
+  async resetSessions() {
+    await Session.deleteMany({});
     return { success: true, count: 0, message: 'All attendance and research logs have been reset.' };
   }
 }
 
-const db = new RelationalDatabase();
-
+const db = new DatabaseWrapper();
 module.exports = db;

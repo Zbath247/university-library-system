@@ -4,10 +4,10 @@ const QRCode = require('qrcode');
 const db = require('../database');
 
 // GET /api/kiosk/meta - Metadata for dropdowns
-router.get('/meta', (req, res) => {
+router.get('/meta', async (req, res) => {
   try {
-    const roles = db.getRoles();
-    const departments = db.getDepartments();
+    const roles = await db.getRoles();
+    const departments = await db.getDepartments();
     res.json({ success: true, roles, departments });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -23,7 +23,7 @@ router.post('/lookup', async (req, res) => {
     }
 
     const cleanId = university_id.trim().toUpperCase();
-    const user = db.findUserByUniversityId(cleanId);
+    const user = await db.findUserByUniversityId(cleanId);
 
     if (!user) {
       return res.json({
@@ -35,9 +35,9 @@ router.post('/lookup', async (req, res) => {
     }
 
     // Check if user has an active or pending session
-    let activeSession = db.getActiveSessionForUser(user.id);
+    let activeSession = await db.getActiveSessionForUser(user.id);
     if (!activeSession) {
-      const pendingSession = db.data.sessions.find(s => s.user_id === user.id && s.status === 'PENDING_APPROVAL');
+      const pendingSession = (await db.getSessions({ status: 'PENDING_APPROVAL' })).find(s => s.user_id === user.id);
       if (pendingSession) {
         activeSession = { ...pendingSession, user };
       }
@@ -76,7 +76,7 @@ router.post('/register-and-checkin', async (req, res) => {
     }
 
     // 1. Create User
-    const newUser = db.createUser({
+    const newUser = await db.createUser({
       university_id,
       full_name,
       email,
@@ -88,7 +88,7 @@ router.post('/register-and-checkin', async (req, res) => {
     });
 
     // 2. Immediate Check-In Session
-    const sessionResult = db.createSession(
+    const sessionResult = await db.createSession(
       newUser.id,
       purpose_of_visit || 'First-Time Library Research Session',
       research_field || newUser.research_field
@@ -135,11 +135,11 @@ router.post('/checkin', async (req, res) => {
       return res.status(400).json({ success: false, message: 'University ID is required.' });
     }
 
-    let user = db.findUserByUniversityId(university_id);
+    let user = await db.findUserByUniversityId(university_id);
     if (!user) {
       const { full_name, role_id, department_id, email, phone } = req.body;
       if (full_name) {
-        user = db.createUser({
+        user = await db.createUser({
           university_id,
           full_name,
           role_id: Number(role_id) || 1,
@@ -158,7 +158,7 @@ router.post('/checkin', async (req, res) => {
       }
     }
 
-    const sessionResult = db.createSession(
+    const sessionResult = await db.createSession(
       user.id,
       purpose_of_visit || user.default_purpose || 'Academic Research',
       research_topic || user.research_field || 'Academic Research'
@@ -191,14 +191,14 @@ router.post('/checkin', async (req, res) => {
 });
 
 // POST /api/kiosk/checkout - Check-out / End session
-router.post('/checkout', (req, res) => {
+router.post('/checkout', async (req, res) => {
   try {
     const session_id = req.body.session_id || req.body.sessionId;
     const university_id = req.body.university_id || req.body.universityId;
 
     let checkoutTarget = session_id;
     if (!checkoutTarget && university_id) {
-      const user = db.findUserByUniversityId(university_id);
+      const user = await db.findUserByUniversityId(university_id);
       if (!user) {
         return res.status(404).json({ success: false, message: 'User not found.' });
       }
@@ -209,7 +209,7 @@ router.post('/checkout', (req, res) => {
       return res.status(400).json({ success: false, message: 'Session ID or University ID is required to check out.' });
     }
 
-    const completedSession = db.checkOutSession(checkoutTarget);
+    const completedSession = await db.checkOutSession(checkoutTarget);
 
     const hours = Math.floor(completedSession.duration_minutes / 60);
     const mins = completedSession.duration_minutes % 60;
@@ -230,7 +230,7 @@ router.post('/checkout', (req, res) => {
 router.get('/badge/:university_id', async (req, res) => {
   try {
     const { university_id } = req.params;
-    const user = db.findUserByUniversityId(university_id);
+    const user = await db.findUserByUniversityId(university_id);
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found.' });
     }
@@ -252,10 +252,10 @@ router.get('/badge/:university_id', async (req, res) => {
 });
 
 // GET /api/kiosk/session/:id - Get session status for polling
-router.get('/session/:id', (req, res) => {
+router.get('/session/:id', async (req, res) => {
   try {
     const sessionId = Number(req.params.id);
-    const session = db.data.sessions.find(s => s.id === sessionId);
+    const session = (await db.getSessions()).find(s => s.id === sessionId);
     if (!session) {
       return res.status(404).json({ success: false, message: 'Session not found' });
     }

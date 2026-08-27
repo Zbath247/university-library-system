@@ -110,20 +110,7 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
     }
   };
 
-  const handleSeedDemo = async () => {
-    if (window.confirm('Reset database and re-seed with 35+ realistic academic research sessions & active members?')) {
-      try {
-        setLoading(true);
-        const res = await api.seedDemoData();
-        if (res.success) {
-          playSuccessChime();
-          fetchAllData();
-        }
-      } catch (err) {
-        alert(err.message);
-      }
-    }
-  };
+
 
   const handleViewPass = (user) => {
     setSelectedPassUser(user);

@@ -177,14 +177,6 @@ export const api = {
     return res.json();
   },
 
-  seedDemoData: async (password) => {
-    const res = await fetch(`${API_BASE}/admin/seed-demo`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password })
-    });
-    return res.json();
-  },
 
   getExportCsvUrl: (filters = {}) => {
     const params = new URLSearchParams();

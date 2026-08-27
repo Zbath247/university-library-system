@@ -3,9 +3,9 @@ const router = express.Router();
 const db = require('../database');
 
 // GET /api/admin/stats - KPI summary
-router.get('/stats', (req, res) => {
+router.get('/stats', async (req, res) => {
   try {
-    const stats = db.getDashboardStats();
+    const stats = await db.getDashboardStats();
     res.json({ success: true, stats });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -13,9 +13,9 @@ router.get('/stats', (req, res) => {
 });
 
 // GET /api/admin/analytics - Chart and breakdown data
-router.get('/analytics', (req, res) => {
+router.get('/analytics', async (req, res) => {
   try {
-    const analytics = db.getAnalyticsData();
+    const analytics = await db.getAnalyticsData();
     res.json({ success: true, analytics });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -23,10 +23,10 @@ router.get('/analytics', (req, res) => {
 });
 
 // GET /api/admin/sessions - Filtered sessions list
-router.get('/sessions', (req, res) => {
+router.get('/sessions', async (req, res) => {
   try {
     const { status, role_id, department_id, search, startDate, endDate } = req.query;
-    const sessions = db.getSessions({
+    const sessions = await db.getSessions({
       status,
       role_id,
       department_id,
@@ -41,9 +41,9 @@ router.get('/sessions', (req, res) => {
 });
 
 // GET /api/admin/users - User directory
-router.get('/users', (req, res) => {
+router.get('/users', async (req, res) => {
   try {
-    const users = db.getAllUsers();
+    const users = await db.getAllUsers();
     res.json({ success: true, count: users.length, users });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -51,9 +51,9 @@ router.get('/users', (req, res) => {
 });
 
 // POST /api/admin/users - Create new academic user
-router.post('/users', (req, res) => {
+router.post('/users', async (req, res) => {
   try {
-    const user = db.createUser(req.body);
+    const user = await db.createUser(req.body);
     res.json({ success: true, user, message: 'Academic profile registered successfully.' });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
@@ -61,7 +61,7 @@ router.post('/users', (req, res) => {
 });
 
 // POST /api/admin/login - Authenticate admin credentials
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
     const cleanUser = String(username || '').trim().toLowerCase();
@@ -87,10 +87,10 @@ router.post('/login', (req, res) => {
 });
 
 // DELETE /api/admin/sessions/:sessionId - Delete attendance session
-router.delete('/sessions/:sessionId', (req, res) => {
+router.delete('/sessions/:sessionId', async (req, res) => {
   try {
     const { sessionId } = req.params;
-    const deleted = db.deleteSession(Number(sessionId));
+    const deleted = await db.deleteSession(Number(sessionId));
     res.json({
       success: true,
       deleted,
@@ -102,10 +102,10 @@ router.delete('/sessions/:sessionId', (req, res) => {
 });
 
 // PUT /api/admin/sessions/:sessionId - Update attendance session details
-router.put('/sessions/:sessionId', (req, res) => {
+router.put('/sessions/:sessionId', async (req, res) => {
   try {
     const { sessionId } = req.params;
-    const updated = db.updateSession(Number(sessionId), req.body);
+    const updated = await db.updateSession(Number(sessionId), req.body);
     res.json({
       success: true,
       session: updated,
@@ -117,10 +117,10 @@ router.put('/sessions/:sessionId', (req, res) => {
 });
 
 // DELETE /api/admin/users/:userId - Delete academic user profile
-router.delete('/users/:userId', (req, res) => {
+router.delete('/users/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
-    const deleted = db.deleteUser(Number(userId));
+    const deleted = await db.deleteUser(Number(userId));
     res.json({
       success: true,
       deleted,
@@ -132,10 +132,10 @@ router.delete('/users/:userId', (req, res) => {
 });
 
 // PUT /api/admin/users/:userId - Update academic user profile
-router.put('/users/:userId', (req, res) => {
+router.put('/users/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
-    const updated = db.updateUser(Number(userId), req.body);
+    const updated = await db.updateUser(Number(userId), req.body);
     res.json({
       success: true,
       user: updated,
@@ -147,10 +147,10 @@ router.put('/users/:userId', (req, res) => {
 });
 
 // POST /api/admin/checkout/:sessionId - Force check-out session
-router.post('/checkout/:sessionId', (req, res) => {
+router.post('/checkout/:sessionId', async (req, res) => {
   try {
     const { sessionId } = req.params;
-    const session = db.checkOutSession(Number(sessionId));
+    const session = await db.checkOutSession(Number(sessionId));
     res.json({
       success: true,
       session,
@@ -162,10 +162,10 @@ router.post('/checkout/:sessionId', (req, res) => {
 });
 
 // POST /api/admin/approve-session/:sessionId - Approve pending book borrow/return
-router.post('/approve-session/:sessionId', (req, res) => {
+router.post('/approve-session/:sessionId', async (req, res) => {
   try {
     const { sessionId } = req.params;
-    const session = db.approveSession(Number(sessionId));
+    const session = await db.approveSession(Number(sessionId));
     res.json({
       success: true,
       session,
@@ -177,10 +177,10 @@ router.post('/approve-session/:sessionId', (req, res) => {
 });
 
 // POST /api/admin/reject-session/:sessionId - Reject pending book borrow/return
-router.post('/reject-session/:sessionId', (req, res) => {
+router.post('/reject-session/:sessionId', async (req, res) => {
   try {
     const { sessionId } = req.params;
-    const session = db.rejectSession(Number(sessionId));
+    const session = await db.rejectSession(Number(sessionId));
     res.json({
       success: true,
       session,
@@ -192,10 +192,10 @@ router.post('/reject-session/:sessionId', (req, res) => {
 });
 
 // GET /api/admin/export/csv - Direct CSV download of attendance & research logs
-router.get('/export/csv', (req, res) => {
+router.get('/export/csv', async (req, res) => {
   try {
     const { status, role_id, department_id, search, startDate, endDate, category } = req.query;
-    let sessions = db.getSessions({
+    let sessions = await db.getSessions({
       status,
       role_id,
       department_id,
@@ -274,7 +274,7 @@ router.get('/export/csv', (req, res) => {
 });
 
 // POST /api/admin/reset-sessions - Clear all attendance sessions with admin password protection
-router.post('/reset-sessions', (req, res) => {
+router.post('/reset-sessions', async (req, res) => {
   try {
     const { password } = req.body;
     const cleanPass = String(password || '').trim();
@@ -286,7 +286,7 @@ router.post('/reset-sessions', (req, res) => {
       });
     }
 
-    const result = db.resetSessions();
+    const result = await db.resetSessions();
     res.json({
       success: true,
       message: 'ទិន្នន័យវត្តមាន និងការខ្ចី-សងទាំងអស់ត្រូវបាន Reset ជាថ្មីជោគជ័យ!',
@@ -297,19 +297,6 @@ router.post('/reset-sessions', (req, res) => {
   }
 });
 
-// POST /api/admin/seed-demo - Reset/repopulate demo data
-router.post('/seed-demo', (req, res) => {
-  try {
-    const { password } = req.body || {};
-    const cleanPass = String(password || '').trim();
-    if (cleanPass && cleanPass !== 'zbath@247') {
-      return res.status(401).json({ success: false, message: 'លេខសម្ងាត់ Admin មិនត្រឹមត្រូវ!' });
-    }
-    db.seedInitialData(true);
-    res.json({ success: true, message: 'Database reset and re-seeded with realistic demo records.' });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
+
 
 module.exports = router;

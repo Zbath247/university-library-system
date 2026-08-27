@@ -2,8 +2,22 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '.env') });
+
+// Connect to MongoDB
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('✅ Connected to MongoDB Atlas');
+  } catch (error) {
+    console.error('❌ MongoDB Connection Error:', error);
+    process.exit(1);
+  }
+};
+connectDB();
+
 
 const app = express();
 const PORT = process.env.PORT || 3001;
