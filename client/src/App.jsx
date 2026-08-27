@@ -118,8 +118,6 @@ export default function App() {
           <p>{t('footerCopyright')}</p>
           <div className="flex items-center gap-4 text-[11px] text-slate-400">
             <span>{t('footerRoleInfo')}</span>
-            <span>•</span>
-            <span className="text-teal-400">{t('footerTech')}</span>
           </div>
         </div>
       </footer>
