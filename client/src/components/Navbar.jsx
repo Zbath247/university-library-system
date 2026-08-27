@@ -142,16 +142,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                 </button>
               )}
 
-              {/* Occupants Indicator (Desktop) */}
-              <div className="hidden xl:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs shrink-0">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-500"></span>
-                </span>
-                <span className="text-slate-400">{t('insideLibrary')}</span>
-                <span className="font-bold text-teal-300 font-mono">{activeCount} {t('activeOccupants')}</span>
-              </div>
-
               {/* Time (Desktop) */}
               <div className="hidden 2xl:flex items-center gap-2 text-xs font-mono text-slate-300 bg-slate-900/60 px-3 py-2 rounded-xl border border-slate-800/60 shrink-0">
                 <Clock className="w-3.5 h-3.5 text-slate-400" />
