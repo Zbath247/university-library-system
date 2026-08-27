@@ -21,6 +21,11 @@ import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
 import EditSessionModal from './EditSessionModal';
 import ConfirmResetModal from './ConfirmResetModal';
+import { useReactToPrint } from 'react-to-print';
+import { Document, Packer, Paragraph, Table, TableCell, TableRow, TextRun, AlignmentType, WidthType, ImageRun, SectionType } from 'docx';
+import { saveAs } from 'file-saver';
+import ReportPrintTemplate from './ReportPrintTemplate';
+import { useRef } from 'react';
 
 export default function SessionsTable({
   sessions = [],
@@ -45,6 +50,7 @@ export default function SessionsTable({
   const [editingSession, setEditingSession] = useState(null);
   const [showResetModal, setShowResetModal] = useState(false);
   const [showExportPrompt, setShowExportPrompt] = useState(false);
+  const reportRef = useRef();
 
   const { t, tRole, tDept, tPurpose } = useLanguage();
 
@@ -95,6 +101,129 @@ export default function SessionsTable({
     setShowExportPrompt(true);
   };
 
+  const handleExportPDF = useReactToPrint({
+    content: () => reportRef.current,
+    documentTitle: `Library_Report_${categoryTab}_${new Date().toISOString().slice(0, 10)}`,
+    onAfterPrint: () => setShowExportPrompt(true),
+  });
+
+  const handleExportWord = async () => {
+    let logoBuffer;
+    try {
+      const response = await fetch('/duc-logo.png');
+      logoBuffer = await response.arrayBuffer();
+    } catch (e) {
+      console.error('Failed to load logo for word export', e);
+    }
+
+    const today = new Date();
+    const day = today.getDate().toString().padStart(2, '0');
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const year = today.getFullYear();
+
+    let reportTitle = 'ស្ដីពីបញ្ជីឈ្មោះអ្នកចូលបណ្ណាល័យ';
+    if (categoryTab === 'BORROW') reportTitle = 'ស្ដីពីបញ្ជីឈ្មោះអ្នកខ្ចីសៀវភៅ';
+    if (categoryTab === 'RETURN') reportTitle = 'ស្ដីពីបញ្ជីឈ្មោះអ្នកសងសៀវភៅ';
+    if (categoryTab === 'VISIT') reportTitle = 'ស្ដីពីបញ្ជីឈ្មោះអ្នកចូលអានសៀវភៅ';
+    reportTitle += `ប្រចាំថ្ងៃទី ${day} ខែ ${month} ឆ្នាំ ${year}`;
+
+    const tableRows = [
+      new TableRow({
+        children: [
+          'ល.រ', 'អត្តលេខនិស្សិត', 'គោត្តនាមនិងនាម', 'លេខទូរស័ព្ទ', 'តួនាទីសិក្សា', 'ដេប៉ាតឺម៉ង់', 'គោលបំណងនៃការចូលបណ្ណាល័យ'
+        ].map(text => new TableCell({
+          children: [new Paragraph({ children: [new TextRun({ text, font: "Khmer OS Battambang", size: 22, bold: true })], alignment: AlignmentType.CENTER })],
+          shading: { fill: "F3F4F6" },
+          margins: { top: 100, bottom: 100, left: 100, right: 100 }
+        }))
+      })
+    ];
+
+    filteredSessions.forEach((session, index) => {
+      const user = session.user || {};
+      let purposeDisplay = session.purpose_of_visit || 'ចូលបណ្ណាល័យ';
+      if (session.purpose_of_visit === 'Book Borrowing') purposeDisplay = 'ខ្ចីសៀវភៅ';
+      if (session.purpose_of_visit === 'Book Return') purposeDisplay = 'សងសៀវភៅ';
+      const topic = session.research_topic ? ` - ${session.research_topic}` : '';
+
+      tableRows.push(new TableRow({
+        children: [
+          `${index + 1}`,
+          user.university_id || '-',
+          user.full_name || '-',
+          user.phone || '-',
+          user.role_name || '-',
+          user.department_name || '-',
+          `${purposeDisplay}${topic}`
+        ].map(text => new TableCell({
+          children: [new Paragraph({ children: [new TextRun({ text, font: "Khmer OS Battambang", size: 22 })], alignment: AlignmentType.CENTER })],
+          margins: { top: 100, bottom: 100, left: 100, right: 100 }
+        }))
+      }));
+    });
+
+    const docChildren = [
+      new Paragraph({
+        children: [new TextRun({ text: "ព្រះរាជាណាចក្រកម្ពុជា", font: "Khmer OS Muol Light", size: 32, bold: true })],
+        alignment: AlignmentType.CENTER
+      }),
+      new Paragraph({
+        children: [new TextRun({ text: "ជាតិ សាសនា ព្រះមហាក្សត្រ", font: "Khmer OS Muol Light", size: 28, bold: true })],
+        alignment: AlignmentType.CENTER
+      }),
+      new Paragraph({ text: "", spacing: { after: 200 } })
+    ];
+
+    if (logoBuffer) {
+      docChildren.push(new Paragraph({
+        children: [
+          new ImageRun({
+            data: logoBuffer,
+            transformation: { width: 80, height: 80 },
+          })
+        ],
+        alignment: AlignmentType.LEFT
+      }));
+    }
+
+    docChildren.push(
+      new Paragraph({
+        children: [new TextRun({ text: "សាកលវិទ្យាល័យឌីជីថលកម្ពុជា", font: "Khmer OS Muol Light", size: 24, bold: true })],
+        alignment: AlignmentType.LEFT
+      }),
+      new Paragraph({
+        children: [new TextRun({ text: "DIGITAL UNIVERSITY OF CAMBODIA", font: "Arial", size: 18, bold: true })],
+        alignment: AlignmentType.LEFT,
+        spacing: { after: 400 }
+      }),
+      new Paragraph({
+        children: [new TextRun({ text: "របាយការណ៍", font: "Khmer OS Muol Light", size: 32, bold: true, color: "1a56db" })],
+        alignment: AlignmentType.CENTER
+      }),
+      new Paragraph({
+        children: [new TextRun({ text: reportTitle, font: "Khmer OS Battambang", size: 28, color: "1a56db" })],
+        alignment: AlignmentType.CENTER,
+        spacing: { after: 400 }
+      }),
+      new Table({
+        rows: tableRows,
+        width: { size: 100, type: WidthType.PERCENTAGE },
+      })
+    );
+
+    const doc = new Document({
+      sections: [{
+        properties: { type: SectionType.CONTINUOUS },
+        children: docChildren
+      }]
+    });
+
+    Packer.toBlob(doc).then((blob) => {
+      saveAs(blob, `Library_Report_${categoryTab}_${new Date().toISOString().slice(0, 10)}.docx`);
+      setShowExportPrompt(true);
+    });
+  };
+
   return (
     <div className="rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl overflow-hidden glass-panel">
       
@@ -131,17 +260,37 @@ export default function SessionsTable({
             <span>សម្អាតទិន្នន័យ (Reset)</span>
           </button>
 
-          <button
-            onClick={handleExportCsv}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-teal-500 hover:bg-teal-400 text-slate-950 transition shadow-lg shadow-teal-500/20"
-            title={categoryTab === 'ALL' ? 'ទាញយកទិន្នន័យទាំងអស់' : `ទាញយកតែទិន្នន័យ៖ ${categoryTab}`}
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span>{t('btnExportCsv')} {categoryTab !== 'ALL' && `(${categoryTab === 'BORROW' ? 'ខ្ចី' : categoryTab === 'RETURN' ? 'សង' : 'ចូល'})`}</span>
-          </button>
+          <div className="flex bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-lg shadow-teal-500/10">
+            <button
+              onClick={handleExportCsv}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 transition border-r border-slate-700"
+              title="ទាញយកជា CSV / Excel"
+            >
+              <Download className="w-3.5 h-3.5 text-emerald-400" />
+              <span>CSV/Excel</span>
+            </button>
+            <button
+              onClick={handleExportWord}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 transition border-r border-slate-700"
+              title="ទាញយកជា Word"
+            >
+              <Download className="w-3.5 h-3.5 text-blue-400" />
+              <span>Word</span>
+            </button>
+            <button
+              onClick={handleExportPDF}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 transition"
+              title="ទាញយកជា PDF"
+            >
+              <Download className="w-3.5 h-3.5 text-rose-400" />
+              <span>PDF</span>
+            </button>
+          </div>
         </div>
 
       </div>
+
+      <ReportPrintTemplate ref={reportRef} sessions={filteredSessions} category={categoryTab} />
 
       {/* Post Export Reset Notice Banner */}
       {showExportPrompt && (
