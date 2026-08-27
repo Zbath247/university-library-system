@@ -130,9 +130,15 @@ export default function SessionsTable({
     const tableRows = [
       new TableRow({
         children: [
-          'ល.រ', 'អត្តលេខនិស្សិត', 'គោត្តនាមនិងនាម', 'លេខទូរស័ព្ទ', 'តួនាទីសិក្សា', 'ដេប៉ាតឺម៉ង់', 'គោលបំណងនៃការចូលបណ្ណាល័យ'
-        ].map(text => new TableCell({
-          children: [new Paragraph({ children: [new TextRun({ text, font: "Khmer OS Battambang", size: 22, bold: true })], alignment: AlignmentType.CENTER })],
+          ['ល.រ'],
+          ['អត្តលេខ', 'និស្សិត'],
+          ['គោត្តនាមនិង', 'នាម'],
+          ['លេខទូរស័ព្ទ'],
+          ['តួនាទី', 'សិក្សា'],
+          ['ដេប៉ាតឺម៉ង់'],
+          ['គោលបំណងនៃការចូលបណ្ណាល័យ']
+        ].map(lines => new TableCell({
+          children: lines.map(text => new Paragraph({ children: [new TextRun({ text, font: "Khmer OS Battambang", size: 22, bold: true })], alignment: AlignmentType.CENTER })),
           shading: { fill: "F3F4F6" },
           margins: { top: 100, bottom: 100, left: 100, right: 100 }
         }))
@@ -164,11 +170,11 @@ export default function SessionsTable({
 
     const docChildren = [
       new Paragraph({
-        children: [new TextRun({ text: "ព្រះរាជាណាចក្រកម្ពុជា", font: "Khmer OS Muol Light", size: 32, bold: true })],
+        children: [new TextRun({ text: "ព្រះរាជាណាចក្រកម្ពុជា", font: "Khmer OS Muol Light", size: 36 })],
         alignment: AlignmentType.CENTER
       }),
       new Paragraph({
-        children: [new TextRun({ text: "ជាតិ សាសនា ព្រះមហាក្សត្រ", font: "Khmer OS Muol Light", size: 28, bold: true })],
+        children: [new TextRun({ text: "ជាតិ សាសនា ព្រះមហាក្សត្រ", font: "Khmer OS Muol Light", size: 32 })],
         alignment: AlignmentType.CENTER
       }),
       new Paragraph({ text: "", spacing: { after: 200 } })
@@ -188,16 +194,16 @@ export default function SessionsTable({
 
     docChildren.push(
       new Paragraph({
-        children: [new TextRun({ text: "សាកលវិទ្យាល័យឌីជីថលកម្ពុជា", font: "Khmer OS Muol Light", size: 24, bold: true })],
+        children: [new TextRun({ text: "សាកលវិទ្យាល័យឌីជីថលកម្ពុជា", font: "Khmer OS Muol Light", size: 28 })],
         alignment: AlignmentType.LEFT
       }),
       new Paragraph({
-        children: [new TextRun({ text: "DIGITAL UNIVERSITY OF CAMBODIA", font: "Arial", size: 18, bold: true })],
+        children: [new TextRun({ text: "DIGITAL UNIVERSITY OF CAMBODIA", font: "Arial", size: 20, bold: true })],
         alignment: AlignmentType.LEFT,
         spacing: { after: 400 }
       }),
       new Paragraph({
-        children: [new TextRun({ text: "របាយការណ៍", font: "Khmer OS Muol Light", size: 32, bold: true, color: "1a56db" })],
+        children: [new TextRun({ text: "របាយការណ៍", font: "Khmer OS Muol Light", size: 32, color: "1a56db" })],
         alignment: AlignmentType.CENTER
       }),
       new Paragraph({

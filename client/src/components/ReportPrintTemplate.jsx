@@ -35,21 +35,21 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
       >
         {/* Header - Kingdom of Cambodia */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h2 style={{ fontSize: '18pt', margin: '0 0 5px 0', fontWeight: 'bold' }}>ព្រះរាជាណាចក្រកម្ពុជា</h2>
-          <h3 style={{ fontSize: '16pt', margin: '0', fontWeight: 'bold' }}>ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
-          <div style={{ width: '150px', height: '2px', backgroundColor: '#000', margin: '10px auto' }}></div>
+          <h2 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '18pt', margin: '0 0 5px 0', fontWeight: 'normal' }}>ព្រះរាជាណាចក្រកម្ពុជា</h2>
+          <h3 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '16pt', margin: '0', fontWeight: 'normal' }}>ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
+          <div style={{ width: '130px', height: '2px', backgroundColor: '#000', margin: '8px auto' }}></div>
         </div>
 
         {/* University Header */}
         <div style={{ textAlign: 'left', marginBottom: '30px' }}>
           <img src="/duc-logo.png" alt="DUC Logo" style={{ width: '80px', height: 'auto', marginBottom: '10px' }} />
-          <h3 style={{ fontSize: '14pt', margin: '0', fontWeight: 'bold' }}>សាកលវិទ្យាល័យឌីជីថលកម្ពុជា</h3>
-          <p style={{ fontSize: '10pt', margin: '0', fontWeight: 'bold', color: '#666' }}>DIGITAL UNIVERSITY OF CAMBODIA</p>
+          <h3 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '14pt', margin: '0', fontWeight: 'normal' }}>សាកលវិទ្យាល័យឌីជីថលកម្ពុជា</h3>
+          <p style={{ fontFamily: 'Arial, sans-serif', fontSize: '10pt', margin: '0', fontWeight: 'bold', color: '#666' }}>DIGITAL UNIVERSITY OF CAMBODIA</p>
         </div>
 
         {/* Report Title */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h2 style={{ fontSize: '16pt', color: '#1a56db', margin: '0 0 10px 0', fontWeight: 'bold' }}>របាយការណ៍</h2>
+          <h2 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '16pt', color: '#1a56db', margin: '0 0 10px 0', fontWeight: 'normal' }}>របាយការណ៍</h2>
           <h3 style={{ fontSize: '14pt', color: '#1a56db', margin: '0', fontWeight: 'normal' }}>{reportTitle}</h3>
         </div>
 
@@ -62,13 +62,13 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
         }}>
           <thead>
             <tr>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>ល.រ</th>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>អត្តលេខនិស្សិត</th>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>គោត្តនាមនិងនាម</th>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>លេខទូរស័ព្ទ</th>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>តួនាទីសិក្សា</th>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>ដេប៉ាតឺម៉ង់</th>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>គោលបំណងនៃការចូលបណ្ណាល័យ</th>
+              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>ល.រ</th>
+              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>អត្តលេខ<br/>និស្សិត</th>
+              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>គោត្តនាមនិង<br/>នាម</th>
+              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>លេខទូរស័ព្ទ</th>
+              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>តួនាទី<br/>សិក្សា</th>
+              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>ដេប៉ាតឺម៉ង់</th>
+              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>គោលបំណងនៃការចូលបណ្ណាល័យ</th>
             </tr>
           </thead>
           <tbody>
@@ -101,16 +101,16 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
         </table>
 
         {/* Signatures */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '50px', fontSize: '12pt' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '50px', fontSize: '11pt' }}>
           <div style={{ textAlign: 'center' }}>
-            <p style={{ margin: '0 0 80px 0', fontWeight: 'bold' }}>អ្នកត្រួតពិនិត្យ</p>
+            <p style={{ margin: '0 0 80px 0', fontWeight: 'bold', fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive' }}>អ្នកត្រួតពិនិត្យ</p>
             {/* Signature space */}
           </div>
           
           <div style={{ textAlign: 'center' }}>
             <p style={{ margin: '0 0 5px 0' }}>ថ្ងៃ .................... ខែ ស្រាពណ៍ ឆ្នាំរោង ឆស័ក ព.ស ២៥៦៨</p>
-            <p style={{ margin: '0 0 20px 0' }}>កំពង់ស្ពឺ ថ្ងៃទី ......... ខែ ........... ឆ្នាំ ២០២...</p>
-            <p style={{ margin: '0 0 80px 0', fontWeight: 'bold' }}>អ្នកធ្វើរបាយការណ៍</p>
+            <p style={{ margin: '0 0 20px 0' }}>កំពង់ស្ពឺ ថ្ងៃទី ......... ខែ ........... ឆ្នាំ 2026</p>
+            <p style={{ margin: '0 0 80px 0', fontWeight: 'bold', fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive' }}>អ្នកធ្វើរបាយការណ៍</p>
             {/* Signature space */}
           </div>
         </div>
