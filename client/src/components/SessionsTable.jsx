@@ -702,9 +702,13 @@ export default function SessionsTable({
           filteredSessions.map((session) => {
             const user = session.user || {};
             const isActive = session.status === 'ACTIVE';
+            const isPending = session.status === 'PENDING_APPROVAL';
+            const isRejected = session.status === 'REJECTED';
             const inTime = new Date(session.check_in_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             const inDate = new Date(session.check_in_time).toLocaleDateString([], { month: 'short', day: 'numeric' });
-            const outTime = session.check_out_time ? new Date(session.check_out_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : (isActive ? t('statusActive') : '-');
+            const outTime = session.check_out_time 
+              ? new Date(session.check_out_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+              : (isPending ? 'Waiting for approval' : (isActive ? t('statusActive') : '-'));
 
             const hours = Math.floor(session.duration_minutes / 60);
             const mins = session.duration_minutes % 60;
@@ -789,22 +793,32 @@ export default function SessionsTable({
                 <div className="grid grid-cols-2 gap-2 text-[11px] pt-1">
                   <div>
                     <span className="text-slate-500 block text-[10px]">ចូល / ចេញ៖</span>
-                    <span className="font-mono text-slate-300 font-medium">
+                    <span className="font-mono text-slate-300 font-medium text-[11px]">
                       {inTime} → {outTime}
                     </span>
                   </div>
                   <div>
                     <span className="text-slate-500 block text-[10px]">ថិរវេលា & ស្ថានភាព៖</span>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mt-0.5">
                       <span className={`font-mono font-bold ${isActive ? 'text-teal-400' : 'text-slate-300'}`}>
                         {durationFormatted}
                       </span>
-                      {isActive ? (
-                        <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">
-                          {t('statusActive')}
+                      {isPending ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
+                          <span>Pending</span>
+                        </span>
+                      ) : isActive ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">
+                          <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-ping" />
+                          <span>{t('statusActive')}</span>
+                        </span>
+                      ) : isRejected ? (
+                        <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                          Rejected
                         </span>
                       ) : (
-                        <span className="px-1.5 py-0.2 rounded text-[9px] bg-slate-800 text-slate-400">
+                        <span className="px-1.5 py-0.5 rounded text-[9px] bg-slate-800 text-slate-400">
                           {t('statusCompleted')}
                         </span>
                       )}
@@ -813,14 +827,14 @@ export default function SessionsTable({
                 </div>
 
                 {/* Action Buttons for Mobile Screen */}
-                <div className="pt-2 border-t border-slate-800/80 flex items-center gap-2">
+                <div className="pt-2 border-t border-slate-800/80 flex items-center gap-2 flex-wrap">
                   <button
                     type="button"
                     onClick={() => setEditingSession(session)}
-                    className="flex-1 py-2 px-3 rounded-xl text-xs font-bold bg-indigo-500/20 hover:bg-indigo-500 text-indigo-300 hover:text-white border border-indigo-500/30 transition flex items-center justify-center gap-1.5 shadow-sm"
+                    className="flex-1 py-2 px-3 rounded-xl text-xs font-bold bg-indigo-500/20 hover:bg-indigo-500 text-indigo-300 hover:text-white border border-indigo-500/30 transition flex items-center justify-center gap-1.5 shadow-sm min-w-[100px]"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
-                    <span>កែសម្រួល (Edit)</span>
+                    <span>កែសម្រួល</span>
                   </button>
 
                   <button
@@ -832,13 +846,47 @@ export default function SessionsTable({
                     <QrCode className="w-4 h-4" />
                   </button>
 
+                  {/* Approve & Reject for Mobile if Pending */}
+                  {isPending && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => onApproveSession && onApproveSession(session.id)}
+                        disabled={actionLoading === session.id}
+                        className="flex-1 py-2 px-3 rounded-xl text-xs font-bold bg-teal-500/20 hover:bg-teal-500 text-teal-300 hover:text-white border border-teal-500/30 transition flex items-center justify-center gap-1 shadow-sm disabled:opacity-50 min-w-[90px]"
+                      >
+                        {actionLoading === session.id ? (
+                          <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          <CheckCircle2 className="w-3.5 h-3.5 text-teal-400" />
+                        )}
+                        <span>Approve</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onRejectSession && onRejectSession(session.id)}
+                        disabled={actionLoading === session.id}
+                        className="py-2 px-2.5 rounded-xl text-xs font-bold bg-rose-500/20 hover:bg-rose-500 text-rose-400 hover:text-white border border-rose-500/30 transition flex items-center justify-center shadow-sm disabled:opacity-50"
+                        title="Reject"
+                      >
+                        <AlertTriangle className="w-3.5 h-3.5" />
+                      </button>
+                    </>
+                  )}
+
+                  {/* Force Check-Out for Mobile if Active */}
                   {isActive && (
                     <button
                       type="button"
                       onClick={() => onForceCheckout(session.id)}
-                      className="py-2 px-3 rounded-xl text-xs font-bold bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition flex items-center justify-center gap-1 shadow-sm"
+                      disabled={actionLoading === session.id}
+                      className="py-2 px-3 rounded-xl text-xs font-bold bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition flex items-center justify-center gap-1 shadow-sm disabled:opacity-50"
                     >
-                      <LogOut className="w-3.5 h-3.5" />
+                      {actionLoading === session.id ? (
+                        <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <LogOut className="w-3.5 h-3.5" />
+                      )}
                       <span>{t('tabCheckOut')}</span>
                     </button>
                   )}
