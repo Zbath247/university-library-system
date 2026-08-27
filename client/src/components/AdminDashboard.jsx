@@ -31,6 +31,7 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
   const [roles, setRoles] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState(null);
 
   const { t, tRole, tDept, tPurpose } = useLanguage();
 
@@ -78,35 +79,44 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
 
   const handleForceCheckout = async (sessionId) => {
     try {
+      setActionLoading(sessionId);
       const res = await api.adminCheckout(sessionId);
       if (res.success) {
         playCheckoutChime();
-        fetchAllData();
+        await fetchAllData();
       }
     } catch (err) {
       alert(err.message || 'Check-out failed.');
+    } finally {
+      setActionLoading(null);
     }
   };
 
   const handleApproveSession = async (sessionId) => {
     try {
+      setActionLoading(sessionId);
       const res = await api.adminApproveSession(sessionId);
       if (res.success) {
-        fetchAllData();
+        await fetchAllData();
       }
     } catch (err) {
       alert(err.message || 'Approval failed.');
+    } finally {
+      setActionLoading(null);
     }
   };
 
   const handleRejectSession = async (sessionId) => {
     try {
+      setActionLoading(sessionId);
       const res = await api.adminRejectSession(sessionId);
       if (res.success) {
-        fetchAllData();
+        await fetchAllData();
       }
     } catch (err) {
       alert(err.message || 'Rejection failed.');
+    } finally {
+      setActionLoading(null);
     }
   };
 
@@ -342,6 +352,7 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
         roles={roles}
         departments={departments}
         loading={loading}
+        actionLoading={actionLoading}
         onRefresh={fetchAllData}
         onForceCheckout={handleForceCheckout}
         onApproveSession={handleApproveSession}

@@ -32,6 +32,7 @@ export default function SessionsTable({
   roles = [],
   departments = [],
   loading = false,
+  actionLoading = null,
   onRefresh,
   onForceCheckout,
   onApproveSession,
@@ -651,15 +652,17 @@ export default function SessionsTable({
                           <>
                             <button
                               onClick={() => onApproveSession && onApproveSession(session.id)}
+                              disabled={actionLoading === session.id}
                               title="Approve Request"
-                              className="p-1.5 rounded-lg bg-teal-500/20 hover:bg-teal-500 text-teal-400 hover:text-white transition"
+                              className="p-1.5 rounded-lg bg-teal-500/20 hover:bg-teal-500 text-teal-400 hover:text-white transition disabled:opacity-50"
                             >
-                              <CheckCircle2 className="w-3.5 h-3.5" />
+                              {actionLoading === session.id ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
                             </button>
                             <button
                               onClick={() => onRejectSession && onRejectSession(session.id)}
+                              disabled={actionLoading === session.id}
                               title="Reject Request"
-                              className="p-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500 text-rose-400 hover:text-white transition"
+                              className="p-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500 text-rose-400 hover:text-white transition disabled:opacity-50"
                             >
                               <AlertTriangle className="w-3.5 h-3.5" />
                             </button>
@@ -670,10 +673,11 @@ export default function SessionsTable({
                         {isActive && (
                           <button
                             onClick={() => onForceCheckout(session.id)}
+                            disabled={actionLoading === session.id}
                             title={t('btnForceCheckout')}
-                            className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition"
+                            className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition disabled:opacity-50"
                           >
-                            <LogOut className="w-3 h-3" />
+                            {actionLoading === session.id ? <RefreshCw className="w-3 h-3 animate-spin" /> : <LogOut className="w-3 h-3" />}
                             <span>{t('tabCheckOut')}</span>
                           </button>
                         )}
