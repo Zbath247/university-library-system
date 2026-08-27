@@ -134,14 +134,10 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
       
       {/* Top Banner & Quick Controls */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 sm:gap-4 bg-slate-900/80 p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-800 shadow-xl glass-panel">
-        <div>
-          <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+          <div>
             <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
               {t('adminTitle')}
             </h1>
-            <span className="px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-              {t('liveMonitorBadge')}
-            </span>
           </div>
           <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5 sm:mt-1">
             {t('adminSub')}
