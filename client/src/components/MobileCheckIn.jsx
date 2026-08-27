@@ -723,11 +723,6 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
         />
       )}
 
-      {/* Footer Info */}
-      <p className="text-[11px] text-slate-500 mt-6 text-center max-w-xs leading-relaxed">
-        {t('footerCopyright')}
-      </p>
-
     </div>
   );
 }
