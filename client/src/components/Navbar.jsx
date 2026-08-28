@@ -15,13 +15,13 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
     <>
       <header className="fixed top-0 left-0 z-40 w-full md:w-[280px] md:h-screen border-b md:border-b-0 md:border-r border-slate-800/80 bg-slate-950/95 backdrop-blur-2xl shadow-xl flex flex-col transition-all">
         {/* Top Area: Mobile Bar or Desktop Logo */}
-        <div className="flex items-center justify-between h-20 px-4 sm:px-6 shrink-0 md:flex-col md:h-auto md:py-8 md:gap-4 w-full">
+        <div className="relative flex items-center justify-between h-20 px-4 sm:px-6 shrink-0 md:static md:flex-col md:h-auto md:py-8 md:gap-4 w-full">
           
           {/* 3-Bar Hamburger Menu Button for Mobile */}
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2.5 rounded-2xl text-slate-300 hover:text-white bg-slate-900 border border-slate-800 focus:outline-none transition active:scale-95 shrink-0"
+            className="relative z-10 md:hidden p-2.5 rounded-2xl text-slate-300 hover:text-white bg-slate-900 border border-slate-800 focus:outline-none transition active:scale-95 shrink-0"
             aria-label="Toggle Menu"
           >
             {mobileMenuOpen ? (
@@ -31,32 +31,32 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
             )}
           </button>
 
-          {/* Logo & University Name */}
-          <div
-            className="flex items-center gap-3 cursor-pointer shrink-0 select-none group md:flex-col md:text-center w-full justify-center md:justify-start"
-            onClick={() => handleNavClick('kiosk')}
-          >
-            <div className="h-11 w-11 md:h-16 md:w-16 flex items-center justify-center shrink-0">
-              <img 
-                src="/duc-logo.png" 
-                alt="DUC Logo" 
-                className="h-full w-full object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-200"
-                onError={(e) => { e.target.style.display='none'; }}
-              />
-            </div>
-            <div className="flex flex-col justify-center leading-tight">
-              <span className="text-[11px] md:text-[12px] font-black tracking-wider bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent uppercase font-sans text-center">
-                DIGITAL UNIVERSITY OF CAMBODIA
-              </span>
-              <span className="text-xs font-extrabold text-teal-400 whitespace-nowrap tracking-wide mt-1 flex items-center justify-center md:justify-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse hidden md:block"></span>
-                {lang === 'km' ? 'ចូលបណ្ណាល័យ' : 'Library Portal'}
-              </span>
+          {/* Logo & University Name (Absolutely Centered on Mobile) */}
+          <div className="absolute inset-0 flex items-center justify-center md:static md:w-full pointer-events-none md:pointer-events-auto">
+            <div
+              className="flex items-center gap-2 sm:gap-3 cursor-pointer select-none group md:flex-col md:text-center pointer-events-auto"
+              onClick={() => handleNavClick('kiosk')}
+            >
+              <div className="h-10 w-10 sm:h-11 sm:w-11 md:h-16 md:w-16 flex items-center justify-center shrink-0">
+                <img 
+                  src="/duc-logo.png" 
+                  alt="DUC Logo" 
+                  className="h-full w-full object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-200"
+                  onError={(e) => { e.target.style.display='none'; }}
+                />
+              </div>
+              <div className="flex flex-col justify-center leading-tight">
+                <span className="text-[10px] sm:text-[11px] md:text-[12px] font-black tracking-wider bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent uppercase font-sans text-center">
+                  DIGITAL UNIVERSITY OF CAMBODIA
+                </span>
+                <span className="text-[11px] sm:text-xs font-extrabold text-teal-400 whitespace-nowrap tracking-wide mt-0.5 md:mt-1 flex items-center justify-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse hidden md:block"></span>
+                  {lang === 'km' ? 'ចូលបណ្ណាល័យ' : 'Library Portal'}
+                </span>
+              </div>
             </div>
           </div>
           
-          {/* Invisible Spacer for Mobile Centering */}
-          <div className="w-10 h-10 md:hidden opacity-0 pointer-events-none"></div>
         </div>
 
         {/* Desktop Navigation Tabs (Sidebar style) */}
