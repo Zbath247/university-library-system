@@ -289,7 +289,17 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
   };
 
   const handleSwitchProfile = () => {
-    localStorage.removeItem('saved_library_user');
+    // Keep it in localStorage so they can cancel
+    setFormData({
+      full_name: '',
+      university_id: '',
+      email: '',
+      phone: '',
+      role_id: roles[0]?.id || 1,
+      department_id: departments[0]?.id || 1,
+      purpose_of_visit: 'Study & Revision',
+      research_field: ''
+    });
     setSavedUser(null);
     setActiveSession(null);
     setMessage(null);
@@ -720,6 +730,24 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
                   </>
                 )}
               </button>
+
+              {/* Cancel / Go Back Button */}
+              {localStorage.getItem('saved_library_user') && (
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => {
+                    const local = localStorage.getItem('saved_library_user');
+                    if (local) {
+                      setSavedUser(JSON.parse(local));
+                      setMessage(null);
+                    }
+                  }}
+                  className="w-full mt-2 py-3.5 px-5 rounded-2xl font-bold text-sm bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/50 transition flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  <span>ត្រឡប់ក្រោយ (Cancel & Go Back)</span>
+                </button>
+              )}
 
             </form>
 
