@@ -54,7 +54,7 @@ export default function AdminLoginModal({ isOpen, onClose, onLoginSuccess }) {
             </div>
             <div>
               <h3 className="text-base font-extrabold text-white">
-                ផ្ទៀងផ្ទាត់សិទ្ធិ Admin
+                Admin
               </h3>
               <p className="text-xs text-slate-400">
                 Administrator Authentication Portal
