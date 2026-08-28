@@ -203,7 +203,7 @@ export default function AnalyticsCharts({ analytics }) {
         </div>
 
         {/* Role Distribution & Top Topics */}
-        <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl glass-panel flex flex-col justify-between">
+        <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl glass-panel">
           <div>
             <div className="flex items-center gap-2.5 mb-4">
               <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400">
@@ -237,24 +237,6 @@ export default function AnalyticsCharts({ analytics }) {
               })}
             </div>
           </div>
-
-          {/* Popular Purpose Tags */}
-          <div className="mt-4 pt-3 border-t border-slate-800">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
-              {t('analyticsPurposeDist')}
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {(analytics.topPurposes || []).slice(0, 3).map((item, idx) => (
-                <span
-                  key={idx}
-                  className="px-2 py-0.5 rounded text-[10px] bg-slate-800/80 text-teal-300 border border-slate-700/60 truncate max-w-full"
-                >
-                  {tPurpose(item.purpose)} ({item.count})
-                </span>
-              ))}
-            </div>
-          </div>
-
         </div>
 
       </div>
