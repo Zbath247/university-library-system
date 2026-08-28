@@ -111,21 +111,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               </div>
             </button>
 
-            {/* 4. Admin Overview */}
-            <button
-              onClick={() => handleNavClick('admin')}
-              className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
-                activeTab === 'admin'
-                  ? 'bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 text-white font-black shadow-lg shadow-indigo-500/25 scale-[1.02]'
-                  : 'bg-slate-900/40 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800/50'
-              }`}
-            >
-              <LayoutDashboard className="w-5 h-5 shrink-0" />
-              <div className="text-left leading-tight flex-1">
-                <span className="block">{t('navAdmin')}</span>
-                <span className={`text-[10px] font-normal ${activeTab === 'admin' ? 'text-indigo-100' : 'text-slate-500'}`}>Dashboard & Overview</span>
-              </div>
-            </button>
+
           </nav>
 
           {/* Bottom Area (Language, Logout, Stats) */}
@@ -275,26 +261,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </button>
 
-                {/* 4. Admin */}
-                <button
-                  onClick={() => handleNavClick('admin')}
-                  className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
-                    activeTab === 'admin'
-                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30'
-                      : 'bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/20'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-300">
-                      <LayoutDashboard className="w-4 h-4" />
-                    </div>
-                    <div className="text-left">
-                      <span className="block">{t('navAdmin')}</span>
-                      <span className="text-[10px] opacity-80 font-normal">Dashboard & Overview</span>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-4 h-4 opacity-70" />
-                </button>
+
 
               </div>
 
