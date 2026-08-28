@@ -254,7 +254,28 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </button>
 
-                {/* 3. Admin */}
+                {/* 3. Attendance Logs */}
+                <button
+                  onClick={() => handleNavClick('logs')}
+                  className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
+                    activeTab === 'logs'
+                      ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-lg shadow-purple-500/20'
+                      : 'bg-slate-950/60 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-purple-500/20 text-purple-300">
+                      <Layers className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <span className="block">កំណត់ត្រាវត្តមានទាំងអស់</span>
+                      <span className="text-[10px] text-slate-400 font-normal">Attendance Logs</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-500" />
+                </button>
+
+                {/* 4. Admin */}
                 <button
                   onClick={() => handleNavClick('admin')}
                   className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
@@ -269,7 +290,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                     </div>
                     <div className="text-left">
                       <span className="block">{t('navAdmin')}</span>
-                      <span className="text-[10px] opacity-80 font-normal">Dashboard & All Logs</span>
+                      <span className="text-[10px] opacity-80 font-normal">Dashboard & Overview</span>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 opacity-70" />
