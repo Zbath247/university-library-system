@@ -107,8 +107,8 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               </button>
             </div>
 
-            {/* Right Controls: Language Switcher & Logout */}
-            <div className="flex items-center gap-2.5 shrink-0">
+            {/* Right Controls (Desktop Only: Language Switcher & Logout) */}
+            <div className="hidden md:flex items-center gap-2.5 shrink-0">
               
               {/* Language Switcher Toggle */}
               <button
@@ -261,11 +261,31 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                 </div>
               </div>
 
+              {/* Language Switcher in Mobile Drawer */}
+              <div className="mt-4 p-3 rounded-2xl bg-slate-950/90 border border-slate-800 flex items-center justify-between shadow-sm">
+                <span className="text-xs font-bold text-slate-300 flex items-center gap-2">
+                  <Globe className="w-4 h-4 text-teal-400" />
+                  <span>{lang === 'km' ? 'ភាសា / Language' : 'Language / ភាសា'}</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={toggleLanguage}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-bold text-slate-200 transition shadow-sm active:scale-95"
+                >
+                  <span className={lang === 'km' ? 'text-teal-400 font-bold' : 'text-slate-400'}>🇰🇭 ខ្មែរ</span>
+                  <span className="text-slate-600">|</span>
+                  <span className={lang === 'en' ? 'text-teal-400 font-bold' : 'text-slate-400'}>🇬🇧 EN</span>
+                </button>
+              </div>
+
               {/* Admin Logout in Drawer */}
               {isAdminLoggedIn && onLogout && (
                 <button
-                  onClick={onLogout}
-                  className="mt-4 w-full flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-xs font-bold text-rose-400 hover:bg-rose-500/20 transition-all"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onLogout();
+                  }}
+                  className="mt-3 w-full flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/25 text-xs font-bold text-rose-400 hover:bg-rose-500/20 transition-all shadow-sm active:scale-95"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>ចាកចេញ (Logout)</span>
