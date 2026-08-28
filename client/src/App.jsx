@@ -16,6 +16,11 @@ export default function App() {
     return 'kiosk'; // 'kiosk' | 'mobile' | 'admin'
   });
 
+  const [isQRScan] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('mode') === 'mobile';
+  });
+
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
     return sessionStorage.getItem('duc_admin_auth') === 'true';
   });
@@ -72,19 +77,21 @@ export default function App() {
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-teal-500 selection:text-slate-950">
       
       {/* Navbar / Sidebar */}
-      <Navbar
-        activeTab={activeTab}
-        setActiveTab={handleTabSelect}
-        activeCount={activeCount}
-        isAdminLoggedIn={isAdminLoggedIn}
-        onLogout={handleAdminLogout}
-      />
+      {!(activeTab === 'mobile' && isQRScan) && (
+        <Navbar
+          activeTab={activeTab}
+          setActiveTab={handleTabSelect}
+          activeCount={activeCount}
+          isAdminLoggedIn={isAdminLoggedIn}
+          onLogout={handleAdminLogout}
+        />
+      )}
 
       {/* Main Content Container (Padded left for sidebar on desktop) */}
-      <div className="flex-1 flex flex-col min-h-screen w-full md:pl-[280px]">
+      <div className={`flex-1 flex flex-col min-h-screen w-full ${!(activeTab === 'mobile' && isQRScan) ? 'md:pl-[280px]' : ''}`}>
         
         {/* Main Area */}
-        <main className="flex-1 mt-20 md:mt-0">
+        <main className={`flex-1 ${!(activeTab === 'mobile' && isQRScan) ? 'mt-20 md:mt-0' : ''}`}>
           {activeTab === 'kiosk' ? (
             <KioskMode
               activeOccupantsCount={activeCount}
@@ -111,14 +118,16 @@ export default function App() {
         </main>
 
         {/* Footer */}
-        <footer className="border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-500">
-          <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <p>{t('footerCopyright')}</p>
-            <div className="flex items-center gap-4 text-[11px] text-slate-400">
-              <span>{t('footerRoleInfo')}</span>
+        {!(activeTab === 'mobile' && isQRScan) && (
+          <footer className="border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-500">
+            <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+              <p>{t('footerCopyright')}</p>
+              <div className="flex items-center gap-4 text-[11px] text-slate-400">
+                <span>{t('footerRoleInfo')}</span>
+              </div>
             </div>
-          </div>
-        </footer>
+          </footer>
+        )}
 
       </div>
 
