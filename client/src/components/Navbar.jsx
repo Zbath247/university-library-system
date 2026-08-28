@@ -128,11 +128,11 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               {isAdminLoggedIn && onLogout && (
                 <button
                   onClick={onLogout}
-                  title="ចាកចេញពីគណនី Admin (Logout)"
+                  title="Logout"
                   className="flex items-center gap-1.5 h-10 px-3.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-xs font-bold text-rose-400 transition-all shadow-sm active:scale-95"
                 >
                   <LogOut className="w-4 h-4" />
-                  <span className="hidden sm:inline">ចាកចេញ (Logout)</span>
+                  <span className="hidden sm:inline">Logout</span>
                 </button>
               )}
 
@@ -183,28 +183,28 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                   ជ្រើសរើសផ្ទាំងដំណើរការ (Menu)
                 </p>
 
-                {/* 1. Admin Dashboard (Requested prominently!) */}
+                {/* 1. Scan QR Code */}
                 <button
-                  onClick={() => handleNavClick('admin')}
+                  onClick={() => handleNavClick('kiosk')}
                   className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
-                    activeTab === 'admin'
-                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30'
-                      : 'bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/20'
+                    activeTab === 'kiosk'
+                      ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 shadow-lg shadow-teal-500/20'
+                      : 'bg-slate-950/60 hover:bg-slate-800 text-slate-300 border border-slate-800'
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-300">
-                      <LayoutDashboard className="w-4 h-4" />
+                    <div className="p-2 rounded-xl bg-teal-500/20 text-teal-300">
+                      <ScanLine className="w-4 h-4" />
                     </div>
                     <div className="text-left">
-                      <span className="block">{t('navAdmin')}</span>
-                      <span className="text-[10px] opacity-80 font-normal">Dashboard & All Logs</span>
+                      <span className="block">{t('navKiosk')}</span>
+                      <span className="text-[10px] text-slate-400 font-normal">Entrance Scanner</span>
                     </div>
                   </div>
-                  <ChevronRight className="w-4 h-4 opacity-70" />
+                  <ChevronRight className="w-4 h-4 text-slate-500" />
                 </button>
 
-                {/* 2. Mobile Portal */}
+                {/* 2. បំពេញព័ត៌មាន (Mobile Portal) */}
                 <button
                   onClick={() => handleNavClick('mobile')}
                   className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
@@ -225,25 +225,25 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </button>
 
-                {/* 3. Entrance Kiosk Screen */}
+                {/* 3. Admin */}
                 <button
-                  onClick={() => handleNavClick('kiosk')}
+                  onClick={() => handleNavClick('admin')}
                   className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
-                    activeTab === 'kiosk'
-                      ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 shadow-lg shadow-teal-500/20'
-                      : 'bg-slate-950/60 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                    activeTab === 'admin'
+                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30'
+                      : 'bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/20'
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-xl bg-teal-500/20 text-teal-300">
-                      <ScanLine className="w-4 h-4" />
+                    <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-300">
+                      <LayoutDashboard className="w-4 h-4" />
                     </div>
                     <div className="text-left">
-                      <span className="block">{t('navKiosk')}</span>
-                      <span className="text-[10px] text-slate-400 font-normal">Entrance QR Scanner</span>
+                      <span className="block">{t('navAdmin')}</span>
+                      <span className="text-[10px] opacity-80 font-normal">Dashboard & All Logs</span>
                     </div>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-500" />
+                  <ChevronRight className="w-4 h-4 opacity-70" />
                 </button>
 
               </div>
@@ -288,7 +288,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                   className="mt-3 w-full flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/25 text-xs font-bold text-rose-400 hover:bg-rose-500/20 transition-all shadow-sm active:scale-95"
                 >
                   <LogOut className="w-4 h-4" />
-                  <span>ចាកចេញ (Logout)</span>
+                  <span>Logout</span>
                 </button>
               )}
 
