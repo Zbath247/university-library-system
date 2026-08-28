@@ -510,33 +510,40 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
               )}
             </div>
 
-            {/* Bottom Actions */}
-            <div className="flex items-center justify-between pt-3 border-t border-slate-800 text-xs gap-2 flex-wrap">
+            {/* Bottom Actions - Centered & Clean Design */}
+            <div className="pt-4 border-t border-slate-800/80 flex flex-col items-center gap-2.5">
+              
+              {/* Digital Pass Button (Centered, Prominent & Sleek) */}
               <button
+                type="button"
                 onClick={() => setShowPassModal(true)}
-                className="flex items-center gap-1.5 text-teal-400 hover:text-teal-300 font-semibold transition"
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 border border-teal-500/25 font-bold text-xs shadow-sm transition active:scale-95"
               >
-                <QrCode className="w-4 h-4" />
+                <QrCode className="w-4 h-4 text-teal-400" />
                 <span>{t('passTitle')}</span>
               </button>
 
-              <div className="flex items-center gap-2">
+              {/* Secondary Controls (Centered Row: Edit & Switch Profile) */}
+              <div className="flex items-center justify-center gap-2 flex-wrap w-full">
                 <button
                   type="button"
                   onClick={handleEditProfile}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 border border-indigo-500/30 transition font-medium"
+                  className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 border border-indigo-500/30 text-xs font-semibold transition active:scale-95 shadow-sm"
                 >
-                  <Edit3 className="w-3.5 h-3.5" />
-                  <span>កែប្រែព័ត៌មាន (Edit)</span>
+                  <Edit3 className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>{lang === 'km' ? 'កែប្រែព័ត៌មាន (Edit)' : 'Edit Profile'}</span>
                 </button>
 
                 <button
+                  type="button"
                   onClick={handleSwitchProfile}
-                  className="text-slate-400 hover:text-slate-200 transition text-[11px]"
+                  className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/70 text-xs font-medium transition active:scale-95 shadow-sm"
                 >
-                  {t('mobileSwitchProfile')}
+                  <RefreshCw className="w-3 h-3 text-slate-400" />
+                  <span>{t('mobileSwitchProfile')}</span>
                 </button>
               </div>
+
             </div>
 
           </div>
