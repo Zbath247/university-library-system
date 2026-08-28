@@ -1,18 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { LayoutDashboard, ScanLine, Smartphone, Clock, Globe, Menu, X, ShieldCheck, ChevronRight, Users, Sparkles, LogOut } from 'lucide-react';
+import React, { useState } from 'react';
+import { LayoutDashboard, ScanLine, Smartphone, Globe, Menu, X, ShieldCheck, ChevronRight, Users, Sparkles, LogOut } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLoggedIn, onLogout }) {
-  const [currentTime, setCurrentTime] = useState(new Date());
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { lang, toggleLanguage, t } = useLanguage();
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   const handleNavClick = (tab) => {
     setActiveTab(tab);
@@ -142,13 +134,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                 </button>
               )}
 
-              {/* Time (Desktop) */}
-              <div className="hidden 2xl:flex items-center gap-2 text-xs font-mono text-slate-300 bg-slate-900/60 px-3 py-2 rounded-xl border border-slate-800/60 shrink-0">
-                <Clock className="w-3.5 h-3.5 text-slate-400" />
-                <span>
-                  {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </span>
-              </div>
+
 
             </div>
 
