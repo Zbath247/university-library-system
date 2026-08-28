@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Edit3, Trash2, CheckCircle2, BookOpen, Clock, AlertCircle, User, Phone, GraduationCap, Building, Activity } from 'lucide-react';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
@@ -121,8 +122,8 @@ export default function EditSessionModal({
     'Computer & Digital Lab'
   ];
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 bg-slate-950/90 backdrop-blur-md animate-fade-in">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4 bg-slate-950/90 backdrop-blur-md animate-fade-in">
       <div className="relative w-full h-[100dvh] sm:h-auto sm:max-h-[90vh] max-w-2xl bg-slate-900 border-0 sm:border sm:border-slate-800 rounded-none sm:rounded-3xl shadow-2xl overflow-hidden animate-slide-up flex flex-col">
         
         {/* Sticky Header */}
@@ -372,6 +373,7 @@ export default function EditSessionModal({
         </form>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
