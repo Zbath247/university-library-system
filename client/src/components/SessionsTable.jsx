@@ -90,6 +90,20 @@ export default function SessionsTable({
     return true;
   });
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+
+  // Reset page when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [search, statusFilter, roleFilter, deptFilter, categoryTab]);
+
+  const totalPages = Math.ceil(filteredSessions.length / itemsPerPage);
+  const paginatedSessions = filteredSessions.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   const handleExportCsv = () => {
     const exportUrl = api.getExportCsvUrl({
       status: statusFilter,
@@ -476,14 +490,14 @@ export default function SessionsTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800/60">
-            {filteredSessions.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="py-8 text-center text-slate-500">
-                  {t('noSessionsFound')}
-                </td>
-              </tr>
-            ) : (
-              filteredSessions.map((session) => {
+                {paginatedSessions.length === 0 ? (
+                  <tr>
+                    <td colSpan="8" className="py-12 text-center text-slate-500 font-medium">
+                      មិនមានទិន្នន័យ (No records found)
+                    </td>
+                  </tr>
+                ) : (
+                  paginatedSessions.map((session, index) => {
                 const user = session.user || {};
                 const isActive = session.status === 'ACTIVE';
                 const isPending = session.status === 'PENDING_APPROVAL';
@@ -699,12 +713,12 @@ export default function SessionsTable({
 
       {/* Sessions List - Mobile Cards View (Optimized for Phone Screens) */}
       <div className="block md:hidden p-4 space-y-3">
-        {filteredSessions.length === 0 ? (
+        {paginatedSessions.length === 0 ? (
           <div className="py-8 text-center text-slate-500 text-xs">
             {t('noSessionsFound')}
           </div>
         ) : (
-          filteredSessions.map((session) => {
+          paginatedSessions.map((session) => {
             const user = session.user || {};
             const isActive = session.status === 'ACTIVE';
             const isPending = session.status === 'PENDING_APPROVAL';
@@ -902,6 +916,63 @@ export default function SessionsTable({
           })
         )}
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-slate-900/60 rounded-2xl border border-slate-800">
+          <span className="text-sm text-slate-400 font-medium">
+            បង្ហាញ {((currentPage - 1) * itemsPerPage) + 1} - {Math.min(currentPage * itemsPerPage, filteredSessions.length)} នៃ {filteredSessions.length} ទិន្នន័យ
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            >
+              ថយក្រោយ (Prev)
+            </button>
+            <div className="flex items-center gap-1">
+              {[...Array(totalPages)].map((_, i) => {
+                const page = i + 1;
+                // Show only a few page numbers around the current page
+                if (
+                  page === 1 || 
+                  page === totalPages || 
+                  (page >= currentPage - 1 && page <= currentPage + 1)
+                ) {
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`w-8 h-8 rounded-lg text-sm font-bold flex items-center justify-center transition ${
+                        currentPage === page
+                          ? 'bg-teal-500 text-slate-950 shadow-md shadow-teal-500/20'
+                          : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  );
+                } else if (
+                  page === currentPage - 2 ||
+                  page === currentPage + 2
+                ) {
+                  return <span key={page} className="text-slate-500">...</span>;
+                }
+                return null;
+              })}
+            </div>
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            >
+              បន្ទាប់ (Next)
+            </button>
+          </div>
+        </div>
+      )}
+
 
       {/* Edit Session Modal */}
       {editingSession && (

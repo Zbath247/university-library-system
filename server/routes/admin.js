@@ -25,16 +25,24 @@ router.get('/analytics', async (req, res) => {
 // GET /api/admin/sessions - Filtered sessions list
 router.get('/sessions', async (req, res) => {
   try {
-    const { status, role_id, department_id, search, startDate, endDate } = req.query;
-    const sessions = await db.getSessions({
+    const { status, role_id, department_id, search, startDate, endDate, page, limit } = req.query;
+    const result = await db.getSessions({
       status,
       role_id,
       department_id,
       search,
       startDate,
-      endDate
+      endDate,
+      page,
+      limit
     });
-    res.json({ success: true, count: sessions.length, sessions });
+    
+    // If paginated, result is an object { sessions, totalCount, totalPages }
+    if (page && limit) {
+      res.json({ success: true, ...result });
+    } else {
+      res.json({ success: true, count: result.length, sessions: result });
+    }
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

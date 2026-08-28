@@ -331,11 +331,33 @@ class DatabaseWrapper {
     }
 
     const sessions = await Session.find(query).sort({ check_in_time: -1 }).lean();
+    
+    // Bulk load reference data to avoid N+1 queries
+    const roles = await Role.find({}).lean();
+    const depts = await Department.find({}).lean();
+    const roleMap = new Map(roles.map(r => [r.id, r]));
+    const deptMap = new Map(depts.map(d => [d.id, d]));
+    
+    // Bulk load users referenced in these sessions
+    const userIds = [...new Set(sessions.map(s => s.user_id).filter(Boolean))];
+    const users = await User.find({ id: { $in: userIds } }).lean();
+    const userMap = new Map(users.map(u => {
+       const role = roleMap.get(u.role_id) || { name: 'Unknown', badge_color: '#6B7280' };
+       const dept = deptMap.get(u.department_id) || { name: 'General', code: 'GEN', faculty: 'University' };
+       return [u.id, {
+         ...u,
+         role_name: role.name,
+         role_badge_color: role.badge_color,
+         department_name: dept.name,
+         department_code: dept.code,
+         faculty_name: dept.faculty
+       }];
+    }));
+
     let list = [];
     
-    // We need hydrated users
     for (let s of sessions) {
-      const user = await this.findUserById(s.user_id) || {};
+      const user = userMap.get(s.user_id) || {};
       let duration = s.duration_minutes;
       if (s.status === 'ACTIVE') {
         const checkIn = new Date(s.check_in_time);
@@ -365,6 +387,22 @@ class DatabaseWrapper {
           (s.user.department_name && s.user.department_name.toLowerCase().includes(q))
         );
       });
+    }
+
+    const totalCount = list.length;
+    
+    // Support Pagination if requested
+    if (filters.page && filters.limit) {
+      const page = Number(filters.page);
+      const limit = Number(filters.limit);
+      const startIndex = (page - 1) * limit;
+      list = list.slice(startIndex, startIndex + limit);
+      
+      return {
+        sessions: list,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit)
+      };
     }
 
     return list;
