@@ -356,9 +356,6 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
               <h2 className="text-xl sm:text-2xl font-extrabold text-white">
                 {savedUser.full_name}
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                {t('mobileReturningSub')}
-              </p>
             </div>
 
             {/* Profile Card */}
