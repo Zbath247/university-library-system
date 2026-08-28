@@ -1,38 +1,24 @@
 import React from 'react';
 import {
   Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  PointElement,
-  LineElement,
   ArcElement,
-  Title,
   Tooltip,
-  Legend,
-  Filler
+  Legend
 } from 'chart.js';
-import { Bar, Doughnut, Line } from 'react-chartjs-2';
-import { Clock, PieChart, TrendingUp, BookOpen, Layers } from 'lucide-react';
+import { Doughnut } from 'react-chartjs-2';
+import { PieChart, Layers } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  PointElement,
-  LineElement,
   ArcElement,
-  Title,
   Tooltip,
-  Legend,
-  Filler
+  Legend
 );
 
 ChartJS.defaults.font.family = "'Battambang', system-ui, sans-serif";
 
 export default function AnalyticsCharts({ analytics }) {
-  const { t, tRole, tDept, tPurpose } = useLanguage();
+  const { t, tRole, tDept } = useLanguage();
 
   if (!analytics) {
     return (
@@ -42,53 +28,7 @@ export default function AnalyticsCharts({ analytics }) {
     );
   }
 
-  // 1. Peak Research Hours (Bar Chart)
-  const hourlyData = {
-    labels: analytics.hourly?.labels || [],
-    datasets: [
-      {
-        label: t('statTodayVisits'),
-        data: analytics.hourly?.data || [],
-        backgroundColor: 'rgba(20, 184, 166, 0.75)',
-        hoverBackgroundColor: 'rgba(45, 212, 191, 0.95)',
-        borderRadius: 8,
-        borderSkipped: false
-      }
-    ]
-  };
-
-  const hourlyOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        backgroundColor: '#0f172a',
-        titleColor: '#f8fafc',
-        bodyColor: '#2dd4bf',
-        borderColor: '#334155',
-        borderWidth: 1,
-        padding: 10,
-        cornerRadius: 10,
-        displayColors: false,
-        callbacks: {
-          label: (context) => ` ${context.raw}`
-        }
-      }
-    },
-    scales: {
-      x: {
-        grid: { display: false },
-        ticks: { color: '#94a3b8', font: { size: 11, family: 'Battambang, sans-serif' } }
-      },
-      y: {
-        grid: { color: 'rgba(51, 65, 85, 0.3)' },
-        ticks: { color: '#94a3b8', stepSize: 1, font: { size: 11 } }
-      }
-    }
-  };
-
-  // 2. Department Breakdown (Doughnut Chart)
+  // Department Breakdown (Doughnut Chart)
   const topDepts = (analytics.departments || []).slice(0, 5);
   const deptData = {
     labels: topDepts.map(d => tDept(d.name) || d.code),
@@ -132,98 +72,15 @@ export default function AnalyticsCharts({ analytics }) {
     }
   };
 
-  // 3. 7-Day Attendance Trend (Line Chart)
-  const trendData = {
-    labels: analytics.trend?.labels || [],
-    datasets: [
-      {
-        label: t('statTodayVisits'),
-        data: analytics.trend?.data || [],
-        fill: true,
-        borderColor: '#6366f1',
-        backgroundColor: 'rgba(99, 102, 241, 0.15)',
-        tension: 0.35,
-        pointBackgroundColor: '#818cf8',
-        pointBorderColor: '#0f172a',
-        pointBorderWidth: 2,
-        pointRadius: 4,
-        pointHoverRadius: 6
-      }
-    ]
-  };
-
-  const trendOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        backgroundColor: '#0f172a',
-        borderColor: '#334155',
-        borderWidth: 1,
-        padding: 10,
-        cornerRadius: 10
-      }
-    },
-    scales: {
-      x: {
-        grid: { display: false },
-        ticks: { color: '#94a3b8', font: { size: 11 } }
-      },
-      y: {
-        grid: { color: 'rgba(51, 65, 85, 0.3)' },
-        ticks: { color: '#94a3b8', stepSize: 2, font: { size: 11 } }
-      }
-    }
-  };
-
   const roles = analytics.roles || [];
 
   return (
     <div className="space-y-6">
       
-      {/* Comprehensive 2x2 Charts Grid */}
+      {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
         
-        {/* 1. Peak Research Hours Bar Chart */}
-        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-teal-950/20 border border-slate-800/90 shadow-xl backdrop-blur-xl flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800/80">
-              <div className="p-2.5 rounded-2xl bg-teal-500/15 text-teal-300 border border-teal-500/20">
-                <Clock className="w-4 h-4" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-white">{t('statPeakHour')}</h4>
-                <p className="text-xs text-slate-400">{t('statPeakHourDesc')}</p>
-              </div>
-            </div>
-
-            <div className="h-60 w-full relative flex items-center justify-center pt-2">
-              <Bar data={hourlyData} options={hourlyOptions} />
-            </div>
-          </div>
-        </div>
-
-        {/* 2. 7-Day Attendance Trend Line Chart */}
-        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-violet-950/20 border border-slate-800/90 shadow-xl backdrop-blur-xl flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800/80">
-              <div className="p-2.5 rounded-2xl bg-violet-500/15 text-violet-300 border border-violet-500/20">
-                <TrendingUp className="w-4 h-4" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-white">{t('tabAnalytics')}</h4>
-                <p className="text-xs text-slate-400">និន្នាការវត្តមានរយៈពេល ៧ថ្ងៃចុងក្រោយ</p>
-              </div>
-            </div>
-
-            <div className="h-60 w-full relative flex items-center justify-center pt-2">
-              <Line data={trendData} options={trendOptions} />
-            </div>
-          </div>
-        </div>
-
-        {/* 3. Department Share Doughnut */}
+        {/* Department Share Doughnut */}
         <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-indigo-950/20 border border-slate-800/90 shadow-xl backdrop-blur-xl flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800/80">
@@ -242,7 +99,7 @@ export default function AnalyticsCharts({ analytics }) {
           </div>
         </div>
 
-        {/* 4. Role Distribution */}
+        {/* Role Distribution */}
         <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-amber-950/20 border border-slate-800/90 shadow-xl backdrop-blur-xl flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800/80">
