@@ -207,7 +207,7 @@ const translations = {
     btnAddMember: 'បន្ថែមសមាជិកថ្មី',
 
     // Admin Dashboard
-    adminTitle: 'ផ្ទាំងគ្រប់គ្រងទូទៅ និងវិភាគទិន្នន័យស្រាវជ្រាវ',
+    adminTitle: 'គ្រប់គ្រងទូទៅ និងវិភាគទិន្នន័យស្រាវជ្រាវ',
     adminSub: 'តាមដានចំនួនវត្តមានផ្ទាល់ ស្ថិតិនៃការស្រាវជ្រាវ និងគ្រប់គ្រងសមាជិកបណ្ណាល័យ',
     liveMonitorBadge: 'តាមដានផ្ទាល់ (Live)',
     btnAcademicDirectory: 'បញ្ជីសមាជិក',
