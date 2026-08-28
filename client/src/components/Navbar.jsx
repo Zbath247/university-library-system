@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LayoutDashboard, QrCode, Smartphone, Globe, Menu, X, ChevronRight, LogOut } from 'lucide-react';
+import { LayoutDashboard, QrCode, Smartphone, Globe, Menu, X, ChevronRight, LogOut, ScanLine } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLoggedIn, onLogout }) {
