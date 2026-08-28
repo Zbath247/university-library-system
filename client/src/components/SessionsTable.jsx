@@ -348,7 +348,7 @@ export default function SessionsTable({
           </span>
         </button>
 
-        {/* 1. ចូលបណ្ណាល័យ */}
+        {/* ចូលបណ្ណាល័យ */}
         <button
           type="button"
           onClick={() => setCategoryTab('VISIT')}
@@ -358,13 +358,13 @@ export default function SessionsTable({
               : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
           }`}
         >
-          <span>🏛️ ១. ចូលបណ្ណាល័យ</span>
+          <span>🏛️ ចូលបណ្ណាល័យ</span>
           <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${categoryTab === 'VISIT' ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-300'}`}>
             {countVisit}
           </span>
         </button>
 
-        {/* 2. ខ្ចីសៀវភៅ */}
+        {/* ខ្ចីសៀវភៅ */}
         <button
           type="button"
           onClick={() => setCategoryTab('BORROW')}
@@ -374,13 +374,13 @@ export default function SessionsTable({
               : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
           }`}
         >
-          <span>📚 ២. ខ្ចីសៀវភៅ</span>
+          <span>📚 ខ្ចីសៀវភៅ</span>
           <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${categoryTab === 'BORROW' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-amber-300'}`}>
             {countBorrow}
           </span>
         </button>
 
-        {/* 3. សងសៀវភៅ */}
+        {/* សងសៀវភៅ */}
         <button
           type="button"
           onClick={() => setCategoryTab('RETURN')}
@@ -390,7 +390,7 @@ export default function SessionsTable({
               : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
           }`}
         >
-          <span>📗 ៣. សងសៀវភៅ</span>
+          <span>📗 សងសៀវភៅ</span>
           <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${categoryTab === 'RETURN' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-emerald-300'}`}>
             {countReturn}
           </span>

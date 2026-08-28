@@ -220,7 +220,6 @@ router.get('/export/csv', async (req, res) => {
       'Full Name',
       'Role',
       'Department / Faculty',
-      'Contact Email',
       'Contact Phone',
       'Purpose of Visit',
       'Book Title / Research Topic (ឈ្មោះសៀវភៅ / ប្រធានបទ)',
@@ -232,11 +231,11 @@ router.get('/export/csv', async (req, res) => {
 
     const rows = sessions.map(s => {
       const u = s.user || {};
-      let catLabel = '១. ចូលបណ្ណាល័យ (Library Visit)';
+      let catLabel = 'ចូលបណ្ណាល័យ (Library Visit)';
       if (s.purpose_of_visit === 'Book Borrowing') {
-        catLabel = '២. ខ្ចីសៀវភៅ (Book Borrowing)';
+        catLabel = 'ខ្ចីសៀវភៅ (Book Borrowing)';
       } else if (s.purpose_of_visit === 'Book Return') {
-        catLabel = '៣. សងសៀវភៅ (Book Return)';
+        catLabel = 'សងសៀវភៅ (Book Return)';
       }
 
       return [
@@ -246,7 +245,6 @@ router.get('/export/csv', async (req, res) => {
         `"${(u.full_name || '').replace(/"/g, '""')}"`,
         `"${(u.role_name || '').replace(/"/g, '""')}"`,
         `"${(u.department_name || '').replace(/"/g, '""')}"`,
-        `"${(u.email || '').replace(/"/g, '""')}"`,
         `"${(u.phone || '').replace(/"/g, '""')}"`,
         `"${(s.purpose_of_visit || '').replace(/"/g, '""')}"`,
         `"${(s.research_topic || '').replace(/"/g, '""')}"`,
