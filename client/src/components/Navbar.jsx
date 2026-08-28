@@ -13,128 +13,148 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl shadow-xl">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20 gap-4 lg:gap-8">
-            
-            {/* Left: Mobile Hamburger (☰) + University Logo & Title */}
-            <div className="flex items-center gap-3 shrink-0">
-              
-              {/* 3-Bar Hamburger Menu Button for Mobile */}
-              <button
-                type="button"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2.5 rounded-2xl text-slate-300 hover:text-white bg-slate-900 border border-slate-800 focus:outline-none transition active:scale-95 shrink-0"
-                aria-label="Toggle Menu"
-              >
-                {mobileMenuOpen ? (
-                  <X className="w-5 h-5 text-teal-400" />
-                ) : (
-                  <Menu className="w-5 h-5 text-white" />
-                )}
-              </button>
+      <header className="fixed top-0 left-0 z-40 w-full md:w-[280px] md:h-screen border-b md:border-b-0 md:border-r border-slate-800/80 bg-slate-950/95 backdrop-blur-2xl shadow-xl flex flex-col transition-all">
+        {/* Top Area: Mobile Bar or Desktop Logo */}
+        <div className="flex items-center justify-between h-20 px-4 sm:px-6 shrink-0 md:flex-col md:h-auto md:py-8 md:gap-4 w-full">
+          
+          {/* 3-Bar Hamburger Menu Button for Mobile */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2.5 rounded-2xl text-slate-300 hover:text-white bg-slate-900 border border-slate-800 focus:outline-none transition active:scale-95 shrink-0"
+            aria-label="Toggle Menu"
+          >
+            {mobileMenuOpen ? (
+              <X className="w-5 h-5 text-teal-400" />
+            ) : (
+              <Menu className="w-5 h-5 text-white" />
+            )}
+          </button>
 
-              {/* Logo & University Name */}
-              <div
-                className="flex items-center gap-3 cursor-pointer shrink-0 select-none group"
-                onClick={() => handleNavClick('kiosk')}
-              >
-                <div className="h-11 w-11 flex items-center justify-center shrink-0">
-                  <img 
-                    src="/duc-logo.png" 
-                    alt="DUC Logo" 
-                    className="h-11 w-11 object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-200"
-                    onError={(e) => { e.target.style.display='none'; }}
-                  />
-                </div>
-                <div className="flex flex-col justify-center leading-none">
-                  <span className="text-[11px] font-black tracking-wider bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent uppercase font-sans">
-                    DIGITAL UNIVERSITY OF CAMBODIA
-                  </span>
-                  <span className="text-xs font-extrabold text-teal-400 whitespace-nowrap tracking-wide mt-1 flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse"></span>
-                    {lang === 'km' ? 'ចូលបណ្ណាល័យ' : 'Library Portal'}
-                  </span>
-                </div>
-              </div>
-
+          {/* Logo & University Name */}
+          <div
+            className="flex items-center gap-3 cursor-pointer shrink-0 select-none group md:flex-col md:text-center w-full justify-center md:justify-start"
+            onClick={() => handleNavClick('kiosk')}
+          >
+            <div className="h-11 w-11 md:h-16 md:w-16 flex items-center justify-center shrink-0">
+              <img 
+                src="/duc-logo.png" 
+                alt="DUC Logo" 
+                className="h-full w-full object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-200"
+                onError={(e) => { e.target.style.display='none'; }}
+              />
             </div>
-
-            {/* Desktop Navigation Tabs (Sleek Elevated Glass Capsule) */}
-            <nav className="hidden md:flex items-center gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 shadow-2xl backdrop-blur-xl">
-              
-              {/* 1. Scan QR Code */}
-              <button
-                onClick={() => handleNavClick('kiosk')}
-                className={`flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-bold transition-all duration-200 ${
-                  activeTab === 'kiosk'
-                    ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 font-black shadow-md shadow-teal-500/25 scale-[1.02]'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-                }`}
-              >
-                <QrCode className="w-4 h-4" />
-                <span className="whitespace-nowrap">{t('navKiosk')}</span>
-              </button>
-
-              {/* 2. បំពេញព័ត៌មាន (Mobile Portal) */}
-              <button
-                onClick={() => handleNavClick('mobile')}
-                className={`flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-bold transition-all duration-200 ${
-                  activeTab === 'mobile'
-                    ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black shadow-md shadow-cyan-500/25 scale-[1.02]'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-                }`}
-              >
-                <Smartphone className="w-4 h-4" />
-                <span className="whitespace-nowrap">{t('navMobilePortal')}</span>
-              </button>
-
-              {/* 3. Admin */}
-              <button
-                onClick={() => handleNavClick('admin')}
-                className={`flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-bold transition-all duration-200 ${
-                  activeTab === 'admin'
-                    ? 'bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 text-white font-black shadow-md shadow-indigo-500/25 scale-[1.02]'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-                }`}
-              >
-                <LayoutDashboard className="w-4 h-4" />
-                <span className="whitespace-nowrap">{t('navAdmin')}</span>
-              </button>
-            </nav>
-
-            {/* Right Controls (Desktop Only: Language Switcher & Logout) */}
-            <div className="hidden md:flex items-center gap-2.5 shrink-0">
-              
-              {/* Language Switcher Toggle */}
-              <button
-                onClick={toggleLanguage}
-                title="Switch Language / ផ្លាស់ប្ដូរភាសា"
-                className="flex items-center gap-2 h-10 px-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-xs font-bold text-slate-200 transition-all shadow-sm active:scale-95"
-              >
-                <Globe className="w-4 h-4 text-teal-400" />
-                <span className="flex items-center gap-1.5 text-xs">
-                  <span className={lang === 'km' ? 'text-teal-400 font-bold' : 'text-slate-400'}>🇰🇭 ខ្មែរ</span>
-                  <span className="text-slate-600 font-normal">|</span>
-                  <span className={lang === 'en' ? 'text-teal-400 font-bold' : 'text-slate-400'}>🇬🇧 EN</span>
-                </span>
-              </button>
-
-              {/* Admin Logout */}
-              {isAdminLoggedIn && onLogout && (
-                <button
-                  onClick={onLogout}
-                  title="Logout"
-                  className="flex items-center gap-2 h-10 px-4 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-xs font-bold text-rose-400 hover:text-rose-300 transition-all shadow-sm active:scale-95"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span className="hidden sm:inline">Logout</span>
-                </button>
-              )}
-
+            <div className="flex flex-col justify-center leading-tight">
+              <span className="text-[11px] md:text-[12px] font-black tracking-wider bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent uppercase font-sans">
+                DIGITAL UNIVERSITY
+              </span>
+              <span className="text-xs font-extrabold text-teal-400 whitespace-nowrap tracking-wide mt-1 flex items-center justify-center md:justify-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse hidden md:block"></span>
+                {lang === 'km' ? 'ចូលបណ្ណាល័យ' : 'Library Portal'}
+              </span>
             </div>
-
           </div>
+          
+          {/* Invisible Spacer for Mobile Centering */}
+          <div className="w-10 h-10 md:hidden opacity-0 pointer-events-none"></div>
+        </div>
+
+        {/* Desktop Navigation Tabs (Sidebar style) */}
+        <div className="hidden md:flex flex-col flex-1 px-4 pb-6 overflow-y-auto w-full">
+          
+          <nav className="flex flex-col gap-2 w-full mt-4">
+            {/* 1. Scan QR Code */}
+            <button
+              onClick={() => handleNavClick('kiosk')}
+              className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
+                activeTab === 'kiosk'
+                  ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 font-black shadow-lg shadow-teal-500/25 scale-[1.02]'
+                  : 'bg-slate-900/40 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800/50'
+              }`}
+            >
+              <QrCode className="w-5 h-5 shrink-0" />
+              <div className="text-left leading-tight flex-1">
+                <span className="block">{t('navKiosk')}</span>
+                <span className={`text-[10px] font-normal ${activeTab === 'kiosk' ? 'text-slate-800' : 'text-slate-500'}`}>Entrance Scanner</span>
+              </div>
+            </button>
+
+            {/* 2. បំពេញព័ត៌មាន (Mobile Portal) */}
+            <button
+              onClick={() => handleNavClick('mobile')}
+              className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
+                activeTab === 'mobile'
+                  ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black shadow-lg shadow-cyan-500/25 scale-[1.02]'
+                  : 'bg-slate-900/40 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800/50'
+              }`}
+            >
+              <Smartphone className="w-5 h-5 shrink-0" />
+              <div className="text-left leading-tight flex-1">
+                <span className="block">{t('navMobilePortal')}</span>
+                <span className={`text-[10px] font-normal ${activeTab === 'mobile' ? 'text-blue-100' : 'text-slate-500'}`}>Check-In & Pass</span>
+              </div>
+            </button>
+
+            {/* 3. Admin */}
+            <button
+              onClick={() => handleNavClick('admin')}
+              className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
+                activeTab === 'admin'
+                  ? 'bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 text-white font-black shadow-lg shadow-indigo-500/25 scale-[1.02]'
+                  : 'bg-slate-900/40 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800/50'
+              }`}
+            >
+              <LayoutDashboard className="w-5 h-5 shrink-0" />
+              <div className="text-left leading-tight flex-1">
+                <span className="block">{t('navAdmin')}</span>
+                <span className={`text-[10px] font-normal ${activeTab === 'admin' ? 'text-indigo-100' : 'text-slate-500'}`}>Dashboard & Logs</span>
+              </div>
+            </button>
+          </nav>
+
+          {/* Bottom Area (Language, Logout, Stats) */}
+          <div className="mt-auto w-full flex flex-col gap-3 pt-6 border-t border-slate-800/80">
+            {/* Live Stats */}
+            <div className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 flex items-center justify-between">
+              <span className="text-xs text-slate-400 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
+                <span>Active</span>
+              </span>
+              <span className="text-xs font-bold text-teal-300 font-mono">
+                {activeCount} {t('activeOccupants')}
+              </span>
+            </div>
+
+            {/* Language Switcher */}
+            <button
+              onClick={toggleLanguage}
+              title="Switch Language / ផ្លាស់ប្ដូរភាសា"
+              className="flex items-center justify-between p-3 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-200 transition-all shadow-sm active:scale-95 w-full"
+            >
+              <div className="flex items-center gap-2">
+                <Globe className="w-4 h-4 text-teal-400" />
+                <span>{lang === 'km' ? 'ភាសា' : 'Language'}</span>
+              </div>
+              <span className="flex items-center gap-1.5 text-xs">
+                <span className={lang === 'km' ? 'text-teal-400 font-bold' : 'text-slate-500'}>🇰🇭 ខ្មែរ</span>
+                <span className="text-slate-700 font-normal">|</span>
+                <span className={lang === 'en' ? 'text-teal-400 font-bold' : 'text-slate-500'}>🇬🇧 EN</span>
+              </span>
+            </button>
+
+            {/* Admin Logout */}
+            {isAdminLoggedIn && onLogout && (
+              <button
+                onClick={onLogout}
+                title="Logout"
+                className="w-full flex items-center justify-center gap-2 p-3 rounded-2xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-xs font-bold text-rose-400 hover:text-rose-300 transition-all shadow-sm active:scale-95"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Logout</span>
+              </button>
+            )}
+          </div>
+
         </div>
       </header>
 
