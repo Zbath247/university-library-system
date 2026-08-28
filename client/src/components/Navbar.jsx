@@ -95,23 +95,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               </div>
             </button>
 
-            {/* 3. Admin Overview */}
-            <button
-              onClick={() => handleNavClick('admin')}
-              className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
-                activeTab === 'admin'
-                  ? 'bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 text-white font-black shadow-lg shadow-indigo-500/25 scale-[1.02]'
-                  : 'bg-slate-900/40 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800/50'
-              }`}
-            >
-              <LayoutDashboard className="w-5 h-5 shrink-0" />
-              <div className="text-left leading-tight flex-1">
-                <span className="block">{t('navAdmin')}</span>
-                <span className={`text-[10px] font-normal ${activeTab === 'admin' ? 'text-indigo-100' : 'text-slate-500'}`}>Dashboard & Overview</span>
-              </div>
-            </button>
-
-            {/* 4. Attendance Logs */}
+            {/* 3. Attendance Logs */}
             <button
               onClick={() => handleNavClick('logs')}
               className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
@@ -124,6 +108,22 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               <div className="text-left leading-tight flex-1">
                 <span className="block">កំណត់ត្រាវត្តមានទាំងអស់</span>
                 <span className={`text-[10px] font-normal ${activeTab === 'logs' ? 'text-purple-100' : 'text-slate-500'}`}>Attendance Logs</span>
+              </div>
+            </button>
+
+            {/* 4. Admin Overview */}
+            <button
+              onClick={() => handleNavClick('admin')}
+              className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
+                activeTab === 'admin'
+                  ? 'bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 text-white font-black shadow-lg shadow-indigo-500/25 scale-[1.02]'
+                  : 'bg-slate-900/40 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800/50'
+              }`}
+            >
+              <LayoutDashboard className="w-5 h-5 shrink-0" />
+              <div className="text-left leading-tight flex-1">
+                <span className="block">{t('navAdmin')}</span>
+                <span className={`text-[10px] font-normal ${activeTab === 'admin' ? 'text-indigo-100' : 'text-slate-500'}`}>Dashboard & Overview</span>
               </div>
             </button>
           </nav>
