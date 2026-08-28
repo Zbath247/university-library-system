@@ -307,15 +307,23 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex flex-col items-center justify-start p-4 sm:p-6 font-sans">
       
-      {/* Top Mobile Bar */}
-      <div className="w-full max-w-md flex items-center justify-center py-3 mb-3 border-b border-slate-800">
-        <div className="flex items-center gap-2 text-center">
-          <div className="p-2 rounded-xl bg-teal-500/20 text-teal-300 border border-teal-500/30">
-            <Smartphone className="w-4 h-4" />
+      {/* Top Mobile Bar (Logo & University Name) */}
+      <div className="w-full max-w-md flex items-center justify-center py-4 mb-2">
+        <div className="flex items-center gap-3 select-none">
+          <div className="h-12 w-12 flex items-center justify-center shrink-0">
+            <img 
+              src="/duc-logo.png" 
+              alt="DUC Logo" 
+              className="h-full w-full object-contain drop-shadow-md"
+              onError={(e) => { e.target.style.display='none'; }}
+            />
           </div>
-          <div className="text-left flex items-center h-full">
-            <span className="text-sm font-extrabold uppercase tracking-wider text-teal-400 block">
-              {t('appName')}
+          <div className="flex flex-col justify-center leading-tight">
+            <span className="text-[11px] sm:text-[12px] font-black tracking-wider bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent uppercase font-sans text-left">
+              DIGITAL UNIVERSITY OF CAMBODIA
+            </span>
+            <span className="text-xs font-extrabold text-teal-400 whitespace-nowrap tracking-wide mt-0.5 text-left">
+              {lang === 'km' ? 'ចូលបណ្ណាល័យ' : 'Library Portal'}
             </span>
           </div>
         </div>
