@@ -180,7 +180,7 @@ export default function EditSessionModal({
                     type="text"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder="ឧ. សុខ ចាន់ដារ៉ា"
+                    placeholder="ឧ. ម៉ុក សម្បត្តិ"
                     required
                     className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-500 font-medium"
                   />
