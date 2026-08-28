@@ -225,7 +225,6 @@ router.get('/export/csv', async (req, res) => {
       'Book Title / Research Topic (ឈ្មោះសៀវភៅ / ប្រធានបទ)',
       'Check-in Timestamp',
       'Check-out Timestamp',
-      'Duration (Minutes)',
       'Status'
     ];
 
@@ -250,7 +249,6 @@ router.get('/export/csv', async (req, res) => {
         `"${(s.research_topic || '').replace(/"/g, '""')}"`,
         `"${s.check_in_time}"`,
         `"${s.check_out_time || 'N/A'}"`,
-        s.duration_minutes || 0,
         s.status
       ].join(',');
     });
