@@ -75,10 +75,14 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
             {sessions.map((session, index) => {
               const user = session.user || {};
               let purposeDisplay = session.purpose_of_visit || 'ចូលបណ្ណាល័យ';
-              if (session.purpose_of_visit === 'Book Borrowing') purposeDisplay = 'ខ្ចីសៀវភៅ';
-              if (session.purpose_of_visit === 'Book Return') purposeDisplay = 'សងសៀវភៅ';
-              
-              const topic = session.research_topic ? ` - ${session.research_topic}` : '';
+              let finalText = purposeDisplay;
+              if (session.purpose_of_visit === 'Book Borrowing') {
+                finalText = session.research_topic ? session.research_topic : 'ខ្ចីសៀវភៅ';
+              } else if (session.purpose_of_visit === 'Book Return') {
+                finalText = session.research_topic ? session.research_topic : 'សងសៀវភៅ';
+              } else {
+                finalText = session.research_topic ? `${purposeDisplay} - ${session.research_topic}` : purposeDisplay;
+              }
 
               return (
                 <tr key={session.id || index}>
@@ -88,7 +92,7 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
                   <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.phone || '-'}</td>
                   <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.role_name || '-'}</td>
                   <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.department_name || '-'}</td>
-                  <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'left' }}>{purposeDisplay}{topic}</td>
+                  <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'left' }}>{finalText}</td>
                 </tr>
               );
             })}

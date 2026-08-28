@@ -149,9 +149,14 @@ export default function SessionsTable({
     filteredSessions.forEach((session, index) => {
       const user = session.user || {};
       let purposeDisplay = session.purpose_of_visit || 'ចូលបណ្ណាល័យ';
-      if (session.purpose_of_visit === 'Book Borrowing') purposeDisplay = 'ខ្ចីសៀវភៅ';
-      if (session.purpose_of_visit === 'Book Return') purposeDisplay = 'សងសៀវភៅ';
-      const topic = session.research_topic ? ` - ${session.research_topic}` : '';
+      let finalText = purposeDisplay;
+      if (session.purpose_of_visit === 'Book Borrowing') {
+        finalText = session.research_topic ? session.research_topic : 'ខ្ចីសៀវភៅ';
+      } else if (session.purpose_of_visit === 'Book Return') {
+        finalText = session.research_topic ? session.research_topic : 'សងសៀវភៅ';
+      } else {
+        finalText = session.research_topic ? `${purposeDisplay} - ${session.research_topic}` : purposeDisplay;
+      }
 
       tableRows.push(new TableRow({
         children: [
@@ -161,7 +166,7 @@ export default function SessionsTable({
           user.phone || '-',
           user.role_name || '-',
           user.department_name || '-',
-          `${purposeDisplay}${topic}`
+          finalText
         ].map(text => new TableCell({
           children: [new Paragraph({ children: [new TextRun({ text, font: "Khmer OS Battambang", size: 22 })], alignment: AlignmentType.CENTER })],
           margins: { top: 100, bottom: 100, left: 100, right: 100 }
