@@ -433,11 +433,8 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
                 }`}>
                   <Camera className="w-7 h-7" />
                 </div>
-                <span className="text-sm font-bold text-white mb-0.5">
+                <span className="text-sm font-bold text-white">
                   {t('btnCameraScan')}
-                </span>
-                <span className="text-[11px] text-slate-400">
-                  {t('btnCameraScanSub')}
                 </span>
               </div>
             </div>
