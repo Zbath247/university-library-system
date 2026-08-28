@@ -24,11 +24,14 @@ export default function App() {
   const [activeCount, setActiveCount] = useState(0);
   const { t } = useLanguage();
 
+  const [pendingAdminTab, setPendingAdminTab] = useState('admin');
+
   const handleTabSelect = (tab) => {
-    if (tab === 'admin') {
+    if (tab === 'admin' || tab === 'logs') {
       if (isAdminLoggedIn) {
-        setActiveTab('admin');
+        setActiveTab(tab);
       } else {
+        setPendingAdminTab(tab);
         setShowAdminLoginModal(true);
       }
     } else {
@@ -38,7 +41,7 @@ export default function App() {
 
   const handleAdminLoginSuccess = () => {
     setIsAdminLoggedIn(true);
-    setActiveTab('admin');
+    setActiveTab(pendingAdminTab);
   };
 
   const handleAdminLogout = () => {
@@ -92,8 +95,9 @@ export default function App() {
             <MobileCheckIn
               onNavigateEntrance={() => handleTabSelect('kiosk')}
             />
-          ) : isAdminLoggedIn ? (
+          ) : isAdminLoggedIn && (activeTab === 'admin' || activeTab === 'logs') ? (
             <AdminDashboard
+              view={activeTab === 'logs' ? 'LOGS' : 'OVERVIEW'}
               onStatsUpdate={setActiveCount}
               onLogout={handleAdminLogout}
             />

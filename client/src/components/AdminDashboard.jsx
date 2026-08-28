@@ -23,7 +23,7 @@ import UsersDirectoryModal from './UsersDirectoryModal';
 import RegistrationModal from './RegistrationModal';
 import { playCheckoutChime, playSuccessChime } from '../utils/audioChime';
 
-export default function AdminDashboard({ onStatsUpdate, onLogout }) {
+export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLogout }) {
   const [stats, setStats] = useState(null);
   const [analytics, setAnalytics] = useState(null);
   const [sessions, setSessions] = useState([]);
@@ -122,7 +122,7 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
 
 
 
-  const [dashboardTab, setDashboardTab] = useState('OVERVIEW'); // 'OVERVIEW', 'ANALYTICS', 'LOGS'
+  // Removed local dashboardTab state as it is now controlled by the 'view' prop
 
   const handleViewPass = (user) => {
     setSelectedPassUser(user);
@@ -270,45 +270,10 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
 
       </div>
 
-      {/* Modern Sub-Tab Navigation Bar */}
-      <div className="flex items-center justify-start gap-2 p-1.5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl overflow-x-auto">
-        <button
-          type="button"
-          onClick={() => setDashboardTab('OVERVIEW')}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap ${
-            dashboardTab === 'OVERVIEW'
-              ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 shadow-md shadow-teal-500/20'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-          }`}
-        >
-          <Activity className="w-4 h-4" />
-          <span>ទិដ្ឋភាពទូទៅ & វត្តមានផ្ទាល់ (Live Overview)</span>
-          {activeSessions.length > 0 && (
-            <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold ${dashboardTab === 'OVERVIEW' ? 'bg-slate-950/20 text-slate-950' : 'bg-teal-500/20 text-teal-300'}`}>
-              {activeSessions.length}
-            </span>
-          )}
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setDashboardTab('LOGS')}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap ${
-            dashboardTab === 'LOGS'
-              ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-md shadow-purple-500/20'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-          }`}
-        >
-          <Layers className="w-4 h-4" />
-          <span>កំណត់ត្រាវត្តមានទាំងអស់ (Attendance Logs)</span>
-          <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold ${dashboardTab === 'LOGS' ? 'bg-slate-950/20 text-white' : 'bg-slate-800 text-slate-300'}`}>
-            {sessions.length}
-          </span>
-        </button>
-      </div>
+      {/* Sub-Tab Navigation removed - now handled by Sidebar tabs */}
 
       {/* Tab 1: Live Overview View */}
-      {dashboardTab === 'OVERVIEW' && (
+      {view === 'OVERVIEW' && (
         <div className="space-y-6 animate-fade-in">
           
           {/* Live Occupants Room Monitor */}
@@ -425,7 +390,7 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
       )}
 
       {/* Tab 2: Attendance Logs View */}
-      {dashboardTab === 'LOGS' && (
+      {view === 'LOGS' && (
         <div className="space-y-6 animate-fade-in">
           <SessionsTable
             sessions={sessions}

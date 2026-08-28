@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LayoutDashboard, QrCode, Smartphone, Globe, Menu, X, ChevronRight, LogOut, ScanLine } from 'lucide-react';
+import { LayoutDashboard, QrCode, Smartphone, Globe, Menu, X, ChevronRight, LogOut, ScanLine, Layers } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLoggedIn, onLogout }) {
@@ -95,7 +95,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               </div>
             </button>
 
-            {/* 3. Admin */}
+            {/* 3. Admin Overview */}
             <button
               onClick={() => handleNavClick('admin')}
               className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
@@ -107,7 +107,23 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               <LayoutDashboard className="w-5 h-5 shrink-0" />
               <div className="text-left leading-tight flex-1">
                 <span className="block">{t('navAdmin')}</span>
-                <span className={`text-[10px] font-normal ${activeTab === 'admin' ? 'text-indigo-100' : 'text-slate-500'}`}>Dashboard & Logs</span>
+                <span className={`text-[10px] font-normal ${activeTab === 'admin' ? 'text-indigo-100' : 'text-slate-500'}`}>Dashboard & Overview</span>
+              </div>
+            </button>
+
+            {/* 4. Attendance Logs */}
+            <button
+              onClick={() => handleNavClick('logs')}
+              className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
+                activeTab === 'logs'
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white font-black shadow-lg shadow-purple-500/25 scale-[1.02]'
+                  : 'bg-slate-900/40 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800/50'
+              }`}
+            >
+              <Layers className="w-5 h-5 shrink-0" />
+              <div className="text-left leading-tight flex-1">
+                <span className="block">កំណត់ត្រាវត្តមានទាំងអស់</span>
+                <span className={`text-[10px] font-normal ${activeTab === 'logs' ? 'text-purple-100' : 'text-slate-500'}`}>Attendance Logs</span>
               </div>
             </button>
           </nav>
