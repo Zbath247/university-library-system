@@ -13,24 +13,24 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/95 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl shadow-xl">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20 sm:h-24 gap-3 lg:gap-6">
+          <div className="flex items-center justify-between h-20 gap-4 lg:gap-8">
             
             {/* Left: Mobile Hamburger (☰) + University Logo & Title */}
             <div className="flex items-center gap-3 shrink-0">
               
-              {/* 3-Bar Hamburger Menu Button (☰ Like YouTube) for Mobile */}
+              {/* 3-Bar Hamburger Menu Button for Mobile */}
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 focus:outline-none transition active:scale-95 shrink-0"
+                className="md:hidden p-2.5 rounded-2xl text-slate-300 hover:text-white bg-slate-900 border border-slate-800 focus:outline-none transition active:scale-95 shrink-0"
                 aria-label="Toggle Menu"
               >
                 {mobileMenuOpen ? (
-                  <X className="w-6 h-6 text-teal-400" />
+                  <X className="w-5 h-5 text-teal-400" />
                 ) : (
-                  <Menu className="w-6 h-6 text-white" />
+                  <Menu className="w-5 h-5 text-white" />
                 )}
               </button>
 
@@ -39,51 +39,53 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                 className="flex items-center gap-3 cursor-pointer shrink-0 select-none group"
                 onClick={() => handleNavClick('kiosk')}
               >
-                <div className="h-12 w-12 sm:h-16 sm:w-16 flex items-center justify-center shrink-0">
+                <div className="h-12 w-12 flex items-center justify-center shrink-0">
                   <img 
                     src="/duc-logo.png" 
                     alt="DUC Logo" 
-                    className="h-12 w-12 sm:h-16 sm:w-16 object-contain drop-shadow-lg group-hover:scale-105 transition"
+                    className="h-12 w-12 object-contain drop-shadow-md group-hover:scale-105 transition"
                     onError={(e) => { e.target.style.display='none'; }}
                   />
                 </div>
-                <div className="flex flex-col justify-center leading-tight">
-                  <span className="text-[11px] sm:text-xs font-extrabold tracking-widest text-amber-400 uppercase whitespace-nowrap">
-                    DIGITAL UNIVERSITY
-                  </span>
-                  <span className="text-[11px] sm:text-xs font-extrabold tracking-widest text-amber-300 uppercase whitespace-nowrap">
-                    OF CAMBODIA
-                  </span>
-                  <span className="text-xs sm:text-sm font-black text-teal-400 whitespace-nowrap tracking-wide">
-                    {lang === 'km' ? 'ចូលបណ្ណាល័យ' : 'Library Entrance'}
+                <div className="flex flex-col justify-center leading-none">
+                  <div className="flex items-center gap-1">
+                    <span className="text-[11px] font-extrabold tracking-wider text-amber-400 uppercase whitespace-nowrap font-sans">
+                      DIGITAL UNIVERSITY
+                    </span>
+                    <span className="text-[11px] font-extrabold tracking-wider text-amber-300 uppercase whitespace-nowrap font-sans">
+                      OF CAMBODIA
+                    </span>
+                  </div>
+                  <span className="text-xs font-black text-teal-400 whitespace-nowrap tracking-wide mt-1">
+                    {lang === 'km' ? 'ចូលបណ្ណាល័យ' : 'Library Portal'}
                   </span>
                 </div>
               </div>
 
             </div>
 
-            {/* Desktop Navigation Tabs (Clean & Compact to avoid any overlap) */}
-            <div className="hidden md:flex items-center gap-1.5 bg-slate-900/95 p-1.5 rounded-2xl border border-slate-800 shadow-inner">
+            {/* Desktop Navigation Tabs (Sleek Elevated Glass Capsule) */}
+            <div className="hidden md:flex items-center gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800/90 shadow-2xl backdrop-blur-md">
               
               {/* Entrance Kiosk Screen */}
               <button
                 onClick={() => handleNavClick('kiosk')}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
+                className={`flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-bold transition-all duration-200 ${
                   activeTab === 'kiosk'
-                    ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 shadow-md shadow-teal-500/20'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                    ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 shadow-md shadow-teal-500/25 scale-[1.02]'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
                 <ScanLine className="w-4 h-4" />
                 <span className="whitespace-nowrap">{t('navKiosk')}</span>
               </button>
 
-              {/* Mobile Portal Simulation */}
+              {/* Mobile Portal */}
               <button
                 onClick={() => handleNavClick('mobile')}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
+                className={`flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-bold transition-all duration-200 ${
                   activeTab === 'mobile'
-                    ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/20'
+                    ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/25 scale-[1.02]'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                 }`}
               >
@@ -94,9 +96,9 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               {/* Admin Dashboard */}
               <button
                 onClick={() => handleNavClick('admin')}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
+                className={`flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-bold transition-all duration-200 ${
                   activeTab === 'admin'
-                    ? 'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-500/20'
+                    ? 'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-500/25 scale-[1.02]'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                 }`}
               >
@@ -105,14 +107,14 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               </button>
             </div>
 
-            {/* Right Controls: Language Switcher & Indicators */}
+            {/* Right Controls: Language Switcher & Logout */}
             <div className="flex items-center gap-2.5 shrink-0">
               
               {/* Language Switcher Toggle */}
               <button
                 onClick={toggleLanguage}
                 title="Switch Language / ផ្លាស់ប្ដូរភាសា"
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-xs font-bold text-slate-200 transition-all shadow-sm"
+                className="flex items-center gap-1.5 h-10 px-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-xs font-bold text-slate-200 transition-all shadow-sm active:scale-95"
               >
                 <Globe className="w-4 h-4 text-teal-400" />
                 <span className="flex items-center gap-1">
@@ -127,14 +129,12 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                 <button
                   onClick={onLogout}
                   title="ចាកចេញពីគណនី Admin (Logout)"
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-xs font-bold text-rose-400 transition-all shadow-sm"
+                  className="flex items-center gap-1.5 h-10 px-3.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-xs font-bold text-rose-400 transition-all shadow-sm active:scale-95"
                 >
                   <LogOut className="w-4 h-4" />
                   <span className="hidden sm:inline">ចាកចេញ (Logout)</span>
                 </button>
               )}
-
-
 
             </div>
 

@@ -19,9 +19,9 @@ const translations = {
     footerTech: 'ប្រព័ន្ធទិន្នន័យស្រាវជ្រាវទំនើប REST API',
 
     // Navigation
-    navKiosk: 'ផ្ទាំងស្កេនមាត់ទ្វារ (Kiosk QR)',
-    navAdmin: 'ផ្ទាំងគ្រប់គ្រង & ស្ថិតិ (Admin)',
-    navMobilePortal: 'ផ្ទាំងទូរស័ព្ទដៃ (Mobile)',
+    navKiosk: 'ស្កេនមាត់ទ្វារ (Kiosk)',
+    navAdmin: 'ផ្ទាំងគ្រប់គ្រង (Admin)',
+    navMobilePortal: 'ទូរស័ព្ទដៃ (Mobile)',
 
     // Kiosk & Entrance Screen
     kioskBadge: 'ច្រកស្កេនវត្តមានឌីជីថលស្វ័យប្រវត្តិ',
@@ -281,9 +281,9 @@ const translations = {
     footerTech: 'Modern REST API & Relational Storage',
 
     // Navigation
-    navKiosk: 'Entrance Screen (Kiosk QR)',
-    navAdmin: 'Admin & Analytics',
-    navMobilePortal: 'Mobile Portal (Phone)',
+    navKiosk: 'Entrance (Kiosk)',
+    navAdmin: 'Dashboard (Admin)',
+    navMobilePortal: 'Mobile Portal',
 
     // Kiosk & Entrance Screen
     kioskBadge: 'Smart Digital Entrance Gateway',
