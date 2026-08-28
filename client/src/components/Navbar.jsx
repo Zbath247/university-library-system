@@ -45,8 +45,8 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               />
             </div>
             <div className="flex flex-col justify-center leading-tight">
-              <span className="text-[11px] md:text-[12px] font-black tracking-wider bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent uppercase font-sans">
-                DIGITAL UNIVERSITY
+              <span className="text-[11px] md:text-[12px] font-black tracking-wider bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent uppercase font-sans text-center">
+                DIGITAL UNIVERSITY OF CAMBODIA
               </span>
               <span className="text-xs font-extrabold text-teal-400 whitespace-nowrap tracking-wide mt-1 flex items-center justify-center md:justify-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse hidden md:block"></span>
