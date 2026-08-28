@@ -175,9 +175,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
 
               {/* Navigation Items */}
               <div className="space-y-2">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-3 mb-2">
-                  (MENU)
-                </p>
 
                 {/* 1. Scan QR Code */}
                 <button
