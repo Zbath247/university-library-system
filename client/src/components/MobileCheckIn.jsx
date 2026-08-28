@@ -24,7 +24,7 @@ import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
 import DigitalPassModal from './DigitalPassModal';
 
-export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }) {
+export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, isQRScan = false }) {
   const { t, tRole, tDept, tPurpose, lang, toggleLanguage } = useLanguage();
 
   const [savedUser, setSavedUser] = useState(() => {
@@ -307,27 +307,29 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null }
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex flex-col items-center justify-start p-4 sm:p-6 font-sans">
       
-      {/* Top Mobile Bar (Logo & University Name) */}
-      <div className="w-full max-w-md flex items-center justify-center py-4 mb-2">
-        <div className="flex items-center gap-3 select-none">
-          <div className="h-12 w-12 flex items-center justify-center shrink-0">
-            <img 
-              src="/duc-logo.png" 
-              alt="DUC Logo" 
-              className="h-full w-full object-contain drop-shadow-md"
-              onError={(e) => { e.target.style.display='none'; }}
-            />
-          </div>
-          <div className="flex flex-col justify-center leading-tight">
-            <span className="text-[11px] sm:text-[12px] font-black tracking-wider bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent uppercase font-sans text-left">
-              DIGITAL UNIVERSITY OF CAMBODIA
-            </span>
-            <span className="text-xs font-extrabold text-teal-400 whitespace-nowrap tracking-wide mt-0.5 text-left">
-              {lang === 'km' ? 'ចូលបណ្ណាល័យ' : 'Library Portal'}
-            </span>
+      {/* Top Mobile Bar (Logo & University Name) - Only show if accessed via QR Scan since the main navbar is hidden */}
+      {isQRScan && (
+        <div className="w-full max-w-md flex items-center justify-center py-4 mb-2">
+          <div className="flex items-center gap-3 select-none">
+            <div className="h-12 w-12 flex items-center justify-center shrink-0">
+              <img 
+                src="/duc-logo.png" 
+                alt="DUC Logo" 
+                className="h-full w-full object-contain drop-shadow-md"
+                onError={(e) => { e.target.style.display='none'; }}
+              />
+            </div>
+            <div className="flex flex-col justify-center leading-tight">
+              <span className="text-[11px] sm:text-[12px] font-black tracking-wider bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent uppercase font-sans text-left">
+                DIGITAL UNIVERSITY OF CAMBODIA
+              </span>
+              <span className="text-xs font-extrabold text-teal-400 whitespace-nowrap tracking-wide mt-0.5 text-left">
+                {lang === 'km' ? 'ចូលបណ្ណាល័យ' : 'Library Portal'}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main Container Phone Frame */}
       <div className="w-full max-w-md bg-slate-900/90 border border-slate-800 rounded-3xl shadow-2xl p-5 sm:p-6 glass-panel relative overflow-hidden animate-slide-up">

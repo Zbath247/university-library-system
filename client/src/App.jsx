@@ -101,6 +101,7 @@ export default function App() {
           ) : activeTab === 'mobile' ? (
             <MobileCheckIn
               onNavigateEntrance={() => handleTabSelect('kiosk')}
+              isQRScan={isQRScan}
             />
           ) : isAdminLoggedIn && (activeTab === 'admin' || activeTab === 'logs') ? (
             <AdminDashboard
