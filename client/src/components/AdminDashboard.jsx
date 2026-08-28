@@ -292,19 +292,6 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
 
         <button
           type="button"
-          onClick={() => setDashboardTab('ANALYTICS')}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap ${
-            dashboardTab === 'ANALYTICS'
-              ? 'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-500/20'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-          }`}
-        >
-          <TrendingUp className="w-4 h-4" />
-          <span>ស្ថិតិវិភាគទិន្នន័យ (Analytics & Charts)</span>
-        </button>
-
-        <button
-          type="button"
           onClick={() => setDashboardTab('LOGS')}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap ${
             dashboardTab === 'LOGS'
@@ -437,14 +424,7 @@ export default function AdminDashboard({ onStatsUpdate, onLogout }) {
         </div>
       )}
 
-      {/* Tab 2: Analytics & Charts View */}
-      {dashboardTab === 'ANALYTICS' && (
-        <div className="space-y-6 animate-fade-in">
-          <AnalyticsCharts analytics={analytics} />
-        </div>
-      )}
-
-      {/* Tab 3: Attendance Logs View */}
+      {/* Tab 2: Attendance Logs View */}
       {dashboardTab === 'LOGS' && (
         <div className="space-y-6 animate-fade-in">
           <SessionsTable
