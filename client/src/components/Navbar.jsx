@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LayoutDashboard, ScanLine, Smartphone, Globe, Menu, X, ShieldCheck, ChevronRight, Users, Sparkles, LogOut } from 'lucide-react';
+import { LayoutDashboard, QrCode, Smartphone, Globe, Menu, X, ChevronRight, LogOut } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLoggedIn, onLogout }) {
@@ -39,24 +39,20 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                 className="flex items-center gap-3 cursor-pointer shrink-0 select-none group"
                 onClick={() => handleNavClick('kiosk')}
               >
-                <div className="h-12 w-12 flex items-center justify-center shrink-0">
+                <div className="h-11 w-11 flex items-center justify-center shrink-0">
                   <img 
                     src="/duc-logo.png" 
                     alt="DUC Logo" 
-                    className="h-12 w-12 object-contain drop-shadow-md group-hover:scale-105 transition"
+                    className="h-11 w-11 object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-200"
                     onError={(e) => { e.target.style.display='none'; }}
                   />
                 </div>
                 <div className="flex flex-col justify-center leading-none">
-                  <div className="flex items-center gap-1">
-                    <span className="text-[11px] font-extrabold tracking-wider text-amber-400 uppercase whitespace-nowrap font-sans">
-                      DIGITAL UNIVERSITY
-                    </span>
-                    <span className="text-[11px] font-extrabold tracking-wider text-amber-300 uppercase whitespace-nowrap font-sans">
-                      OF CAMBODIA
-                    </span>
-                  </div>
-                  <span className="text-xs font-black text-teal-400 whitespace-nowrap tracking-wide mt-1">
+                  <span className="text-[11px] font-black tracking-wider bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent uppercase font-sans">
+                    DIGITAL UNIVERSITY OF CAMBODIA
+                  </span>
+                  <span className="text-xs font-extrabold text-teal-400 whitespace-nowrap tracking-wide mt-1 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse"></span>
                     {lang === 'km' ? 'ចូលបណ្ណាល័យ' : 'Library Portal'}
                   </span>
                 </div>
@@ -65,47 +61,47 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
             </div>
 
             {/* Desktop Navigation Tabs (Sleek Elevated Glass Capsule) */}
-            <div className="hidden md:flex items-center gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800/90 shadow-2xl backdrop-blur-md">
+            <nav className="hidden md:flex items-center gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 shadow-2xl backdrop-blur-xl">
               
-              {/* Entrance Kiosk Screen */}
+              {/* 1. Scan QR Code */}
               <button
                 onClick={() => handleNavClick('kiosk')}
                 className={`flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-bold transition-all duration-200 ${
                   activeTab === 'kiosk'
-                    ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 shadow-md shadow-teal-500/25 scale-[1.02]'
+                    ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 font-black shadow-md shadow-teal-500/25 scale-[1.02]'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
-                <ScanLine className="w-4 h-4" />
+                <QrCode className="w-4 h-4" />
                 <span className="whitespace-nowrap">{t('navKiosk')}</span>
               </button>
 
-              {/* Mobile Portal */}
+              {/* 2. បំពេញព័ត៌មាន (Mobile Portal) */}
               <button
                 onClick={() => handleNavClick('mobile')}
                 className={`flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-bold transition-all duration-200 ${
                   activeTab === 'mobile'
-                    ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/25 scale-[1.02]'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                    ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black shadow-md shadow-cyan-500/25 scale-[1.02]'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
                 <Smartphone className="w-4 h-4" />
                 <span className="whitespace-nowrap">{t('navMobilePortal')}</span>
               </button>
 
-              {/* Admin Dashboard */}
+              {/* 3. Admin */}
               <button
                 onClick={() => handleNavClick('admin')}
                 className={`flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-bold transition-all duration-200 ${
                   activeTab === 'admin'
-                    ? 'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-500/25 scale-[1.02]'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                    ? 'bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 text-white font-black shadow-md shadow-indigo-500/25 scale-[1.02]'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
                 <LayoutDashboard className="w-4 h-4" />
                 <span className="whitespace-nowrap">{t('navAdmin')}</span>
               </button>
-            </div>
+            </nav>
 
             {/* Right Controls (Desktop Only: Language Switcher & Logout) */}
             <div className="hidden md:flex items-center gap-2.5 shrink-0">
@@ -114,12 +110,12 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               <button
                 onClick={toggleLanguage}
                 title="Switch Language / ផ្លាស់ប្ដូរភាសា"
-                className="flex items-center gap-1.5 h-10 px-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-xs font-bold text-slate-200 transition-all shadow-sm active:scale-95"
+                className="flex items-center gap-2 h-10 px-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-xs font-bold text-slate-200 transition-all shadow-sm active:scale-95"
               >
                 <Globe className="w-4 h-4 text-teal-400" />
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-1.5 text-xs">
                   <span className={lang === 'km' ? 'text-teal-400 font-bold' : 'text-slate-400'}>🇰🇭 ខ្មែរ</span>
-                  <span className="text-slate-600">|</span>
+                  <span className="text-slate-600 font-normal">|</span>
                   <span className={lang === 'en' ? 'text-teal-400 font-bold' : 'text-slate-400'}>🇬🇧 EN</span>
                 </span>
               </button>
@@ -129,7 +125,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                 <button
                   onClick={onLogout}
                   title="Logout"
-                  className="flex items-center gap-1.5 h-10 px-3.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-xs font-bold text-rose-400 transition-all shadow-sm active:scale-95"
+                  className="flex items-center gap-2 h-10 px-4 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-xs font-bold text-rose-400 hover:text-rose-300 transition-all shadow-sm active:scale-95"
                 >
                   <LogOut className="w-4 h-4" />
                   <span className="hidden sm:inline">Logout</span>
