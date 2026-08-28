@@ -179,7 +179,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                   <img src="/duc-logo.png" alt="DUC Logo" className="h-9 w-9 object-contain" />
                   <div>
                     <h3 className="text-xs font-extrabold text-white leading-tight">
-                      DIGITAL UNIVERSITY
+                      DIGITAL UNIVERSITY OF CAMBODIA
                     </h3>
                     <span className="text-[11px] font-bold text-teal-400 block">
                       {lang === 'km' ? 'ចូលបណ្ណាល័យ' : 'Library Portal'}
