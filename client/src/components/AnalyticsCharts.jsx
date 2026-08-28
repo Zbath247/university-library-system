@@ -183,30 +183,32 @@ export default function AnalyticsCharts({ analytics }) {
     <div className="space-y-6">
       
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
         
         {/* Department Share Doughnut */}
-        <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl glass-panel flex flex-col">
-          <div className="flex items-center gap-2.5 mb-4">
-            <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400">
-              <PieChart className="w-4 h-4" />
+        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-indigo-950/20 border border-slate-800/90 shadow-xl backdrop-blur-xl flex flex-col justify-between h-full">
+          <div>
+            <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800/80">
+              <div className="p-2.5 rounded-2xl bg-indigo-500/15 text-indigo-300 border border-indigo-500/20">
+                <PieChart className="w-4 h-4" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-white">{t('analyticsVisitsByDept')}</h4>
+                <p className="text-xs text-slate-400">{t('analyticsVisitsByDeptSub')}</p>
+              </div>
             </div>
-            <div>
-              <h4 className="text-sm font-bold text-white">{t('analyticsVisitsByDept')}</h4>
-              <p className="text-xs text-slate-400">{t('analyticsVisitsByDeptSub')}</p>
-            </div>
-          </div>
 
-          <div className="h-64 w-full relative flex items-center justify-center">
-            <Doughnut data={deptData} options={doughnutOptions} />
+            <div className="h-64 w-full relative flex items-center justify-center pt-2">
+              <Doughnut data={deptData} options={doughnutOptions} />
+            </div>
           </div>
         </div>
 
-        {/* Role Distribution & Top Topics */}
-        <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl glass-panel">
+        {/* Role Distribution */}
+        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-amber-950/20 border border-slate-800/90 shadow-xl backdrop-blur-xl flex flex-col justify-between h-full">
           <div>
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400">
+            <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800/80">
+              <div className="p-2.5 rounded-2xl bg-amber-500/15 text-amber-300 border border-amber-500/20">
                 <Layers className="w-4 h-4" />
               </div>
               <div>
@@ -216,19 +218,19 @@ export default function AnalyticsCharts({ analytics }) {
             </div>
 
             {/* Role Bars */}
-            <div className="space-y-3">
+            <div className="space-y-4 pt-2">
               {roles.map((r, i) => {
                 const total = roles.reduce((acc, x) => acc + x.count, 0) || 1;
                 const pct = Math.round((r.count / total) * 100);
                 return (
                   <div key={i} className="text-xs">
-                    <div className="flex justify-between text-slate-300 font-semibold mb-1">
-                      <span>{tRole(r.name)}</span>
-                      <span className="font-mono text-slate-400">{r.count} ({pct}%)</span>
+                    <div className="flex justify-between text-slate-300 font-semibold mb-1.5">
+                      <span className="font-medium">{tRole(r.name)}</span>
+                      <span className="font-mono text-slate-400 font-bold">{r.count} ({pct}%)</span>
                     </div>
-                    <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                    <div className="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800/80 p-0.5">
                       <div
-                        className="h-full rounded-full transition-all duration-500"
+                        className="h-full rounded-full transition-all duration-700 shadow-sm"
                         style={{ width: `${pct}%`, backgroundColor: r.color }}
                       />
                     </div>
