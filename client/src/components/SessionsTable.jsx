@@ -148,9 +148,11 @@ export default function SessionsTable({
           ['ល.រ'],
           ['អត្តលេខ', 'និស្សិត'],
           ['គោត្តនាមនិង', 'នាម'],
+          ['ភេទ'],
           ['លេខទូរស័ព្ទ'],
           ['តួនាទី', 'សិក្សា'],
           ['ដេប៉ាតឺម៉ង់'],
+          ['បន្ទប់'],
           ['គោលបំណងនៃការចូលបណ្ណាល័យ']
         ].map(lines => new TableCell({
           children: lines.map(text => new Paragraph({ children: [new TextRun({ text, font: "Khmer OS Battambang", size: 22, bold: true })], alignment: AlignmentType.CENTER })),
@@ -177,9 +179,11 @@ export default function SessionsTable({
           `${index + 1}`,
           user.university_id || '-',
           user.full_name || '-',
+          user.gender || '-',
           user.phone || '-',
           user.role_name || '-',
           user.department_name || '-',
+          user.room || '-',
           finalText
         ].map(text => new TableCell({
           children: [new Paragraph({ children: [new TextRun({ text, font: "Khmer OS Battambang", size: 22 })], alignment: AlignmentType.CENTER })],

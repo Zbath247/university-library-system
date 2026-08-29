@@ -65,9 +65,11 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
               <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>ល.រ</th>
               <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>អត្តលេខ<br/>និស្សិត</th>
               <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>គោត្តនាមនិង<br/>នាម</th>
+              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>ភេទ</th>
               <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>លេខទូរស័ព្ទ</th>
               <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>តួនាទី<br/>សិក្សា</th>
               <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>ដេប៉ាតឺម៉ង់</th>
+              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>បន្ទប់</th>
               <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>គោលបំណងនៃការចូលបណ្ណាល័យ</th>
             </tr>
           </thead>
@@ -89,16 +91,18 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
                   <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{index + 1}</td>
                   <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.university_id || '-'}</td>
                   <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.full_name || '-'}</td>
+                  <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.gender || '-'}</td>
                   <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.phone || '-'}</td>
                   <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.role_name || '-'}</td>
                   <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.department_name || '-'}</td>
+                  <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.room || '-'}</td>
                   <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'left' }}>{finalText}</td>
                 </tr>
               );
             })}
             {sessions.length === 0 && (
               <tr>
-                <td colSpan="7" style={{ border: '1px solid #000', padding: '20px', textAlign: 'center' }}>មិនមានទិន្នន័យទេ</td>
+                <td colSpan="9" style={{ border: '1px solid #000', padding: '20px', textAlign: 'center' }}>មិនមានទិន្នន័យទេ</td>
               </tr>
             )}
           </tbody>
