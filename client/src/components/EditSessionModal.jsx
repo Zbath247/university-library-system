@@ -29,7 +29,8 @@ export default function EditSessionModal({
   const [deptId, setDeptId] = useState(user.department_id || (departments[0]?.id || 1));
   
   const [purpose, setPurpose] = useState(session.purpose_of_visit || 'Study & Revision');
-  const [topic, setTopic] = useState(session.research_topic || '');
+  const [topic, setTopic] = useState('');
+  const [bookQty, setBookQty] = useState(1);
   const [duration, setDuration] = useState(session.duration_minutes || 0);
   const [status, setStatus] = useState(session.status || 'COMPLETED');
 
@@ -49,7 +50,22 @@ export default function EditSessionModal({
       setRoleId(u.role_id || (roles[0]?.id || 1));
       setDeptId(u.department_id || (departments[0]?.id || 1));
       setPurpose(session.purpose_of_visit || 'Study & Revision');
-      setTopic(session.research_topic || '');
+      
+      let initialTopic = session.research_topic || '';
+      let initialQty = 1;
+      const matchQty = initialTopic.match(/^\[(?:ខ្ចី|សង)\s+(\d+)\s+ក្បាល\]\s*(.*)$/);
+      if (matchQty) {
+        initialQty = parseInt(matchQty[1], 10) || 1;
+        initialTopic = matchQty[2];
+      } else {
+        const matchOld = initialTopic.match(/^\[(?:ខ្ចី|សង)\]\s*(.*)$/);
+        if (matchOld) {
+          initialTopic = matchOld[1];
+        }
+      }
+      setTopic(initialTopic);
+      setBookQty(initialQty);
+
       setDuration(session.duration_minutes || 0);
       setStatus(session.status || 'COMPLETED');
     }
@@ -67,6 +83,12 @@ export default function EditSessionModal({
     setErrorMsg('');
 
     try {
+      let finalTopic = topic.trim();
+      if (purpose === 'Book Borrowing' || purpose === 'Book Return') {
+        const action = purpose === 'Book Borrowing' ? 'ខ្ចី' : 'សង';
+        finalTopic = `[${action} ${bookQty} ក្បាល] ${finalTopic}`;
+      }
+
       const res = await api.updateSession(session.id, {
         full_name: fullName.trim(),
         university_id: universityId.trim().toUpperCase(),
@@ -76,7 +98,7 @@ export default function EditSessionModal({
         role_id: Number(roleId),
         department_id: Number(deptId),
         purpose_of_visit: purpose,
-        research_topic: topic.trim(),
+        research_topic: finalTopic,
         duration_minutes: Number(duration),
         status: status
       });
@@ -342,17 +364,18 @@ export default function EditSessionModal({
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
-                {/* Duration */}
+                {/* Book Quantity */}
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
-                    <Clock className="w-3 h-3 text-teal-400" />
-                    <span>ថិរវេលា (នាទី / Minutes)</span>
+                    <BookOpen className="w-3 h-3 text-teal-400" />
+                    <span>ចំនួនសៀវភៅ (ក្បាល)</span>
                   </label>
                   <input
                     type="number"
-                    min="0"
-                    value={duration}
-                    onChange={(e) => setDuration(e.target.value)}
+                    min="1"
+                    max="10"
+                    value={bookQty}
+                    onChange={(e) => setBookQty(Number(e.target.value))}
                     className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm text-white focus:outline-none focus:border-teal-500 font-mono"
                   />
                 </div>
