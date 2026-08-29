@@ -23,6 +23,8 @@ export default function EditSessionModal({
   const [fullName, setFullName] = useState(user.full_name || '');
   const [universityId, setUniversityId] = useState(user.university_id || '');
   const [phone, setPhone] = useState(user.phone || '');
+  const [gender, setGender] = useState(user.gender || 'Male');
+  const [room, setRoom] = useState(user.room || '');
   const [roleId, setRoleId] = useState(user.role_id || (roles[0]?.id || 1));
   const [deptId, setDeptId] = useState(user.department_id || (departments[0]?.id || 1));
   
@@ -42,6 +44,8 @@ export default function EditSessionModal({
       setFullName(u.full_name || '');
       setUniversityId(u.university_id || '');
       setPhone(u.phone || '');
+      setGender(u.gender || 'Male');
+      setRoom(u.room || '');
       setRoleId(u.role_id || (roles[0]?.id || 1));
       setDeptId(u.department_id || (departments[0]?.id || 1));
       setPurpose(session.purpose_of_visit || 'Study & Revision');
@@ -67,6 +71,8 @@ export default function EditSessionModal({
         full_name: fullName.trim(),
         university_id: universityId.trim().toUpperCase(),
         phone: phone.trim(),
+        gender: gender,
+        room: room.trim(),
         role_id: Number(roleId),
         department_id: Number(deptId),
         purpose_of_visit: purpose,
@@ -213,6 +219,38 @@ export default function EditSessionModal({
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="012 345 678"
                     className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-500 font-mono"
+                  />
+                </div>
+
+                {/* Gender */}
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
+                    <User className="w-3 h-3 text-slate-400" />
+                    <span>ភេទ (Gender)</span>
+                  </label>
+                  <select
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm text-white focus:outline-none focus:border-teal-500"
+                  >
+                    <option value="Male">ប្រុស (Male)</option>
+                    <option value="Female">ស្រី (Female)</option>
+                    <option value="Other">ផ្សេងៗ (Other)</option>
+                  </select>
+                </div>
+
+                {/* Room */}
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
+                    <Building className="w-3 h-3 text-slate-400" />
+                    <span>បន្ទប់ (Room)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={room}
+                    onChange={(e) => setRoom(e.target.value)}
+                    placeholder="ឧ. P247"
+                    className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-500 font-medium"
                   />
                 </div>
 
