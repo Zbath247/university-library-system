@@ -65,7 +65,9 @@ router.post('/register-and-checkin', async (req, res) => {
       role_id,
       department_id,
       research_field,
-      purpose_of_visit
+      purpose_of_visit,
+      gender,
+      room
     } = req.body;
 
     if (!university_id || !full_name || !email || !role_id || !department_id) {
@@ -84,7 +86,9 @@ router.post('/register-and-checkin', async (req, res) => {
       role_id,
       department_id,
       research_field: research_field || 'General Academic Research',
-      default_purpose: purpose_of_visit || 'Academic Research'
+      default_purpose: purpose_of_visit || 'Academic Research',
+      gender,
+      room
     });
 
     // 2. Immediate Check-In Session

@@ -106,6 +106,8 @@ class DatabaseWrapper {
       if (payload.research_field) existing.research_field = payload.research_field.trim();
       if (payload.default_purpose) existing.default_purpose = payload.default_purpose.trim();
       else if (payload.purpose_of_visit) existing.default_purpose = payload.purpose_of_visit.trim();
+      if (payload.gender) existing.gender = payload.gender.trim();
+      if (payload.room) existing.room = payload.room.trim();
       
       existing.updated_at = new Date().toISOString();
       await existing.save();
@@ -125,6 +127,8 @@ class DatabaseWrapper {
       department_id: Number(payload.department_id),
       research_field: payload.research_field ? payload.research_field.trim() : 'Academic Research',
       default_purpose: payload.default_purpose ? payload.default_purpose.trim() : (payload.purpose_of_visit || 'Academic Research'),
+      gender: payload.gender ? payload.gender.trim() : '',
+      room: payload.room ? payload.room.trim() : '',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     });
@@ -315,6 +319,8 @@ class DatabaseWrapper {
     if (updates.department_id) user.department_id = Number(updates.department_id);
     if (updates.research_field) user.research_field = updates.research_field.trim();
     if (updates.default_purpose) user.default_purpose = updates.default_purpose.trim();
+    if (updates.gender !== undefined) user.gender = updates.gender.trim();
+    if (updates.room !== undefined) user.room = updates.room.trim();
     
     user.updated_at = new Date().toISOString();
     await user.save();

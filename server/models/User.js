@@ -10,6 +10,8 @@ const userSchema = new mongoose.Schema({
   department_id: { type: Number, required: true },
   research_field: { type: String, default: 'Academic Research' },
   default_purpose: { type: String, default: 'Academic Research' },
+  gender: { type: String, default: '' },
+  room: { type: String, default: '' },
   created_at: { type: String },
   updated_at: { type: String }
 });

@@ -39,6 +39,7 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
   const [activeSession, setActiveSession] = useState(null);
   const [selectedPurpose, setSelectedPurpose] = useState('Study & Revision');
   const [bookTitle, setBookTitle] = useState('');
+  const [bookQty, setBookQty] = useState(1);
   const [agreementAgreed, setAgreementAgreed] = useState(false);
   const [message, setMessage] = useState(null);
   const [showPassModal, setShowPassModal] = useState(false);
@@ -52,7 +53,9 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
     role_id: '',
     department_id: '',
     research_field: '',
-    purpose_of_visit: 'Study & Revision'
+    purpose_of_visit: 'Study & Revision',
+    gender: 'Male',
+    room: ''
   });
 
   // Fetch metadata & sync user's active status
@@ -146,7 +149,7 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
     setMessage(null);
     try {
       const topic = isBookAction && bookTitle.trim()
-        ? `[${selectedPurpose === 'Book Borrowing' ? 'ខ្ចី' : 'សង'}] ${bookTitle.trim()}`
+        ? `[${selectedPurpose === 'Book Borrowing' ? 'ខ្ចី' : 'សង'} ${bookQty} ក្បាល] ${bookTitle.trim()}`
         : savedUser.research_field || 'Academic Research';
 
       const res = await api.checkin(
@@ -158,6 +161,7 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
       if (res.success) {
         setActiveSession(res.session);
         setBookTitle('');
+        setBookQty(1);
         setAgreementAgreed(false);
         setMessage({
           type: 'success',
@@ -233,7 +237,7 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
     setMessage(null);
     try {
       const finalTopic = isBookAction && bookTitle.trim()
-        ? `[${formData.purpose_of_visit === 'Book Borrowing' ? 'ខ្ចី' : 'សង'}] ${bookTitle.trim()}`
+        ? `[${formData.purpose_of_visit === 'Book Borrowing' ? 'ខ្ចី' : 'សង'} ${bookQty} ក្បាល] ${bookTitle.trim()}`
         : formData.research_field || 'Academic Research';
 
       const payload = {
@@ -281,7 +285,9 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
         role_id: savedUser.role_id || (roles[0]?.id || 1),
         department_id: savedUser.department_id || (departments[0]?.id || 1),
         purpose_of_visit: selectedPurpose || savedUser.default_purpose || 'Study & Revision',
-        research_field: savedUser.research_field || ''
+        research_field: savedUser.research_field || '',
+        gender: savedUser.gender || 'Male',
+        room: savedUser.room || ''
       });
       setSavedUser(null);
       setMessage(null);
@@ -298,7 +304,9 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
       role_id: roles[0]?.id || 1,
       department_id: departments[0]?.id || 1,
       purpose_of_visit: 'Study & Revision',
-      research_field: ''
+      research_field: '',
+      gender: 'Male',
+      room: ''
     });
     setSavedUser(null);
     setActiveSession(null);
@@ -469,6 +477,21 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
                       required
                     />
 
+                    <div className="mt-2.5">
+                      <label className="block text-xs font-bold text-amber-300 mb-1.5 flex items-center gap-1.5">
+                        <span>ចំនួនសៀវភៅ (ក្បាល) *</span>
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={bookQty}
+                        onChange={(e) => setBookQty(Number(e.target.value))}
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-amber-500/40 text-xs text-white focus:outline-none focus:border-amber-400 font-medium"
+                        required
+                      />
+                    </div>
+
                     {/* Agreement Confirmation Checkbox */}
                     <label className="mt-3 flex items-start gap-2.5 cursor-pointer select-none bg-slate-950/70 p-2.5 rounded-xl border border-amber-500/20">
                       <input
@@ -600,6 +623,22 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
                 />
               </div>
 
+              {/* Gender */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  ភេទ (Gender) *
+                </label>
+                <select
+                  value={formData.gender}
+                  onChange={(e) => setFormData(prev => ({ ...prev, gender: e.target.value }))}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-teal-500"
+                >
+                  <option value="Male">ប្រុស (Male)</option>
+                  <option value="Female">ស្រី (Female)</option>
+                  <option value="Other">ផ្សេងៗ (Other)</option>
+                </select>
+              </div>
+
               {/* University ID */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
@@ -647,6 +686,20 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
                     <option key={r.id} value={r.id}>{tRole(r.name)}</option>
                   ))}
                 </select>
+              </div>
+
+              {/* Room */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  បន្ទប់ (Room)
+                </label>
+                <input
+                  type="text"
+                  value={formData.room}
+                  onChange={(e) => setFormData(prev => ({ ...prev, room: e.target.value }))}
+                  placeholder="ឧ. P247"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-500"
+                />
               </div>
 
               {/* Department */}
@@ -699,6 +752,21 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
                     className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-amber-500/40 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 font-medium"
                     required
                   />
+
+                  <div className="mt-2.5">
+                    <label className="block text-xs font-bold text-amber-300 mb-1.5 flex items-center gap-1.5">
+                      <span>ចំនួនសៀវភៅ (ក្បាល) *</span>
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="10"
+                      value={bookQty}
+                      onChange={(e) => setBookQty(Number(e.target.value))}
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-amber-500/40 text-xs text-white focus:outline-none focus:border-amber-400 font-medium"
+                      required
+                    />
+                  </div>
 
                   {/* Agreement Confirmation Checkbox */}
                   <label className="mt-3 flex items-start gap-2.5 cursor-pointer select-none bg-slate-950/70 p-2.5 rounded-xl border border-amber-500/20">
