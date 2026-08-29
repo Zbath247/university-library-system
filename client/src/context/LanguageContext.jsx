@@ -171,7 +171,7 @@ const translations = {
     bookTitleRequiredError: 'សូមបញ្ជាក់ឈ្មោះ ឬចំណងជើងសៀវភៅជាមុនសិន!',
     email: 'អាសយដ្ឋានអ៊ីមែល (មិនបង្ខំ)',
     emailPlaceholder: 'name@university.edu.kh',
-    phone: 'លេខទូរស័ព្ទ (មិនបង្ខំ)',
+    phone: 'លេខទូរស័ព្ទ',
     phonePlaceholder: '012 345 678',
     btnCancel: 'បោះបង់',
     btnBack: '← ត្រឡប់ក្រោយ',
