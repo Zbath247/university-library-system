@@ -26,7 +26,6 @@ import { useReactToPrint } from 'react-to-print';
 import { Document, Packer, Paragraph, Table, TableCell, TableRow, TextRun, AlignmentType, WidthType, ImageRun, SectionType } from 'docx';
 import { saveAs } from 'file-saver';
 import ReportPrintTemplate from './ReportPrintTemplate';
-import { useRef } from 'react';
 
 export default function SessionsTable({
   sessions = [],
