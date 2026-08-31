@@ -3,7 +3,7 @@ import { X, KeyRound, AlertTriangle, Trash2, Eye, EyeOff, ShieldAlert, CheckCirc
 import { api } from '../services/api';
 import { playSuccessChime, playErrorSound } from '../utils/audioChime';
 
-export default function ConfirmResetModal({ isOpen, onClose, onSuccess, title, description }) {
+export default function ConfirmResetModal({ isOpen, onClose, onSubmit, title, description, buttonText, buttonIcon: ButtonIcon }) {
   if (!isOpen) return null;
 
   const [password, setPassword] = useState('');
@@ -23,14 +23,11 @@ export default function ConfirmResetModal({ isOpen, onClose, onSuccess, title, d
     setErrorMsg('');
 
     try {
-      const res = await api.resetSessions(password);
-      if (res.success) {
-        playSuccessChime();
-        if (onSuccess) onSuccess();
-        onClose();
-      } else {
-        throw new Error(res.message || 'លេខសម្ងាត់មិនត្រឹមត្រូវ!');
+      if (onSubmit) {
+        await onSubmit(password);
       }
+      playSuccessChime();
+      onClose();
     } catch (err) {
       setErrorMsg(err.message || 'លេខសម្ងាត់ Admin មិនត្រឹមត្រូវ!');
       playErrorSound();
@@ -129,8 +126,8 @@ export default function ConfirmResetModal({ isOpen, onClose, onSuccess, title, d
                 <span>កំពុងផ្ទៀងផ្ទាត់...</span>
               ) : (
                 <>
-                  <RotateCcw className="w-4 h-4" />
-                  <span>បញ្ជាក់ការ Reset ឥឡូវនេះ</span>
+                  {ButtonIcon ? <ButtonIcon className="w-4 h-4" /> : <RotateCcw className="w-4 h-4" />}
+                  <span>{buttonText || 'បញ្ជាក់ការ Reset ឥឡូវនេះ'}</span>
                 </>
               )}
             </button>

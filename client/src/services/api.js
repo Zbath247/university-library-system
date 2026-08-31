@@ -198,15 +198,15 @@ export const api = {
     return `${API_BASE}/admin/export/excel?${params.toString()}`;
   },
 
-  backupSystem: () => {
-    return `${API_BASE}/admin/system/backup`;
+  backupSystem: (password) => {
+    return `${API_BASE}/admin/system/backup?password=${encodeURIComponent(password)}`;
   },
 
-  restoreSystem: async (jsonData) => {
+  restoreSystem: async (jsonData, password) => {
     const res = await fetch(`${API_BASE}/admin/system/restore`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(jsonData)
+      body: JSON.stringify({ data: jsonData, password })
     });
     if (!res.ok) {
       const error = await res.json();

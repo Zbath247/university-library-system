@@ -525,6 +525,16 @@ router.get('/export/excel', async (req, res) => {
 // GET /api/admin/system/backup - Download all collections as JSON
 router.get('/system/backup', async (req, res) => {
   try {
+    const { password } = req.query;
+    const cleanPass = String(password || '').trim();
+
+    if (cleanPass !== 'zbath@247') {
+      return res.status(401).json({
+        success: false,
+        message: 'លេខសម្ងាត់ Admin មិនត្រឹមត្រូវ! (Incorrect Admin Password)'
+      });
+    }
+
     const users = await User.find({}).lean();
     const sessions = await Session.find({}).lean();
     const roles = await Role.find({}).lean();
@@ -553,7 +563,15 @@ router.get('/system/backup', async (req, res) => {
 // POST /api/admin/system/restore - Restore all collections from JSON
 router.post('/system/restore', async (req, res) => {
   try {
-    const { data } = req.body;
+    const { data, password } = req.body;
+    const cleanPass = String(password || '').trim();
+
+    if (cleanPass !== 'zbath@247') {
+      return res.status(401).json({
+        success: false,
+        message: 'លេខសម្ងាត់ Admin មិនត្រឹមត្រូវ! (Incorrect Admin Password)'
+      });
+    }
     
     if (!data || !data.users || !data.sessions || !data.roles || !data.departments) {
       return res.status(400).json({ success: false, message: 'Invalid backup file structure.' });
