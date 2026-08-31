@@ -631,8 +631,8 @@ export default function SessionsTable({
                                 </span>
                               </div>
                               {cleanTopic && (
-                                <p className="text-xs text-amber-100 font-bold flex items-center gap-1.5 truncate max-w-[220px]" title={cleanTopic}>
-                                  <span>📖</span> <span className="underline decoration-amber-500/50">{cleanTopic}</span>
+                                <p className="text-xs text-amber-100 font-bold flex items-start gap-1.5" title={cleanTopic}>
+                                  <span className="mt-0.5 shrink-0">📖</span> <span className="underline decoration-amber-500/50 leading-relaxed break-words">{cleanTopic}</span>
                                 </p>
                               )}
                             </div>
@@ -649,8 +649,8 @@ export default function SessionsTable({
                                 </span>
                               </div>
                               {cleanTopic && (
-                                <p className="text-xs text-emerald-100 font-bold flex items-center gap-1.5 truncate max-w-[220px]" title={cleanTopic}>
-                                  <span>📗</span> <span className="underline decoration-emerald-500/50">{cleanTopic}</span>
+                                <p className="text-xs text-emerald-100 font-bold flex items-start gap-1.5" title={cleanTopic}>
+                                  <span className="mt-0.5 shrink-0">📗</span> <span className="underline decoration-emerald-500/50 leading-relaxed break-words">{cleanTopic}</span>
                                 </p>
                               )}
                             </div>
@@ -845,8 +845,8 @@ export default function SessionsTable({
                         {tPurpose('Book Borrowing')}
                       </span>
                       {cleanTopic && (
-                        <p className="text-xs text-amber-100 font-bold flex items-center gap-1 truncate" title={cleanTopic}>
-                          <span>📖</span> <span>{cleanTopic}</span>
+                        <p className="text-xs text-amber-100 font-bold flex items-start gap-1" title={cleanTopic}>
+                          <span className="mt-0.5 shrink-0">📖</span> <span className="leading-relaxed break-words">{cleanTopic}</span>
                         </p>
                       )}
                     </div>
@@ -857,8 +857,8 @@ export default function SessionsTable({
                         {tPurpose('Book Return')}
                       </span>
                       {cleanTopic && (
-                        <p className="text-xs text-emerald-100 font-bold flex items-center gap-1 truncate" title={cleanTopic}>
-                          <span>📗</span> <span>{cleanTopic}</span>
+                        <p className="text-xs text-emerald-100 font-bold flex items-start gap-1" title={cleanTopic}>
+                          <span className="mt-0.5 shrink-0">📗</span> <span className="leading-relaxed break-words">{cleanTopic}</span>
                         </p>
                       )}
                     </div>
