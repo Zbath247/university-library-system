@@ -47,6 +47,8 @@ export default function SessionsTable({
   const [statusFilter, setStatusFilter] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
   const [deptFilter, setDeptFilter] = useState('');
+  const [monthFilter, setMonthFilter] = useState('');
+  const [yearFilter, setYearFilter] = useState('');
   const [categoryTab, setCategoryTab] = useState('ALL'); // 'ALL', 'VISIT', 'BORROW', 'RETURN'
   const [editingSession, setEditingSession] = useState(null);
   const [showResetModal, setShowResetModal] = useState(false);
@@ -78,6 +80,16 @@ export default function SessionsTable({
     if (statusFilter && s.status !== statusFilter) return false;
     if (roleFilter && String(user.role_id) !== String(roleFilter)) return false;
     if (deptFilter && String(user.department_id) !== String(deptFilter)) return false;
+
+    if (yearFilter) {
+      const sYear = new Date(s.check_in_time).getFullYear();
+      if (String(sYear) !== String(yearFilter)) return false;
+    }
+    if (monthFilter) {
+      const sMonth = new Date(s.check_in_time).getMonth() + 1; // 0-indexed
+      if (String(sMonth) !== String(monthFilter)) return false;
+    }
+    
     if (search) {
       const q = search.toLowerCase();
       const matchName = user.full_name && user.full_name.toLowerCase().includes(q);
@@ -96,7 +108,7 @@ export default function SessionsTable({
   // Reset page when filters change
   React.useEffect(() => {
     setCurrentPage(1);
-  }, [search, statusFilter, roleFilter, deptFilter, categoryTab]);
+  }, [search, statusFilter, roleFilter, deptFilter, monthFilter, yearFilter, categoryTab]);
 
   const totalPages = Math.ceil(filteredSessions.length / itemsPerPage);
   const paginatedSessions = filteredSessions.slice(
@@ -105,12 +117,27 @@ export default function SessionsTable({
   );
 
   const handleExportCsv = () => {
+    let startDate, endDate;
+    if (yearFilter || monthFilter) {
+      const y = yearFilter ? parseInt(yearFilter) : new Date().getFullYear();
+      if (monthFilter) {
+        const m = parseInt(monthFilter);
+        startDate = new Date(y, m - 1, 1).toISOString();
+        endDate = new Date(y, m, 0, 23, 59, 59, 999).toISOString();
+      } else {
+        startDate = new Date(y, 0, 1).toISOString();
+        endDate = new Date(y, 11, 31, 23, 59, 59, 999).toISOString();
+      }
+    }
+
     const exportUrl = api.getExportCsvUrl({
       status: statusFilter,
       role_id: roleFilter,
       department_id: deptFilter,
       search,
-      category: categoryTab !== 'ALL' ? categoryTab : undefined
+      category: categoryTab !== 'ALL' ? categoryTab : undefined,
+      startDate,
+      endDate
     });
     window.open(exportUrl, '_blank');
     setShowExportPrompt(true);
@@ -422,7 +449,7 @@ export default function SessionsTable({
       </div>
 
       {/* Filter Bar */}
-      <div className="p-4 bg-slate-950/60 border-b border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="p-4 bg-slate-950/60 border-b border-slate-800 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         
         {/* Search */}
         <div className="relative">
@@ -473,6 +500,43 @@ export default function SessionsTable({
             <option value="">{t('colDept')}</option>
             {departments.map(d => (
               <option key={d.id} value={d.id}>{tDept(d.name)} ({d.code})</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Month */}
+        <div>
+          <select
+            value={monthFilter}
+            onChange={(e) => setMonthFilter(e.target.value)}
+            className="w-full px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
+          >
+            <option value="">គ្រប់ខែ (All Months)</option>
+            <option value="1">មករា (Jan)</option>
+            <option value="2">កុម្ភៈ (Feb)</option>
+            <option value="3">មីនា (Mar)</option>
+            <option value="4">មេសា (Apr)</option>
+            <option value="5">ឧសភា (May)</option>
+            <option value="6">មិថុនា (Jun)</option>
+            <option value="7">កក្កដា (Jul)</option>
+            <option value="8">សីហា (Aug)</option>
+            <option value="9">កញ្ញា (Sep)</option>
+            <option value="10">តុលា (Oct)</option>
+            <option value="11">វិច្ឆិកា (Nov)</option>
+            <option value="12">ធ្នូ (Dec)</option>
+          </select>
+        </div>
+
+        {/* Year */}
+        <div>
+          <select
+            value={yearFilter}
+            onChange={(e) => setYearFilter(e.target.value)}
+            className="w-full px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
+          >
+            <option value="">គ្រប់ឆ្នាំ (All Years)</option>
+            {[...new Set([...safeSessions.map(s => new Date(s.check_in_time).getFullYear()), new Date().getFullYear()])].sort((a,b)=>b-a).map(y => (
+              <option key={y} value={y}>{y}</option>
             ))}
           </select>
         </div>
