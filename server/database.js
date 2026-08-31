@@ -469,10 +469,14 @@ class DatabaseWrapper {
       hourlyData.push(allSessions.filter(s => new Date(s.check_in_time).getHours() === h).length);
     }
 
+    const now = new Date();
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 86400000);
+    const last30DaysSessions = allSessions.filter(s => new Date(s.check_in_time).getTime() >= thirtyDaysAgo.getTime());
+
     const depts = await this.getDepartments();
     const deptMap = {};
     depts.forEach(d => { deptMap[d.id] = { name: d.name, code: d.code, count: 0 }; });
-    allSessions.forEach(s => {
+    last30DaysSessions.forEach(s => {
       if (s.user && s.user.department_id && deptMap[s.user.department_id]) {
         deptMap[s.user.department_id].count++;
       }
@@ -480,7 +484,7 @@ class DatabaseWrapper {
     const departmentDistribution = Object.values(deptMap).sort((a, b) => b.count - a.count);
 
     const roleMap = { 1: 0, 2: 0, 3: 0, 4: 0 };
-    allSessions.forEach(s => {
+    last30DaysSessions.forEach(s => {
       if (s.user && s.user.role_id) roleMap[s.user.role_id] = (roleMap[s.user.role_id] || 0) + 1;
     });
     const rolesDistribution = [

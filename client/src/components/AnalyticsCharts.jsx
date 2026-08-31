@@ -319,7 +319,7 @@ export default function AnalyticsCharts({ analytics }) {
                 <PieChart className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-white">{t('analyticsVisitsByDept')}</h4>
+                <h4 className="text-sm font-bold text-white">{t('analyticsVisitsByDept')} (30 Days)</h4>
                 <p className="text-xs text-slate-400">{t('analyticsVisitsByDeptSub')}</p>
               </div>
             </div>
@@ -338,7 +338,7 @@ export default function AnalyticsCharts({ analytics }) {
                 <Layers className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-white">{t('analyticsRoleBreakdown')}</h4>
+                <h4 className="text-sm font-bold text-white">{t('analyticsRoleBreakdown')} (30 Days)</h4>
                 <p className="text-xs text-slate-400">{t('analyticsRoleBreakdownSub')}</p>
               </div>
             </div>
