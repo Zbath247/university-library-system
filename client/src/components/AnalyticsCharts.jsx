@@ -179,60 +179,54 @@ export default function AnalyticsCharts({ analytics }) {
 
     const roles = analytics.roles || [];
 
-  // 5. 30-Day Monthly Trend (Line Chart with 2 lines)
-  const monthlyTrendData = {
-    labels: analytics.monthlyTrend?.labels || [],
+  // 5. 30-Day Monthly Trend (Bar Chart - Total Sums)
+  const totalVisits = (analytics.monthlyTrend?.visits || []).reduce((acc, val) => acc + val, 0);
+  const totalBorrowReturn = (analytics.monthlyTrend?.borrowReturn || []).reduce((acc, val) => acc + val, 0);
+
+  const monthlyBarData = {
+    labels: ['ចូលបណ្ណាល័យ', 'ខ្ចី និងសងសៀវភៅ'],
     datasets: [
       {
-        label: 'ចូលស្រាវជ្រាវ (Visits)',
-        data: analytics.monthlyTrend?.visits || [],
-        borderColor: '#10B981', // Emerald
-        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-        tension: 0.35,
-        fill: true,
-        pointBackgroundColor: '#10B981',
-        pointRadius: 2,
-        pointHoverRadius: 5
-      },
-      {
-        label: 'ខ្ចី និងសងសៀវភៅ (Borrow & Return)',
-        data: analytics.monthlyTrend?.borrowReturn || [],
-        borderColor: '#F59E0B', // Amber
-        backgroundColor: 'rgba(245, 158, 11, 0.1)',
-        tension: 0.35,
-        fill: true,
-        pointBackgroundColor: '#F59E0B',
-        pointRadius: 2,
-        pointHoverRadius: 5
+        data: [totalVisits, totalBorrowReturn],
+        backgroundColor: [
+          'rgba(59, 130, 246, 0.9)', // Blue
+          'rgba(245, 158, 11, 0.9)', // Amber
+        ],
+        hoverBackgroundColor: [
+          'rgba(59, 130, 246, 1)', 
+          'rgba(245, 158, 11, 1)', 
+        ],
+        borderRadius: 4,
+        barThickness: 60
       }
     ]
   };
 
-  const monthlyTrendOptions = {
+  const monthlyBarOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        position: 'top',
-        align: 'end',
-        labels: { color: '#cbd5e1', font: { family: 'Battambang, sans-serif', size: 11 }, usePointStyle: true, boxWidth: 6 }
-      },
+      legend: { display: false }, // We don't need legend since x-axis has labels
       tooltip: {
         backgroundColor: '#0f172a',
         borderColor: '#334155',
         borderWidth: 1,
         padding: 10,
-        cornerRadius: 10
+        cornerRadius: 10,
+        displayColors: false,
+        callbacks: {
+          label: (context) => ` សរុប៖ ${context.raw} នាក់`
+        }
       }
     },
     scales: {
       x: {
         grid: { display: false },
-        ticks: { color: '#94a3b8', font: { size: 10 }, maxTicksLimit: 10 }
+        ticks: { color: '#cbd5e1', font: { size: 13, family: 'Battambang, sans-serif' } }
       },
       y: {
         grid: { color: 'rgba(51, 65, 85, 0.3)' },
-        ticks: { color: '#94a3b8', stepSize: 2, font: { size: 11 } }
+        ticks: { color: '#94a3b8', stepSize: 1, font: { size: 12 } }
       }
     }
   };
@@ -353,7 +347,7 @@ export default function AnalyticsCharts({ analytics }) {
           </div>
 
           <div className="h-72 w-full relative flex items-center justify-center pt-2">
-            <Line data={monthlyTrendData} options={monthlyTrendOptions} />
+            <Bar data={monthlyBarData} options={monthlyBarOptions} />
           </div>
         </div>
       </div>
