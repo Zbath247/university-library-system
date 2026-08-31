@@ -196,5 +196,24 @@ export const api = {
       }
     });
     return `${API_BASE}/admin/export/excel?${params.toString()}`;
+  },
+
+  backupSystem: () => {
+    return `${API_BASE}/admin/system/backup`;
+  },
+
+  restoreSystem: async (jsonData) => {
+    const res = await fetch(`${API_BASE}/admin/system/restore`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(jsonData)
+    });
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.message || 'Failed to restore system');
+    }
+    return res.json();
   }
 };
+
+export default api;

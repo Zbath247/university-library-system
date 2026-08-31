@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database');
 const ExcelJS = require('exceljs');
+const User = require('../models/User');
+const Session = require('../models/Session');
+const Role = require('../models/Role');
+const Department = require('../models/Department');
 
 // GET /api/admin/stats - KPI summary
 router.get('/stats', async (req, res) => {
@@ -515,6 +519,63 @@ router.get('/export/excel', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Failed to generate Excel file' });
+  }
+});
+
+// GET /api/admin/system/backup - Download all collections as JSON
+router.get('/system/backup', async (req, res) => {
+  try {
+    const users = await User.find({}).lean();
+    const sessions = await Session.find({}).lean();
+    const roles = await Role.find({}).lean();
+    const departments = await Department.find({}).lean();
+
+    const backupData = {
+      timestamp: new Date().toISOString(),
+      data: {
+        users,
+        sessions,
+        roles,
+        departments
+      }
+    };
+
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="Library_Backup_${new Date().toISOString().slice(0, 10)}.json"`);
+    res.send(JSON.stringify(backupData, null, 2));
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Failed to generate backup' });
+  }
+});
+
+// POST /api/admin/system/restore - Restore all collections from JSON
+router.post('/system/restore', async (req, res) => {
+  try {
+    const { data } = req.body;
+    
+    if (!data || !data.users || !data.sessions || !data.roles || !data.departments) {
+      return res.status(400).json({ success: false, message: 'Invalid backup file structure.' });
+    }
+
+    // Safety: Clear existing collections
+    await User.deleteMany({});
+    await Session.deleteMany({});
+    await Role.deleteMany({});
+    await Department.deleteMany({});
+
+    // Restore data
+    if (data.users.length > 0) await User.insertMany(data.users);
+    if (data.sessions.length > 0) await Session.insertMany(data.sessions);
+    if (data.roles.length > 0) await Role.insertMany(data.roles);
+    if (data.departments.length > 0) await Department.insertMany(data.departments);
+
+    res.json({ success: true, message: 'System restored successfully' });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Failed to restore backup: ' + err.message });
   }
 });
 

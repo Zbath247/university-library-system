@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Search,
   Filter,
   Download,
+  Upload,
   Clock,
   CheckCircle2,
   LogOut,
@@ -168,6 +169,37 @@ export default function SessionsTable({
     });
     window.open(exportUrl, '_blank');
     setShowExportPrompt(true);
+  };
+
+  const fileInputRef = useRef(null);
+
+  const handleBackup = () => {
+    window.open(api.backupSystem(), '_blank');
+  };
+
+  const handleRestoreClick = () => {
+    if(window.confirm('តើអ្នកពិតជាចង់ Restore ទិន្នន័យមែនទេ? ទិន្នន័យចាស់ៗទាំងអស់នឹងត្រូវលុបចោលទាំងស្រុង។')) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const jsonData = JSON.parse(event.target.result);
+        await api.restoreSystem(jsonData);
+        alert('Restore ទិន្នន័យបានជោគជ័យ! សូម Refresh ទំព័រនេះ។');
+        window.location.reload();
+      } catch (err) {
+        alert('Restore បរាជ័យ៖ ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = null;
   };
 
   const handleExportPDF = useReactToPrint({
@@ -343,6 +375,32 @@ export default function SessionsTable({
             <RotateCcw className="w-3.5 h-3.5" />
             <span>សម្អាតទិន្នន័យ (Reset)</span>
           </button>
+
+          <div className="flex bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-lg shadow-teal-500/10">
+            <button
+              onClick={handleBackup}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-amber-300 transition border-r border-slate-700"
+              title="ទាញយកទិន្នន័យប្រព័ន្ធទុក (Backup)"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Backup</span>
+            </button>
+            <button
+              onClick={handleRestoreClick}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-amber-300 transition border-r border-slate-700"
+              title="ទាញទិន្នន័យចាស់មកវិញ (Restore)"
+            >
+              <Upload className="w-3.5 h-3.5" />
+              <span>Restore</span>
+            </button>
+            <input 
+              type="file" 
+              accept=".json" 
+              ref={fileInputRef} 
+              style={{ display: 'none' }} 
+              onChange={handleFileChange} 
+            />
+          </div>
 
           <div className="flex bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-lg shadow-teal-500/10">
             <button
