@@ -207,7 +207,7 @@ const translations = {
     btnAddMember: 'បន្ថែមសមាជិកថ្មី',
 
     // Admin Dashboard
-    adminTitle: 'ក្រាបហ្វិក',
+    adminTitle: 'ទិន្នន័យនិស្សិត',
     adminSub: 'តាមដានចំនួនវត្តមានផ្ទាល់ ស្ថិតិនៃការស្រាវជ្រាវ និងគ្រប់គ្រងសមាជិកបណ្ណាល័យ',
     liveMonitorBadge: 'តាមដានផ្ទាល់ (Live)',
     btnAcademicDirectory: 'បញ្ជីសមាជិក',
