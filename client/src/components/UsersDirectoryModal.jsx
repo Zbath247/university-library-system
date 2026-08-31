@@ -11,10 +11,9 @@ export default function UsersDirectoryModal({
   departments = [],
   onViewPass,
   onAddUser,
-  onUserDeleted,
-  inline = false
+  onUserDeleted
 }) {
-  if (!inline && !isOpen) return null;
+  if (!isOpen) return null;
 
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
@@ -54,11 +53,11 @@ export default function UsersDirectoryModal({
   });
 
   return (
-    <div className={inline ? "w-full animate-fade-in" : "fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in"}>
-      <div className={`relative w-full overflow-hidden flex flex-col ${inline ? 'bg-transparent' : 'max-w-4xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl max-h-[88vh] animate-slide-up'}`}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">
+      <div className="relative w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh] animate-slide-up">
         
         {/* Header */}
-        <div className={`p-6 bg-slate-950 flex items-center justify-between ${inline ? 'rounded-t-3xl border border-slate-800' : 'border-b border-slate-800'}`}>
+        <div className="p-6 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-2xl bg-indigo-500/10 text-indigo-400">
               <Users className="w-6 h-6" />
@@ -80,14 +79,12 @@ export default function UsersDirectoryModal({
               <span>{t('btnAddMember')}</span>
             </button>
 
-            {!inline && (
-              <button
-                onClick={onClose}
-                className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            )}
+            <button
+              onClick={onClose}
+              className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
         </div>
 
@@ -117,7 +114,7 @@ export default function UsersDirectoryModal({
         </div>
 
         {/* Users List Grid */}
-        <div className={`p-6 overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ${inline ? 'border-x border-b border-slate-800 rounded-b-3xl bg-slate-900/40' : ''}`}>
+        <div className="p-6 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredUsers.length === 0 ? (
             <div className="col-span-2 py-12 text-center text-slate-500 text-sm">
               {t('noSessionsFound')}
