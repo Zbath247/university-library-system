@@ -277,12 +277,16 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
       {/* Tab 1: Live Overview View */}
       {view === 'OVERVIEW' && (
         <div className="space-y-6 animate-fade-in">
-          
-
-
-          {/* Quick Analytics Visualizations Preview */}
-          <AnalyticsCharts analytics={analytics} />
-
+          {/* Member Directory Inline */}
+          <UsersDirectoryModal
+            inline={true}
+            users={users}
+            roles={roles}
+            departments={departments}
+            onViewPass={handleViewPass}
+            onAddUser={() => setShowAddUserModal(true)}
+            onUserDeleted={fetchAllData}
+          />
         </div>
       )}
 
