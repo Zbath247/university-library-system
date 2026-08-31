@@ -513,11 +513,28 @@ class DatabaseWrapper {
       .sort((a, b) => b.count - a.count)
       .slice(0, 6);
 
+    const monthlyLabels = [], monthlyVisits = [], monthlyBorrowReturn = [];
+    for (let d = 29; d >= 0; d--) {
+      const date = new Date(now.getTime() - d * 86400000);
+      monthlyLabels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+      const dayStart = new Date(date); dayStart.setHours(0, 0, 0, 0);
+      const dayEnd = new Date(date); dayEnd.setHours(23, 59, 59, 999);
+      
+      const daySessions = allSessions.filter(s => {
+        const time = new Date(s.check_in_time).getTime();
+        return time >= dayStart.getTime() && time <= dayEnd.getTime();
+      });
+      
+      monthlyVisits.push(daySessions.filter(s => s.purpose_of_visit !== 'Book Borrowing' && s.purpose_of_visit !== 'Book Return').length);
+      monthlyBorrowReturn.push(daySessions.filter(s => s.purpose_of_visit === 'Book Borrowing' || s.purpose_of_visit === 'Book Return').length);
+    }
+
     return {
       hourly: { labels: hourlyLabels, data: hourlyData },
       departments: departmentDistribution,
       roles: rolesDistribution,
       trend: { labels: trendLabels, data: trendData },
+      monthlyTrend: { labels: monthlyLabels, visits: monthlyVisits, borrowReturn: monthlyBorrowReturn },
       topPurposes
     };
   }

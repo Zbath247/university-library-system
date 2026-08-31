@@ -177,7 +177,65 @@ export default function AnalyticsCharts({ analytics }) {
     }
   };
 
-  const roles = analytics.roles || [];
+    const roles = analytics.roles || [];
+
+  // 5. 30-Day Monthly Trend (Line Chart with 2 lines)
+  const monthlyTrendData = {
+    labels: analytics.monthlyTrend?.labels || [],
+    datasets: [
+      {
+        label: 'ចូលស្រាវជ្រាវ (Visits)',
+        data: analytics.monthlyTrend?.visits || [],
+        borderColor: '#10B981', // Emerald
+        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+        tension: 0.35,
+        fill: true,
+        pointBackgroundColor: '#10B981',
+        pointRadius: 2,
+        pointHoverRadius: 5
+      },
+      {
+        label: 'ខ្ចី និងសងសៀវភៅ (Borrow & Return)',
+        data: analytics.monthlyTrend?.borrowReturn || [],
+        borderColor: '#F59E0B', // Amber
+        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+        tension: 0.35,
+        fill: true,
+        pointBackgroundColor: '#F59E0B',
+        pointRadius: 2,
+        pointHoverRadius: 5
+      }
+    ]
+  };
+
+  const monthlyTrendOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+        align: 'end',
+        labels: { color: '#cbd5e1', font: { family: 'Battambang, sans-serif', size: 11 }, usePointStyle: true, boxWidth: 6 }
+      },
+      tooltip: {
+        backgroundColor: '#0f172a',
+        borderColor: '#334155',
+        borderWidth: 1,
+        padding: 10,
+        cornerRadius: 10
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { color: '#94a3b8', font: { size: 10 }, maxTicksLimit: 10 }
+      },
+      y: {
+        grid: { color: 'rgba(51, 65, 85, 0.3)' },
+        ticks: { color: '#94a3b8', stepSize: 2, font: { size: 11 } }
+      }
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -279,6 +337,25 @@ export default function AnalyticsCharts({ analytics }) {
           </div>
         </div>
 
+      </div>
+
+      {/* 5. 30-Day Monthly Trend */}
+      <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-emerald-950/20 border border-slate-800/90 shadow-xl backdrop-blur-xl flex flex-col justify-between w-full">
+        <div>
+          <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800/80">
+            <div className="p-2.5 rounded-2xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/20">
+              <TrendingUp className="w-4 h-4" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white">ក្រាបហ្វិកសម្រាប់១ខែ (30-Day Activity)</h4>
+              <p className="text-xs text-slate-400">ប្រៀបធៀបចំនួនអ្នកចូលស្រាវជ្រាវ ជាមួយនឹងការខ្ចី-សងសៀវភៅ</p>
+            </div>
+          </div>
+
+          <div className="h-72 w-full relative flex items-center justify-center pt-2">
+            <Line data={monthlyTrendData} options={monthlyTrendOptions} />
+          </div>
+        </div>
       </div>
 
     </div>
