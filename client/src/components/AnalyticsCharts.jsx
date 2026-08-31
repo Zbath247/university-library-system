@@ -181,20 +181,23 @@ export default function AnalyticsCharts({ analytics }) {
 
   // 5. 30-Day Monthly Trend (Bar Chart - Total Sums)
   const totalVisits = (analytics.monthlyTrend?.visits || []).reduce((acc, val) => acc + val, 0);
-  const totalBorrowReturn = (analytics.monthlyTrend?.borrowReturn || []).reduce((acc, val) => acc + val, 0);
+  const totalBorrows = (analytics.monthlyTrend?.borrows || []).reduce((acc, val) => acc + val, 0);
+  const totalReturns = (analytics.monthlyTrend?.returns || []).reduce((acc, val) => acc + val, 0);
 
   const monthlyBarData = {
-    labels: ['ចូលបណ្ណាល័យ', 'ខ្ចី និងសងសៀវភៅ'],
+    labels: ['ចូលបណ្ណាល័យ (Visits)', 'ខ្ចីសៀវភៅ (Borrow)', 'សងសៀវភៅ (Return)'],
     datasets: [
       {
-        data: [totalVisits, totalBorrowReturn],
+        data: [totalVisits, totalBorrows, totalReturns],
         backgroundColor: [
           'rgba(59, 130, 246, 0.9)', // Blue
           'rgba(245, 158, 11, 0.9)', // Amber
+          'rgba(16, 185, 129, 0.9)'  // Emerald
         ],
         hoverBackgroundColor: [
           'rgba(59, 130, 246, 1)', 
           'rgba(245, 158, 11, 1)', 
+          'rgba(16, 185, 129, 1)'
         ],
         borderRadius: 4,
         barThickness: 60

@@ -513,7 +513,7 @@ class DatabaseWrapper {
       .sort((a, b) => b.count - a.count)
       .slice(0, 6);
 
-    const monthlyLabels = [], monthlyVisits = [], monthlyBorrowReturn = [];
+    const monthlyLabels = [], monthlyVisits = [], monthlyBorrows = [], monthlyReturns = [];
     for (let d = 29; d >= 0; d--) {
       const date = new Date(now.getTime() - d * 86400000);
       monthlyLabels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
@@ -526,7 +526,8 @@ class DatabaseWrapper {
       });
       
       monthlyVisits.push(daySessions.filter(s => s.purpose_of_visit !== 'Book Borrowing' && s.purpose_of_visit !== 'Book Return').length);
-      monthlyBorrowReturn.push(daySessions.filter(s => s.purpose_of_visit === 'Book Borrowing' || s.purpose_of_visit === 'Book Return').length);
+      monthlyBorrows.push(daySessions.filter(s => s.purpose_of_visit === 'Book Borrowing').length);
+      monthlyReturns.push(daySessions.filter(s => s.purpose_of_visit === 'Book Return').length);
     }
 
     return {
@@ -534,7 +535,7 @@ class DatabaseWrapper {
       departments: departmentDistribution,
       roles: rolesDistribution,
       trend: { labels: trendLabels, data: trendData },
-      monthlyTrend: { labels: monthlyLabels, visits: monthlyVisits, borrowReturn: monthlyBorrowReturn },
+      monthlyTrend: { labels: monthlyLabels, visits: monthlyVisits, borrows: monthlyBorrows, returns: monthlyReturns },
       topPurposes
     };
   }
