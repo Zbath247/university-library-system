@@ -95,7 +95,23 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               </div>
             </button>
 
-            {/* 3. Attendance Logs */}
+            {/* 3. Admin Overview */}
+            <button
+              onClick={() => handleNavClick('admin')}
+              className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
+                activeTab === 'admin'
+                  ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white font-black shadow-lg shadow-amber-500/25 scale-[1.02]'
+                  : 'bg-slate-900/40 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800/50'
+              }`}
+            >
+              <LayoutDashboard className="w-5 h-5 shrink-0" />
+              <div className="text-left leading-tight flex-1">
+                <span className="block">{t('adminTitle') || 'ទិដ្ឋភាពទូទៅ'}</span>
+                <span className={`text-[10px] font-normal ${activeTab === 'admin' ? 'text-amber-100' : 'text-slate-500'}`}>Admin Overview</span>
+              </div>
+            </button>
+
+            {/* 4. Attendance Logs */}
             <button
               onClick={() => handleNavClick('logs')}
               className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
@@ -240,7 +256,28 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </button>
 
-                {/* 3. Attendance Logs */}
+                {/* 3. Admin Overview */}
+                <button
+                  onClick={() => handleNavClick('admin')}
+                  className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
+                    activeTab === 'admin'
+                      ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg shadow-amber-500/20'
+                      : 'bg-slate-950/60 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-amber-500/20 text-amber-300">
+                      <LayoutDashboard className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <span className="block">{t('adminTitle') || 'ទិដ្ឋភាពទូទៅ'}</span>
+                      <span className="text-[10px] text-slate-400 font-normal">Admin Overview</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-500" />
+                </button>
+
+                {/* 4. Attendance Logs */}
                 <button
                   onClick={() => handleNavClick('logs')}
                   className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
