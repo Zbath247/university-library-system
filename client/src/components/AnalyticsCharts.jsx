@@ -273,44 +273,6 @@ export default function AnalyticsCharts({ analytics }) {
       {/* Comprehensive 2x2 Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
         
-        {/* 1. Peak Research Hours Bar Chart */}
-        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-teal-950/20 border border-slate-800/90 shadow-xl backdrop-blur-xl flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800/80">
-              <div className="p-2.5 rounded-2xl bg-teal-500/15 text-teal-300 border border-teal-500/20">
-                <Clock className="w-4 h-4" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-white">{t('statPeakHour')}</h4>
-                <p className="text-xs text-slate-400">{t('statPeakHourDesc')}</p>
-              </div>
-            </div>
-
-            <div className="h-60 w-full relative flex items-center justify-center pt-2">
-              <Bar data={hourlyData} options={hourlyOptions} />
-            </div>
-          </div>
-        </div>
-
-        {/* 2. 7-Day Attendance Trend Line Chart */}
-        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-violet-950/20 border border-slate-800/90 shadow-xl backdrop-blur-xl flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800/80">
-              <div className="p-2.5 rounded-2xl bg-violet-500/15 text-violet-300 border border-violet-500/20">
-                <TrendingUp className="w-4 h-4" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-white">{t('tabAnalytics')}</h4>
-                <p className="text-xs text-slate-400">និន្នាការវត្តមានរយៈពេល ៧ថ្ងៃចុងក្រោយ</p>
-              </div>
-            </div>
-
-            <div className="h-60 w-full relative flex items-center justify-center pt-2">
-              <Line data={trendData} options={trendOptions} />
-            </div>
-          </div>
-        </div>
-
         {/* 3. Department Share Doughnut */}
         <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-indigo-950/20 border border-slate-800/90 shadow-xl backdrop-blur-xl flex flex-col justify-between">
           <div>
