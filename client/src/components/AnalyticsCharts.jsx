@@ -127,12 +127,51 @@ export default function AnalyticsCharts({ analytics }) {
         borderColor: '#334155',
         borderWidth: 1,
         padding: 10,
-        cornerRadius: 10
+        cornerRadius: 10,
+        callbacks: {
+          label: (context) => {
+            const val = context.raw;
+            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+            const pct = total > 0 ? Math.round((val / total) * 100) : 0;
+            return ` ${context.label}: ${val} នាក់ (${pct}%)`;
+          }
+        }
       }
     }
   };
 
-  // 3. 7-Day Attendance Trend (Line Chart)
+  const doughnutDataLabelsPlugin = {
+    id: 'doughnutDataLabels',
+    afterDraw(chart) {
+      const { ctx, data } = chart;
+      ctx.save();
+      const dataset = data.datasets[0];
+      const meta = chart.getDatasetMeta(0);
+      const total = dataset.data.reduce((a, b) => a + b, 0);
+      
+      meta.data.forEach((arc, index) => {
+        const val = dataset.data[index];
+        if (val === 0) return;
+        
+        const pct = total > 0 ? Math.round((val / total) * 100) : 0;
+        
+        // Only show on slices that are large enough
+        if (pct > 5) {
+          const centerPoint = arc.tooltipPosition();
+          ctx.font = 'bold 12px "Battambang", sans-serif';
+          ctx.fillStyle = '#ffffff';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.shadowColor = 'rgba(0,0,0,0.8)';
+          ctx.shadowBlur = 4;
+          ctx.fillText(`${val} (${pct}%)`, centerPoint.x, centerPoint.y);
+        }
+      });
+      ctx.restore();
+    }
+  };
+
+  // 4. Role Distribution
   const trendData = {
     labels: analytics.trend?.labels || [],
     datasets: [
@@ -287,7 +326,7 @@ export default function AnalyticsCharts({ analytics }) {
             </div>
 
             <div className="h-60 w-full relative flex items-center justify-center pt-2">
-              <Doughnut data={deptData} options={doughnutOptions} />
+              <Doughnut data={deptData} options={doughnutOptions} plugins={[doughnutDataLabelsPlugin]} />
             </div>
           </div>
         </div>
