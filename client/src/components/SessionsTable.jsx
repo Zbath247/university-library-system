@@ -200,8 +200,6 @@ export default function SessionsTable({
     reader.readAsText(file);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
-    e.target.value = null;
-  };
 
   const handleExportPDF = useReactToPrint({
     content: () => reportRef.current,
