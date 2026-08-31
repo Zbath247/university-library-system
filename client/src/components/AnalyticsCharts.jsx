@@ -179,17 +179,93 @@ export default function AnalyticsCharts({ analytics }) {
 
     const roles = analytics.roles || [];
 
-  // 5. 30-Day Monthly Trend (Horizontal Bars)
+  // 5. 30-Day Monthly Trend (Bar Chart - Total Sums)
   const totalVisits = (analytics.monthlyTrend?.visits || []).reduce((acc, val) => acc + val, 0);
   const totalBorrows = (analytics.monthlyTrend?.borrows || []).reduce((acc, val) => acc + val, 0);
   const totalReturns = (analytics.monthlyTrend?.returns || []).reduce((acc, val) => acc + val, 0);
   const sum30Days = totalVisits + totalBorrows + totalReturns;
 
-  const monthlyBars = [
-    { name: 'ចូលបណ្ណាល័យ (Visits)', count: totalVisits, color: '#3b82f6' }, // Blue
-    { name: 'ខ្ចីសៀវភៅ (Borrow)', count: totalBorrows, color: '#f59e0b' }, // Amber
-    { name: 'សងសៀវភៅ (Return)', count: totalReturns, color: '#10b981' }  // Emerald
-  ];
+  const monthlyBarData = {
+    labels: ['ចូលបណ្ណាល័យ (Visits)', 'ខ្ចីសៀវភៅ (Borrow)', 'សងសៀវភៅ (Return)'],
+    datasets: [
+      {
+        data: [totalVisits, totalBorrows, totalReturns],
+        backgroundColor: [
+          'rgba(59, 130, 246, 0.9)', // Blue
+          'rgba(245, 158, 11, 0.9)', // Amber
+          'rgba(16, 185, 129, 0.9)'  // Emerald
+        ],
+        hoverBackgroundColor: [
+          'rgba(59, 130, 246, 1)', 
+          'rgba(245, 158, 11, 1)', 
+          'rgba(16, 185, 129, 1)'
+        ],
+        borderRadius: 4,
+        barThickness: 60
+      }
+    ]
+  };
+
+  const monthlyBarOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: {
+      padding: {
+        top: 25 // Make room for the labels above the bars
+      }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#0f172a',
+        borderColor: '#334155',
+        borderWidth: 1,
+        padding: 10,
+        cornerRadius: 10,
+        displayColors: false,
+        callbacks: {
+          label: (context) => {
+            const val = context.raw;
+            const pct = sum30Days > 0 ? Math.round((val / sum30Days) * 100) : 0;
+            return `សរុប៖ ${val} នាក់ (${pct}%)`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { color: '#cbd5e1', font: { size: 13, family: 'Battambang, sans-serif' } }
+      },
+      y: {
+        grid: { color: 'rgba(51, 65, 85, 0.3)' },
+        ticks: { color: '#94a3b8', stepSize: 1, font: { size: 12 } }
+      }
+    }
+  };
+
+  const barDataLabelsPlugin = {
+    id: 'barDataLabels',
+    afterDatasetsDraw(chart) {
+      const { ctx, data } = chart;
+      ctx.save();
+      const dataset = data.datasets[0];
+      const meta = chart.getDatasetMeta(0);
+      
+      meta.data.forEach((bar, index) => {
+        const val = dataset.data[index];
+        if (val > 0 || sum30Days === 0) {
+          const pct = sum30Days > 0 ? Math.round((val / sum30Days) * 100) : 0;
+          ctx.font = 'bold 12px "Battambang", sans-serif';
+          ctx.fillStyle = '#e2e8f0';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          ctx.fillText(`${val} (${pct}%)`, bar.x, bar.y - 6);
+        }
+      });
+      ctx.restore();
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -293,36 +369,22 @@ export default function AnalyticsCharts({ analytics }) {
 
       </div>
 
-      {/* 5. 30-Day Monthly Trend (Custom Horizontal Bars) */}
-      <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-emerald-950/20 border border-slate-800/90 shadow-xl backdrop-blur-xl w-full">
-        <div className="flex items-center gap-3 mb-6 pb-3 border-b border-slate-800/80">
-          <div className="p-2.5 rounded-2xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/20">
-            <TrendingUp className="w-4 h-4" />
+      {/* 5. 30-Day Monthly Trend */}
+      <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-emerald-950/20 border border-slate-800/90 shadow-xl backdrop-blur-xl flex flex-col justify-between w-full">
+        <div>
+          <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800/80">
+            <div className="p-2.5 rounded-2xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/20">
+              <TrendingUp className="w-4 h-4" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white">ក្រាបហ្វិកសម្រាប់១ខែ (30-Day Activity)</h4>
+              <p className="text-xs text-slate-400">ប្រៀបធៀបចំនួនអ្នកចូលស្រាវជ្រាវ ជាមួយនឹងការខ្ចី-សងសៀវភៅ</p>
+            </div>
           </div>
-          <div>
-            <h4 className="text-sm font-bold text-white">ក្រាបហ្វិកសម្រាប់១ខែ (30-Day Activity)</h4>
-            <p className="text-xs text-slate-400">ប្រៀបធៀបចំនួនអ្នកចូលស្រាវជ្រាវ ជាមួយនឹងការខ្ចី-សងសៀវភៅ</p>
-          </div>
-        </div>
 
-        <div className="space-y-5 px-2">
-          {monthlyBars.map((item, i) => {
-            const pct = sum30Days > 0 ? Math.round((item.count / sum30Days) * 100) : 0;
-            return (
-              <div key={i} className="text-sm">
-                <div className="flex justify-between text-slate-300 font-semibold mb-2">
-                  <span className="font-medium">{item.name}</span>
-                  <span className="font-mono text-slate-400 font-bold">{item.count} ({pct}%)</span>
-                </div>
-                <div className="w-full bg-slate-950 rounded-full h-3.5 overflow-hidden border border-slate-800/80 p-0.5">
-                  <div
-                    className="h-full rounded-full transition-all duration-1000 shadow-sm"
-                    style={{ width: `${pct}%`, backgroundColor: item.color }}
-                  />
-                </div>
-              </div>
-            );
-          })}
+          <div className="h-72 w-full relative flex items-center justify-center pt-2">
+            <Bar data={monthlyBarData} options={monthlyBarOptions} plugins={[barDataLabelsPlugin]} />
+          </div>
         </div>
       </div>
 
