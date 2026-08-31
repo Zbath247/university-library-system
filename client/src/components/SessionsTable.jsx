@@ -130,6 +130,33 @@ export default function SessionsTable({
       }
     }
 
+    const exportUrl = api.getExportCsvUrl({
+      status: statusFilter,
+      role_id: roleFilter,
+      department_id: deptFilter,
+      search,
+      category: categoryTab !== 'ALL' ? categoryTab : undefined,
+      startDate,
+      endDate
+    });
+    window.open(exportUrl, '_blank');
+    setShowExportPrompt(true);
+  };
+
+  const handleExportExcel = () => {
+    let startDate, endDate;
+    if (yearFilter || monthFilter) {
+      const y = yearFilter ? parseInt(yearFilter) : new Date().getFullYear();
+      if (monthFilter) {
+        const m = parseInt(monthFilter);
+        startDate = new Date(y, m - 1, 1).toISOString();
+        endDate = new Date(y, m, 0, 23, 59, 59, 999).toISOString();
+      } else {
+        startDate = new Date(y, 0, 1).toISOString();
+        endDate = new Date(y, 11, 31, 23, 59, 59, 999).toISOString();
+      }
+    }
+
     const exportUrl = api.getExportExcelUrl({
       status: statusFilter,
       role_id: roleFilter,
@@ -321,10 +348,18 @@ export default function SessionsTable({
             <button
               onClick={handleExportCsv}
               className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 transition border-r border-slate-700"
-              title="ទាញយកជា CSV / Excel"
+              title="ទាញយកជា CSV (ទិន្នន័យចាស់)"
             >
               <Download className="w-3.5 h-3.5 text-emerald-400" />
-              <span>CSV/Excel</span>
+              <span>CSV</span>
+            </button>
+            <button
+              onClick={handleExportExcel}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 transition border-r border-slate-700"
+              title="ទាញយកជា Excel ជាមួយនឹងរបាយការណ៍សង្ខេប"
+            >
+              <Download className="w-3.5 h-3.5 text-green-400" />
+              <span>Excel Summary</span>
             </button>
             <button
               onClick={handleExportWord}
