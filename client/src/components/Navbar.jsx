@@ -106,7 +106,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
             >
               <LayoutDashboard className="w-5 h-5 shrink-0" />
               <div className="text-left leading-tight flex-1">
-                <span className="block">{t('adminTitle') || 'ទិដ្ឋភាពទូទៅ'}</span>
+                <span className="block">{t('adminNavTitle') || 'ទិដ្ឋភាពទូទៅ'}</span>
                 <span className={`text-[10px] font-normal ${activeTab === 'admin' ? 'text-amber-100' : 'text-slate-500'}`}>Admin Overview</span>
               </div>
             </button>
