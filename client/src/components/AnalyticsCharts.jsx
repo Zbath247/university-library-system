@@ -225,7 +225,11 @@ export default function AnalyticsCharts({ analytics }) {
   const sum30Days = totalVisits + totalBorrows + totalReturns;
 
   const monthlyBarData = {
-    labels: ['ចូលបណ្ណាល័យ (Visits)', 'ខ្ចីសៀវភៅ (Borrow)', 'សងសៀវភៅ (Return)'],
+    labels: [
+      ['ចូលបណ្ណាល័យ', '(Visits)'], 
+      ['ខ្ចីសៀវភៅ', '(Borrow)'], 
+      ['សងសៀវភៅ', '(Return)']
+    ],
     datasets: [
       {
         data: [totalVisits, totalBorrows, totalReturns],
@@ -274,7 +278,12 @@ export default function AnalyticsCharts({ analytics }) {
     scales: {
       x: {
         grid: { display: false },
-        ticks: { color: '#cbd5e1', font: { size: 13, family: 'Battambang, sans-serif' } }
+        ticks: { 
+          color: '#cbd5e1', 
+          font: { size: 11, family: 'Battambang, sans-serif' },
+          maxRotation: 0,
+          minRotation: 0
+        }
       },
       y: {
         grid: { color: 'rgba(51, 65, 85, 0.3)' },
