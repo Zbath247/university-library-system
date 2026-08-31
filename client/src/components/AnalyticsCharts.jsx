@@ -183,6 +183,7 @@ export default function AnalyticsCharts({ analytics }) {
   const totalVisits = (analytics.monthlyTrend?.visits || []).reduce((acc, val) => acc + val, 0);
   const totalBorrows = (analytics.monthlyTrend?.borrows || []).reduce((acc, val) => acc + val, 0);
   const totalReturns = (analytics.monthlyTrend?.returns || []).reduce((acc, val) => acc + val, 0);
+  const sum30Days = totalVisits + totalBorrows + totalReturns;
 
   const monthlyBarData = {
     labels: ['ចូលបណ្ណាល័យ (Visits)', 'ខ្ចីសៀវភៅ (Borrow)', 'សងសៀវភៅ (Return)'],
@@ -208,8 +209,13 @@ export default function AnalyticsCharts({ analytics }) {
   const monthlyBarOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    layout: {
+      padding: {
+        top: 25 // Make room for the labels above the bars
+      }
+    },
     plugins: {
-      legend: { display: false }, // We don't need legend since x-axis has labels
+      legend: { display: false },
       tooltip: {
         backgroundColor: '#0f172a',
         borderColor: '#334155',
@@ -218,7 +224,11 @@ export default function AnalyticsCharts({ analytics }) {
         cornerRadius: 10,
         displayColors: false,
         callbacks: {
-          label: (context) => ` សរុប៖ ${context.raw} នាក់`
+          label: (context) => {
+            const val = context.raw;
+            const pct = sum30Days > 0 ? Math.round((val / sum30Days) * 100) : 0;
+            return `សរុប៖ ${val} នាក់ (${pct}%)`;
+          }
         }
       }
     },
@@ -231,6 +241,29 @@ export default function AnalyticsCharts({ analytics }) {
         grid: { color: 'rgba(51, 65, 85, 0.3)' },
         ticks: { color: '#94a3b8', stepSize: 1, font: { size: 12 } }
       }
+    }
+  };
+
+  const barDataLabelsPlugin = {
+    id: 'barDataLabels',
+    afterDatasetsDraw(chart) {
+      const { ctx, data } = chart;
+      ctx.save();
+      const dataset = data.datasets[0];
+      const meta = chart.getDatasetMeta(0);
+      
+      meta.data.forEach((bar, index) => {
+        const val = dataset.data[index];
+        if (val > 0 || sum30Days === 0) {
+          const pct = sum30Days > 0 ? Math.round((val / sum30Days) * 100) : 0;
+          ctx.font = 'bold 12px "Battambang", sans-serif';
+          ctx.fillStyle = '#e2e8f0';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          ctx.fillText(`${val} (${pct}%)`, bar.x, bar.y - 6);
+        }
+      });
+      ctx.restore();
     }
   };
 
@@ -350,7 +383,7 @@ export default function AnalyticsCharts({ analytics }) {
           </div>
 
           <div className="h-72 w-full relative flex items-center justify-center pt-2">
-            <Bar data={monthlyBarData} options={monthlyBarOptions} />
+            <Bar data={monthlyBarData} options={monthlyBarOptions} plugins={[barDataLabelsPlugin]} />
           </div>
         </div>
       </div>
