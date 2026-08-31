@@ -140,11 +140,11 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
           <div className="flex items-center gap-2.5">
             <div className="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse shadow-sm shadow-teal-400/50" />
             <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-              {t('adminTitle')}
+              {view === 'OVERVIEW' ? t('adminTitle') : t('tabAllLogs')}
             </h1>
           </div>
           <p className="text-xs sm:text-sm text-slate-400 font-medium pl-5">
-            {t('adminSub')}
+            {view === 'OVERVIEW' ? t('adminSub') : t('logsSub')}
           </p>
         </div>
 
