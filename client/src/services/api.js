@@ -186,5 +186,15 @@ export const api = {
       }
     });
     return `${API_BASE}/admin/export/csv?${params.toString()}`;
+  },
+
+  getExportExcelUrl: (filters = {}) => {
+    const params = new URLSearchParams();
+    Object.keys(filters).forEach(key => {
+      if (filters[key] !== undefined && filters[key] !== null && filters[key] !== '') {
+        params.append(key, filters[key]);
+      }
+    });
+    return `${API_BASE}/admin/export/excel?${params.toString()}`;
   }
 };

@@ -130,7 +130,7 @@ export default function SessionsTable({
       }
     }
 
-    const exportUrl = api.getExportCsvUrl({
+    const exportUrl = api.getExportExcelUrl({
       status: statusFilter,
       role_id: roleFilter,
       department_id: deptFilter,

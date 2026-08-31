@@ -495,7 +495,6 @@ class DatabaseWrapper {
     ];
 
     const trendLabels = [], trendData = [];
-    const now = new Date();
     for (let d = 6; d >= 0; d--) {
       const date = new Date(now.getTime() - d * 86400000);
       trendLabels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
