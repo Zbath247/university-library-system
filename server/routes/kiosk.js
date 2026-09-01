@@ -37,10 +37,7 @@ router.post('/lookup', async (req, res) => {
     // Check if user has an active or pending session
     let activeSession = await db.getActiveSessionForUser(user.id);
     if (!activeSession) {
-      const pendingSession = (await db.getSessions({ status: 'PENDING_APPROVAL' })).find(s => s.user_id === user.id);
-      if (pendingSession) {
-        activeSession = { ...pendingSession, user };
-      }
+      activeSession = await db.getPendingSessionForUser(user.id);
     }
 
     return res.json({

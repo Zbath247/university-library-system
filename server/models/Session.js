@@ -12,4 +12,8 @@ const sessionSchema = new mongoose.Schema({
   created_at: { type: String, required: true }
 });
 
+sessionSchema.index({ status: 1 });
+sessionSchema.index({ user_id: 1, status: 1 });
+sessionSchema.index({ check_in_time: -1 });
+
 module.exports = mongoose.model('Session', sessionSchema);

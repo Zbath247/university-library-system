@@ -147,6 +147,16 @@ class DatabaseWrapper {
     };
   }
 
+  async getPendingSessionForUser(userId) {
+    const session = await Session.findOne({ user_id: Number(userId), status: 'PENDING_APPROVAL' }).lean();
+    if (!session) return null;
+    const user = await this.findUserById(userId);
+    return {
+      ...session,
+      user
+    };
+  }
+
   async createSession(userId, purposeOfVisit, researchTopic) {
     const user = await this.findUserById(userId);
     if (!user) throw new Error('User not found.');
