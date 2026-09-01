@@ -290,6 +290,16 @@ class DatabaseWrapper {
   async deleteSession(sessionId) {
     const deleted = await Session.findOneAndDelete({ id: Number(sessionId) });
     if (!deleted) throw new Error('Session not found.');
+    
+    // Check if the user has any other sessions left
+    if (deleted.user_id) {
+      const remainingSessionsCount = await Session.countDocuments({ user_id: deleted.user_id });
+      if (remainingSessionsCount === 0) {
+        // If no sessions left, delete the user profile too
+        await User.findOneAndDelete({ id: deleted.user_id });
+      }
+    }
+    
     return deleted;
   }
 
