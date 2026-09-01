@@ -168,20 +168,32 @@ class DatabaseWrapper {
     const user = await this.findUserById(userId);
     if (!user) throw new Error('User not found.');
 
+    // Check for both ACTIVE and PENDING_APPROVAL sessions
     const existingActive = await this.getActiveSessionForUser(userId);
-    if (existingActive) {
+    const existingPending = await this.getPendingSessionForUser(userId);
+    const existingSession = existingActive || existingPending;
+
+    if (existingSession) {
       if (purposeOfVisit || researchTopic) {
         const updateDoc = {};
         if (purposeOfVisit) updateDoc.purpose_of_visit = purposeOfVisit;
         if (researchTopic) updateDoc.research_topic = researchTopic;
-        await Session.updateOne({ id: existingActive.id }, { $set: updateDoc });
         
-        if (purposeOfVisit) existingActive.purpose_of_visit = purposeOfVisit;
-        if (researchTopic) existingActive.research_topic = researchTopic;
+        // If purpose changes to borrowing/returning, it should become PENDING_APPROVAL.
+        // If purpose changes from borrowing to normal reading, it should become ACTIVE.
+        const requiresApproval = (purposeOfVisit === 'Book Borrowing' || purposeOfVisit === 'Book Return');
+        const newStatus = requiresApproval ? 'PENDING_APPROVAL' : 'ACTIVE';
+        updateDoc.status = newStatus;
+
+        await Session.updateOne({ id: existingSession.id }, { $set: updateDoc });
+        
+        if (purposeOfVisit) existingSession.purpose_of_visit = purposeOfVisit;
+        if (researchTopic) existingSession.research_topic = researchTopic;
+        existingSession.status = newStatus;
       }
       return {
         alreadyActive: true,
-        session: existingActive
+        session: existingSession
       };
     }
 
