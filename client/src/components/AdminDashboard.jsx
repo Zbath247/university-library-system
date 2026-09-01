@@ -12,7 +12,9 @@ import {
   QrCode,
   Layers,
   Database,
-  PlusCircle
+  PlusCircle,
+  Bell,
+  AlertCircle
 } from 'lucide-react';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
@@ -40,6 +42,22 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
   const [selectedPassUser, setSelectedPassUser] = useState(null);
   const [showDirectoryModal, setShowDirectoryModal] = useState(false);
   const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  const overdueBooks = React.useMemo(() => {
+    const now = Date.now();
+    const overdue = sessions.filter(session => {
+      if (session.status !== 'ACTIVE') return false;
+      if (session.purpose_of_visit !== 'Book Borrowing' && session.purpose_of_visit !== 'ខ្ចីសៀវភៅ') {
+        return false;
+      }
+      const checkInTime = new Date(session.check_in_time).getTime();
+      const diffDays = Math.floor((now - checkInTime) / (1000 * 60 * 60 * 24));
+      session.days_overdue = diffDays;
+      return diffDays >= 10;
+    });
+    return overdue.sort((a, b) => b.days_overdue - a.days_overdue);
+  }, [sessions]);
 
   const fetchAllData = async () => {
     try {
@@ -149,6 +167,59 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
+          {/* Notification Bell */}
+          <div className="relative z-50">
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="relative p-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700/80 shadow-sm transition active:scale-95 focus:outline-none"
+            >
+              <Bell className="w-4 h-4" />
+              {overdueBooks.length > 0 && (
+                <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-rose-500 border-2 border-slate-800 rounded-full animate-pulse"></span>
+              )}
+            </button>
+
+            {/* Notifications Dropdown */}
+            {showNotifications && (
+              <div className="absolute right-0 mt-2 w-80 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden animate-fade-in">
+                <div className="p-3 border-b border-slate-800 bg-slate-950 flex items-center justify-between">
+                  <h4 className="text-sm font-bold text-slate-200 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-rose-400" />
+                    {t('overdueBooksTitle') || 'Overdue Books'}
+                  </h4>
+                  <span className="text-xs bg-rose-500/20 text-rose-400 px-2 py-0.5 rounded-full font-bold">
+                    {overdueBooks.length}
+                  </span>
+                </div>
+                <div className="max-h-72 overflow-y-auto">
+                  {overdueBooks.length > 0 ? (
+                    <div className="p-2 space-y-1">
+                      {overdueBooks.map(book => (
+                        <div key={book.id} className="p-2 rounded-xl bg-slate-800/50 hover:bg-slate-800 transition">
+                          <div className="flex justify-between items-start">
+                            <span className="text-xs font-bold text-slate-200">{book.user?.full_name || 'Unknown'}</span>
+                            <span className="text-[10px] font-bold text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded-md">
+                              {book.days_overdue} {t('daysOverdue') || 'days overdue'}
+                            </span>
+                          </div>
+                          <div className="text-[10px] text-slate-400 mt-1 flex flex-col gap-0.5">
+                            <span>ID: {book.user?.university_id}</span>
+                            <span className="truncate" title={book.research_topic}>
+                              Book: {book.research_topic || 'N/A'}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="p-6 text-center text-slate-500 text-xs">
+                      {t('noOverdueBooks') || 'No overdue books'}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
           <button
             onClick={() => setShowDirectoryModal(true)}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700/80 shadow-sm hover:shadow transition active:scale-95"
