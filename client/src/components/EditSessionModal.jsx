@@ -345,14 +345,14 @@ export default function EditSessionModal({
               </div>
 
               {/* Book Title / Research Topic */}
-              {['Thesis & Academic Research', 'Book Borrowing', 'Book Return', 'Group Discussion & Project'].includes(purpose) && (
+              {/* Book Title / Research Topic */}
+              {['Book Borrowing', 'Book Return'].includes(purpose) && (
               <div>
                 <label className="block text-xs font-semibold text-amber-300 mb-1 flex items-center gap-1.5">
                   <BookOpen className="w-3.5 h-3.5 text-amber-400" />
                   <span>
                     {purpose === 'Book Borrowing' ? 'ឈ្មោះសៀវភៅដែលបានខ្ចី (Book Title)' :
-                     purpose === 'Book Return' ? 'ឈ្មោះសៀវភៅដែលបានសង (Book Title)' :
-                     'ប្រធានបទស្រាវជ្រាវ ឬឈ្មោះសៀវភៅ (Topic / Title)'}
+                     'ឈ្មោះសៀវភៅដែលបានសង (Book Title)'}
                   </span>
                 </label>
                 <input
