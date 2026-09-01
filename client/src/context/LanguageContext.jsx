@@ -263,7 +263,11 @@ const translations = {
     userNotFound: 'រកមិនឃើញអត្តលេខសម្គាល់នេះទេ! សូមចុះឈ្មោះជាសមាជិកថ្មី។',
     alreadyCheckedIn: 'អ្នកបានកត់ត្រាចូលរួចហើយ! បច្ចុប្បន្នកំពុងស្ថិតក្នុងបណ្ណាល័យ។',
     notCheckedIn: 'មិនមានកំណត់ត្រាចូលសម្រាប់គណនីនេះឡើយ។',
-    inputRequired: 'សូមវាយបញ្ចូលអត្តលេខ ឬស្កេនប័ណ្ណរបស់អ្នក។'
+    inputRequired: 'សូមវាយបញ្ចូលអត្តលេខ ឬស្កេនប័ណ្ណរបស់អ្នក។',
+    overdueBooksTitle: 'សៀវភៅហួសកំណត់សង',
+    overdueBooksMsg: 'មានសៀវភៅដែលត្រូវបានខ្ចីចាប់ពី ១០ ថ្ងៃឡើងទៅ៖',
+    daysOverdue: 'ថ្ងៃ (ហួសកំណត់)',
+    noOverdueBooks: 'មិនមានសៀវភៅហួសកំណត់សងទេ'
   },
   en: {
     // General & App
@@ -525,7 +529,11 @@ const translations = {
     userNotFound: 'ID not found. Please register as a new library member.',
     alreadyCheckedIn: 'Already checked in! Currently active inside library.',
     notCheckedIn: 'No active session found for this ID.',
-    inputRequired: 'Please enter an ID or scan a barcode/QR code.'
+    inputRequired: 'Please enter an ID or scan a barcode/QR code.',
+    overdueBooksTitle: 'Overdue Books',
+    overdueBooksMsg: 'Books borrowed for 10 days or more:',
+    daysOverdue: 'days (overdue)',
+    noOverdueBooks: 'No overdue books'
   }
 };
 

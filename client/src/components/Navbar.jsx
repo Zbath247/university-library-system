@@ -1,15 +1,58 @@
-import React, { useState } from 'react';
-import { LayoutDashboard, QrCode, Smartphone, Globe, Menu, X, ChevronRight, LogOut, ScanLine, Layers } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { LayoutDashboard, QrCode, Smartphone, Globe, Menu, X, ChevronRight, LogOut, ScanLine, Layers, Bell, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { api } from '../services/api';
 
 export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLoggedIn, onLogout }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [overdueBooks, setOverdueBooks] = useState([]);
   const { lang, toggleLanguage, t } = useLanguage();
 
   const handleNavClick = (tab) => {
     setActiveTab(tab);
     setMobileMenuOpen(false);
   };
+
+  useEffect(() => {
+    let interval;
+    const fetchOverdueBooks = async () => {
+      if (!isAdminLoggedIn) {
+        setOverdueBooks([]);
+        return;
+      }
+      try {
+        // Fetch all active sessions
+        const res = await api.getSessions({ status: 'ACTIVE' });
+        if (res && Array.isArray(res)) {
+          const now = Date.now();
+          const overdue = res.filter(session => {
+            // Check if purpose is Book Borrowing
+            if (session.purpose_of_visit !== 'Book Borrowing' && session.purpose_of_visit !== 'ខ្ចីសៀវភៅ') {
+              return false;
+            }
+            const checkInTime = new Date(session.check_in_time).getTime();
+            const diffDays = Math.floor((now - checkInTime) / (1000 * 60 * 60 * 24));
+            // Add diffDays to session for display
+            session.days_overdue = diffDays;
+            return diffDays >= 10;
+          });
+          // Sort by days overdue descending
+          overdue.sort((a, b) => b.days_overdue - a.days_overdue);
+          setOverdueBooks(overdue);
+        }
+      } catch (err) {
+        console.error('Error fetching overdue books:', err);
+      }
+    };
+
+    fetchOverdueBooks();
+    if (isAdminLoggedIn) {
+      interval = setInterval(fetchOverdueBooks, 60000); // Check every minute
+    }
+
+    return () => clearInterval(interval);
+  }, [isAdminLoggedIn]);
 
   return (
     <>
@@ -57,6 +100,62 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
             </div>
           </div>
           
+          {/* Notification Bell (Only for Admin) */}
+          {isAdminLoggedIn && (
+            <div className="absolute right-16 md:right-4 top-1/2 -translate-y-1/2 md:top-6 md:translate-y-0 z-20">
+              <button
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative p-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition focus:outline-none"
+              >
+                <Bell className="w-5 h-5" />
+                {overdueBooks.length > 0 && (
+                  <span className="absolute top-1 right-1 w-3 h-3 bg-rose-500 border-2 border-slate-900 rounded-full animate-pulse"></span>
+                )}
+              </button>
+
+              {/* Notifications Dropdown */}
+              {showNotifications && (
+                <div className="absolute right-0 mt-2 w-80 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden z-50 animate-fade-in">
+                  <div className="p-3 border-b border-slate-800 bg-slate-950 flex items-center justify-between">
+                    <h4 className="text-sm font-bold text-slate-200 flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 text-rose-400" />
+                      {t('overdueBooksTitle') || 'Overdue Books'}
+                    </h4>
+                    <span className="text-xs bg-rose-500/20 text-rose-400 px-2 py-0.5 rounded-full font-bold">
+                      {overdueBooks.length}
+                    </span>
+                  </div>
+                  <div className="max-h-72 overflow-y-auto">
+                    {overdueBooks.length > 0 ? (
+                      <div className="p-2 space-y-1">
+                        {overdueBooks.map(book => (
+                          <div key={book.id} className="p-2 rounded-xl bg-slate-800/50 hover:bg-slate-800 transition">
+                            <div className="flex justify-between items-start">
+                              <span className="text-xs font-bold text-slate-200">{book.user?.full_name || 'Unknown'}</span>
+                              <span className="text-[10px] font-bold text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded-md">
+                                {book.days_overdue} {t('daysOverdue') || 'days overdue'}
+                              </span>
+                            </div>
+                            <div className="text-[10px] text-slate-400 mt-1 flex flex-col gap-0.5">
+                              <span>ID: {book.user?.university_id}</span>
+                              <span className="truncate" title={book.research_topic}>
+                                Book: {book.research_topic || 'N/A'}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="p-6 text-center text-slate-500 text-xs">
+                        {t('noOverdueBooks') || 'No overdue books'}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
         </div>
 
         {/* Desktop Navigation Tabs (Sidebar style) */}
