@@ -200,7 +200,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
 
             {/* Notifications Dropdown */}
             {showNotifications && (
-              <div className="absolute right-0 mt-2 w-80 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden animate-fade-in">
+              <div className="absolute left-0 sm:right-0 sm:left-auto mt-2 w-[calc(100vw-32px)] max-w-sm sm:w-80 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden animate-fade-in origin-top-left sm:origin-top-right">
                 <div className="p-3 border-b border-slate-800 bg-slate-950 flex items-center justify-between">
                   <h4 className="text-sm font-bold text-slate-200 flex items-center gap-2">
                     <AlertCircle className="w-4 h-4 text-rose-400" />
