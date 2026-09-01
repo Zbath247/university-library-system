@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database');
 const ExcelJS = require('exceljs');
+const https = require('https');
 const User = require('../models/User');
 const Session = require('../models/Session');
 const Role = require('../models/Role');
@@ -457,6 +458,74 @@ router.get('/export/excel', async (req, res) => {
       ['E','F','G'].forEach(col => {
         summarySheet.getCell(`${col}${rowIndex}`).style = dataStyle;
       });
+    }
+
+    // Embed Charts from QuickChart
+    try {
+      const fetchImage = (url) => {
+        return new Promise((resolve, reject) => {
+          https.get(url, (res) => {
+            const data = [];
+            res.on('data', chunk => data.push(chunk));
+            res.on('end', () => resolve(Buffer.concat(data)));
+          }).on('error', reject);
+        });
+      };
+
+      // 1. Overview Chart
+      const overviewChartData = {
+        type: 'bar',
+        data: {
+          labels: ['Total Visits', 'Total Borrows', 'Total Returns', 'Male', 'Female'],
+          datasets: [{
+            label: 'Count',
+            data: [totalVisits, totalBorrows, totalReturns, totalMale, totalFemale],
+            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899']
+          }]
+        },
+        options: {
+          title: { display: true, text: 'Library Summary Statistics' },
+          plugins: { datalabels: { display: true, color: 'white' } }
+        }
+      };
+      
+      const overviewChartUrl = `https://quickchart.io/chart?w=500&h=300&c=${encodeURIComponent(JSON.stringify(overviewChartData))}`;
+      const overviewBuffer = await fetchImage(overviewChartUrl);
+      
+      const overviewImageId = workbook.addImage({
+        buffer: overviewBuffer,
+        extension: 'png',
+      });
+      summarySheet.addImage(overviewImageId, 'A10:D25');
+
+      // 2. Top Books Chart
+      if (sortedBooks.length > 0) {
+        const topBooksChartData = {
+          type: 'horizontalBar',
+          data: {
+            labels: sortedBooks.map(b => (b[0].length > 15 ? b[0].substring(0, 15) + '...' : b[0])),
+            datasets: [{
+              label: 'Count',
+              data: sortedBooks.map(b => b[1]),
+              backgroundColor: '#06b6d4'
+            }]
+          },
+          options: {
+            title: { display: true, text: 'Top Books / Topics' }
+          }
+        };
+        
+        const topBooksChartUrl = `https://quickchart.io/chart?w=500&h=300&c=${encodeURIComponent(JSON.stringify(topBooksChartData))}`;
+        const topBooksBuffer = await fetchImage(topBooksChartUrl);
+        
+        const topBooksImageId = workbook.addImage({
+          buffer: topBooksBuffer,
+          extension: 'png',
+        });
+        summarySheet.addImage(topBooksImageId, 'E14:I29');
+      }
+    } catch (chartErr) {
+      console.warn('Failed to generate charts for Excel export', chartErr);
     }
 
     // ==========================================
