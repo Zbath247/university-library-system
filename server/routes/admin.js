@@ -105,6 +105,9 @@ router.delete('/sessions/:sessionId', async (req, res) => {
   try {
     const { sessionId } = req.params;
     const deleted = await db.deleteSession(Number(sessionId));
+    
+    if (req.io) req.io.emit('session_updated');
+
     res.json({
       success: true,
       deleted,
@@ -120,6 +123,9 @@ router.put('/sessions/:sessionId', async (req, res) => {
   try {
     const { sessionId } = req.params;
     const updated = await db.updateSession(Number(sessionId), req.body);
+    
+    if (req.io) req.io.emit('session_updated');
+
     res.json({
       success: true,
       session: updated,
@@ -165,6 +171,9 @@ router.post('/checkout/:sessionId', async (req, res) => {
   try {
     const { sessionId } = req.params;
     const session = await db.checkOutSession(Number(sessionId));
+    
+    if (req.io) req.io.emit('session_updated');
+
     res.json({
       success: true,
       session,
@@ -180,6 +189,9 @@ router.post('/approve-session/:sessionId', async (req, res) => {
   try {
     const { sessionId } = req.params;
     const session = await db.approveSession(Number(sessionId));
+    
+    if (req.io) req.io.emit('session_updated');
+
     res.json({
       success: true,
       session,
@@ -195,6 +207,9 @@ router.post('/reject-session/:sessionId', async (req, res) => {
   try {
     const { sessionId } = req.params;
     const session = await db.rejectSession(Number(sessionId));
+    
+    if (req.io) req.io.emit('session_updated');
+
     res.json({
       success: true,
       session,
@@ -301,6 +316,9 @@ router.post('/reset-sessions', async (req, res) => {
     }
 
     const result = await db.resetSessions();
+    
+    if (req.io) req.io.emit('session_updated');
+
     res.json({
       success: true,
       message: 'ទិន្នន័យវត្តមាន និងការខ្ចី-សងទាំងអស់ត្រូវបាន Reset ជាថ្មីជោគជ័យ!',

@@ -6,6 +6,7 @@ import AdminDashboard from './components/AdminDashboard';
 import AdminLoginModal from './components/AdminLoginModal';
 import { api } from './services/api';
 import { useLanguage } from './context/LanguageContext';
+import { io } from 'socket.io-client';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState(() => {
@@ -69,8 +70,23 @@ export default function App() {
 
   useEffect(() => {
     fetchActiveCount();
-    const interval = setInterval(fetchActiveCount, 15000);
-    return () => clearInterval(interval);
+    
+    // Set up Socket.IO for real-time updates
+    const socketUrl = window.location.hostname === 'localhost' 
+      ? 'http://localhost:3001' 
+      : 'https://university-library-system-1.onrender.com';
+      
+    const socket = io(socketUrl);
+    
+    socket.on('session_updated', () => {
+      fetchActiveCount();
+    });
+
+    const interval = setInterval(fetchActiveCount, 60000);
+    return () => {
+      clearInterval(interval);
+      socket.disconnect();
+    };
   }, []);
 
   return (

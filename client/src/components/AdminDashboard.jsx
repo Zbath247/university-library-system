@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { io } from 'socket.io-client';
 import {
   Users,
   Clock,
@@ -91,8 +92,26 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
 
   useEffect(() => {
     fetchAllData();
-    const interval = setInterval(fetchAllData, 20000);
-    return () => clearInterval(interval);
+    
+    // Set up Socket.IO for real-time updates
+    const socketUrl = window.location.hostname === 'localhost' 
+      ? 'http://localhost:3001' 
+      : 'https://university-library-system-1.onrender.com';
+      
+    const socket = io(socketUrl);
+    
+    socket.on('session_updated', () => {
+      // Immediately fetch new data when someone scans in/out
+      fetchAllData();
+    });
+
+    // Fallback polling just in case (every 1 minute instead of 20s to save load)
+    const interval = setInterval(fetchAllData, 60000);
+    
+    return () => {
+      clearInterval(interval);
+      socket.disconnect();
+    };
   }, []);
 
   const handleForceCheckout = async (sessionId) => {

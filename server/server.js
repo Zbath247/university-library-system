@@ -3,6 +3,8 @@ const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const { Server } = require('socket.io');
+const http = require('http');
 
 dotenv.config({ path: path.join(__dirname, '.env') });
 
@@ -20,7 +22,21 @@ connectDB();
 
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+  }
+});
+
 const PORT = process.env.PORT || 3001;
+
+// Make io accessible to our router
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
 
 // Middleware
 app.use(cors({
@@ -60,7 +76,7 @@ app.get('*', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`====================================================`);
   console.log(`🏛️  University Library Attendance System API Online!`);
   console.log(`📍  Port: http://localhost:${PORT}`);

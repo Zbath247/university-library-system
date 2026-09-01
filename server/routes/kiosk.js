@@ -113,6 +113,11 @@ router.post('/register-and-checkin', async (req, res) => {
     const session = sessionResult.session;
     const isPending = session.status === 'PENDING_APPROVAL';
     
+    // Emit real-time update
+    if (req.io) {
+      req.io.emit('session_updated');
+    }
+    
     return res.json({
       success: true,
       isNewUser: true,
@@ -177,6 +182,11 @@ router.post('/checkin', async (req, res) => {
 
     const isPending = sessionResult.session.status === 'PENDING_APPROVAL';
 
+    // Emit real-time update
+    if (req.io && !sessionResult.alreadyActive) {
+      req.io.emit('session_updated');
+    }
+
     return res.json({
       success: true,
       alreadyActive: false,
@@ -215,6 +225,11 @@ router.post('/checkout', async (req, res) => {
     const hours = Math.floor(completedSession.duration_minutes / 60);
     const mins = completedSession.duration_minutes % 60;
     const durationFormatted = hours > 0 ? `${hours}h ${mins}m` : `${mins} min`;
+
+    // Emit real-time update
+    if (req.io) {
+      req.io.emit('session_updated');
+    }
 
     return res.json({
       success: true,
