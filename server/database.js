@@ -95,9 +95,16 @@ class DatabaseWrapper {
 
   async createUser(payload) {
     const cleanId = String(payload.university_id).trim().toUpperCase();
-    const existing = await User.findOne({ university_id: { $regex: new RegExp('^' + cleanId + '$', 'i') } });
+    let existing = null;
+    
+    if (payload.editing_user_id) {
+      existing = await User.findOne({ id: Number(payload.editing_user_id) });
+    } else {
+      existing = await User.findOne({ university_id: { $regex: new RegExp('^' + cleanId + '$', 'i') } });
+    }
     
     if (existing) {
+      if (payload.university_id) existing.university_id = cleanId;
       if (payload.full_name) existing.full_name = payload.full_name.trim();
       if (payload.email) existing.email = payload.email.trim();
       if (payload.phone !== undefined) existing.phone = payload.phone.trim();

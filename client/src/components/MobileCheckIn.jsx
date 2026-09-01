@@ -59,6 +59,8 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
   });
 
   // Fetch metadata & sync user's active status
+  const [editingUserId, setEditingUserId] = useState(null);
+  
   useEffect(() => {
     let isMounted = true;
     async function loadMeta() {
@@ -246,7 +248,8 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
         department_id: Number(formData.department_id) || (departments[0]?.id || 1),
         purpose_of_visit: formData.purpose_of_visit || selectedPurpose,
         research_field: finalTopic,
-        email: formData.email || `${formData.university_id.toLowerCase().replace(/[^a-z0-9]/g, '')}@university.edu.kh`
+        email: formData.email || `${formData.university_id.toLowerCase().replace(/[^a-z0-9]/g, '')}@university.edu.kh`,
+        editing_user_id: editingUserId
       };
 
       const res = await api.registerAndCheckin(payload);
@@ -256,6 +259,7 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
         setActiveSession(res.session);
         setBookTitle('');
         setAgreementAgreed(false);
+        setEditingUserId(null);
         setMessage({
           type: 'success',
           text: `${t('mobileCheckInSuccess')} ${t('mobileSaveSuccessMsg')}`
@@ -289,6 +293,7 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
         gender: savedUser.gender || 'Male',
         room: savedUser.room || ''
       });
+      setEditingUserId(savedUser.id);
       setSavedUser(null);
       setMessage(null);
     }
@@ -310,6 +315,7 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
     });
     setSavedUser(null);
     setActiveSession(null);
+    setEditingUserId(null);
     setMessage(null);
   };
 
