@@ -315,11 +315,59 @@ export default function AnalyticsCharts({ analytics }) {
     }
   };
 
+  // 6. Book Inventory (Doughnut Chart)
+  const books = analytics.books || { total: 637, outstanding: 0, available: 637 };
+  const bookData = {
+    labels: ['សៀវភៅទំនេរ (Available)', 'កំពុងខ្ចី (Borrowed)'],
+    datasets: [
+      {
+        data: [books.available, books.outstanding],
+        backgroundColor: [
+          '#10b981', // Emerald
+          '#f59e0b', // Amber
+        ],
+        borderWidth: 2,
+        borderColor: '#0f172a'
+      }
+    ]
+  };
+
+  const bookDoughnutOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '70%',
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          color: '#cbd5e1',
+          font: { size: 11, family: 'Battambang, sans-serif' },
+          padding: 12,
+          usePointStyle: true
+        }
+      },
+      tooltip: {
+        backgroundColor: '#0f172a',
+        borderColor: '#334155',
+        borderWidth: 1,
+        padding: 10,
+        cornerRadius: 10,
+        callbacks: {
+          label: (context) => {
+            const val = context.raw;
+            const pct = Math.round((val / books.total) * 100);
+            return ` ${context.label}: ${val} ក្បាល (${pct}%)`;
+          }
+        }
+      }
+    }
+  };
+
   return (
     <div className="space-y-6">
       
       {/* Comprehensive 2x2 Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
         
         {/* 3. Department Share Doughnut */}
         <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-indigo-950/20 border border-slate-800/90 shadow-xl backdrop-blur-xl flex flex-col justify-between">
@@ -373,6 +421,25 @@ export default function AnalyticsCharts({ analytics }) {
                   </div>
                 );
               })}
+            </div>
+          </div>
+        </div>
+
+        {/* 6. Book Inventory Doughnut */}
+        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-emerald-950/20 border border-slate-800/90 shadow-xl backdrop-blur-xl flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800/80">
+              <div className="p-2.5 rounded-2xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/20">
+                <BookOpen className="w-4 h-4" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-white">សន្និធិសៀវភៅ (Book Inventory)</h4>
+                <p className="text-xs text-slate-400">សៀវភៅសរុបមាន {books.total} ក្បាល</p>
+              </div>
+            </div>
+
+            <div className="h-60 w-full relative flex items-center justify-center pt-2">
+              <Doughnut data={bookData} options={bookDoughnutOptions} plugins={[doughnutDataLabelsPlugin]} />
             </div>
           </div>
         </div>

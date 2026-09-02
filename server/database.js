@@ -572,13 +572,25 @@ class DatabaseWrapper {
       monthlyReturns.push(daySessions.filter(s => s.purpose_of_visit === 'Book Return').length);
     }
 
+    let outstandingBooks = 0;
+    allSessions.forEach(s => {
+      if (s.purpose_of_visit === 'Book Borrowing') outstandingBooks++;
+      else if (s.purpose_of_visit === 'Book Return') outstandingBooks--;
+    });
+    outstandingBooks = Math.max(0, outstandingBooks);
+
     return {
       hourly: { labels: hourlyLabels, data: hourlyData },
       departments: departmentDistribution,
       roles: rolesDistribution,
       trend: { labels: trendLabels, data: trendData },
       monthlyTrend: { labels: monthlyLabels, visits: monthlyVisits, borrows: monthlyBorrows, returns: monthlyReturns },
-      topPurposes
+      topPurposes,
+      books: {
+        total: 637,
+        outstanding: outstandingBooks,
+        available: 637 - outstandingBooks
+      }
     };
   }
 
