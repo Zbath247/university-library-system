@@ -60,25 +60,11 @@ export default function SessionsTable({
 
   const { t, tRole, tDept, tPurpose } = useLanguage();
 
-  // Category counts
-  const countAll = safeSessions.length;
-  const countVisit = safeSessions.filter(s => s && s.purpose_of_visit !== 'Book Borrowing' && s.purpose_of_visit !== 'Book Return').length;
-  const countBorrow = safeSessions.filter(s => s && s.purpose_of_visit === 'Book Borrowing').length;
-  const countReturn = safeSessions.filter(s => s && s.purpose_of_visit === 'Book Return').length;
-
   // Client-side filtering for immediate snappy responses
-  const filteredSessions = safeSessions.filter(s => {
+  // 1. Base filter (everything EXCEPT category tab)
+  const baseFilteredSessions = safeSessions.filter(s => {
     if (!s) return false;
     const user = s.user || {};
-
-    // 1. Category segmentation
-    if (categoryTab === 'VISIT') {
-      if (s.purpose_of_visit === 'Book Borrowing' || s.purpose_of_visit === 'Book Return') return false;
-    } else if (categoryTab === 'BORROW') {
-      if (s.purpose_of_visit !== 'Book Borrowing') return false;
-    } else if (categoryTab === 'RETURN') {
-      if (s.purpose_of_visit !== 'Book Return') return false;
-    }
 
     if (statusFilter && s.status !== statusFilter) return false;
     if (roleFilter && String(user.role_id) !== String(roleFilter)) return false;
@@ -101,6 +87,24 @@ export default function SessionsTable({
       const matchPurpose = s.purpose_of_visit && s.purpose_of_visit.toLowerCase().includes(q);
       const matchDept = user.department_name && user.department_name.toLowerCase().includes(q);
       if (!matchName && !matchId && !matchTopic && !matchPurpose && !matchDept) return false;
+    }
+    return true;
+  });
+
+  // Category counts based on applied filters
+  const countAll = baseFilteredSessions.length;
+  const countVisit = baseFilteredSessions.filter(s => s && s.purpose_of_visit !== 'Book Borrowing' && s.purpose_of_visit !== 'Book Return').length;
+  const countBorrow = baseFilteredSessions.filter(s => s && s.purpose_of_visit === 'Book Borrowing').length;
+  const countReturn = baseFilteredSessions.filter(s => s && s.purpose_of_visit === 'Book Return').length;
+
+  // 2. Final filter (apply category tab)
+  const filteredSessions = baseFilteredSessions.filter(s => {
+    if (categoryTab === 'VISIT') {
+      if (s.purpose_of_visit === 'Book Borrowing' || s.purpose_of_visit === 'Book Return') return false;
+    } else if (categoryTab === 'BORROW') {
+      if (s.purpose_of_visit !== 'Book Borrowing') return false;
+    } else if (categoryTab === 'RETURN') {
+      if (s.purpose_of_visit !== 'Book Return') return false;
     }
     return true;
   });
