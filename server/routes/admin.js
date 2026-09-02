@@ -370,6 +370,8 @@ router.get('/export/excel', async (req, res) => {
       const u = s.user || {};
       const gender = u.gender || '';
       
+      totalVisits++;
+      
       if (s.purpose_of_visit === 'Book Borrowing') {
         const topic = s.research_topic || '';
         // Extract quantity from "[ខ្ចី X ក្បាល]" or "[សង X ក្បាល]"
@@ -394,8 +396,6 @@ router.get('/export/excel', async (req, res) => {
           // Subtract the returned quantity to get net outstanding books
           bookCounts[cleanTopic] = (bookCounts[cleanTopic] || 0) - qty;
         }
-      } else {
-        totalVisits++;
       }
 
       if (gender === 'Male' || gender === 'ប្រុស') totalMale++;
