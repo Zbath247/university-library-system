@@ -388,6 +388,12 @@ router.get('/export/excel', async (req, res) => {
         const qtyMatch = topic.match(/^\[(?:ខ្ចី|សង)\s+(\d+)\s+ក្បាល\]/);
         const qty = qtyMatch ? parseInt(qtyMatch[1], 10) : 1;
         totalReturns += qty;
+        
+        const cleanTopic = topic.replace(/^\[(ខ្ចី|សង)(?:\s+\d+\s+ក្បាល)?\]\s*/, '').trim();
+        if (cleanTopic) {
+          // Subtract the returned quantity to get net outstanding books
+          bookCounts[cleanTopic] = (bookCounts[cleanTopic] || 0) - qty;
+        }
       } else {
         totalVisits++;
       }
