@@ -12,7 +12,7 @@ import {
   Legend,
   Filler
 } from 'chart.js';
-import { Bar, Doughnut, Line } from 'react-chartjs-2';
+import { Bar, Doughnut, Line, Pie } from 'react-chartjs-2';
 import { Clock, PieChart, TrendingUp, BookOpen, Layers } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -332,10 +332,9 @@ export default function AnalyticsCharts({ analytics }) {
     ]
   };
 
-  const bookDoughnutOptions = {
+  const bookPieOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    cutout: '70%',
     plugins: {
       legend: {
         position: 'bottom',
@@ -425,7 +424,7 @@ export default function AnalyticsCharts({ analytics }) {
           </div>
         </div>
 
-        {/* 6. Book Inventory Doughnut */}
+        {/* 6. Book Inventory Pie Chart */}
         <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-emerald-950/20 border border-slate-800/90 shadow-xl backdrop-blur-xl flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800/80">
@@ -439,7 +438,7 @@ export default function AnalyticsCharts({ analytics }) {
             </div>
 
             <div className="h-60 w-full relative flex items-center justify-center pt-2">
-              <Doughnut data={bookData} options={bookDoughnutOptions} plugins={[doughnutDataLabelsPlugin]} />
+              <Pie data={bookData} options={bookPieOptions} plugins={[doughnutDataLabelsPlugin]} />
             </div>
           </div>
         </div>
