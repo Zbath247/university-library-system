@@ -239,32 +239,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
               </div>
             )}
           </div>
-          <button
-            onClick={() => setShowDirectoryModal(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700/80 shadow-sm hover:shadow transition active:scale-95"
-          >
-            <Users className="w-4 h-4 text-indigo-400" />
-            <span>{t('btnAcademicDirectory')}</span>
-            <span className="px-1.5 py-0.5 rounded-full bg-slate-900 text-indigo-300 text-[10px] font-mono border border-indigo-500/20">
-              {users.length}
-            </span>
-          </button>
 
-          <button
-            onClick={() => setShowAddUserModal(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 border border-teal-500/30 shadow-sm hover:shadow-teal-500/10 transition active:scale-95"
-          >
-            <PlusCircle className="w-4 h-4 text-teal-400" />
-            <span>{t('btnEnrollMember')}</span>
-          </button>
-
-          <button
-            onClick={fetchAllData}
-            title={t('btnRefreshData')}
-            className="p-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700/80 shadow-sm transition active:scale-95"
-          >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-teal-400' : ''}`} />
-          </button>
         </div>
       </div>
 
