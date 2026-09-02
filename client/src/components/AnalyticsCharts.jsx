@@ -438,7 +438,7 @@ export default function AnalyticsCharts({ analytics }) {
             </div>
 
             <div className="h-60 w-full relative flex items-center justify-center pt-2">
-              <Pie data={bookData} options={bookPieOptions} plugins={[doughnutDataLabelsPlugin]} />
+              <Pie key="book-pie-chart" data={bookData} options={{ ...bookPieOptions, cutout: 0 }} plugins={[doughnutDataLabelsPlugin]} />
             </div>
           </div>
         </div>
