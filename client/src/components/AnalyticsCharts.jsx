@@ -432,7 +432,7 @@ export default function AnalyticsCharts({ analytics }) {
                 <BookOpen className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-white">សន្និធិសៀវភៅ (Book Inventory)</h4>
+                <h4 className="text-sm font-bold text-white">ចំនួនសៀវភៅសរុប</h4>
                 <p className="text-xs text-slate-400">សៀវភៅសរុបមាន {books.total} ក្បាល</p>
               </div>
             </div>
