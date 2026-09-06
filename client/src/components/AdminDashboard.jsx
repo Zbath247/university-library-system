@@ -35,6 +35,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   const { t, tRole, tDept, tPurpose } = useLanguage();
 
@@ -108,8 +109,14 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
     // Fallback polling just in case (every 1 minute instead of 20s to save load)
     const interval = setInterval(fetchAllData, 60000);
     
+    // Real-time clock update
+    const clockInterval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    
     return () => {
       clearInterval(interval);
+      clearInterval(clockInterval);
       socket.disconnect();
     };
   }, []);
@@ -318,13 +325,13 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
                 {t('statPeakHour')}
               </span>
               <div className="p-2.5 rounded-2xl bg-purple-500/15 text-purple-300 border border-purple-500/20 group-hover:scale-110 transition-transform">
-                <TrendingUp className="w-4 h-4" />
+                <Clock className="w-4 h-4" />
               </div>
             </div>
 
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight bg-gradient-to-r from-purple-300 to-indigo-200 bg-clip-text text-transparent">
-                {stats?.peakHour || '14:00 - 15:00'}
+                {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}
               </span>
             </div>
           </div>
