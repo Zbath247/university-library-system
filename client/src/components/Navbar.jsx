@@ -123,7 +123,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
             >
               <Layers className="w-5 h-5 shrink-0" />
               <div className="text-left leading-tight flex-1">
-                <span className="block">កំណត់ត្រាវត្តមានទាំងអស់</span>
+                <span className="block">{t('navLogsTitle') || 'កំណត់ត្រាវត្តមានទាំងអស់'}</span>
                 <span className={`text-[10px] font-normal ${activeTab === 'logs' ? 'text-purple-100' : 'text-slate-500'}`}>Attendance Logs</span>
               </div>
             </button>

@@ -207,7 +207,8 @@ const translations = {
     btnAddMember: 'បន្ថែមសមាជិកថ្មី',
 
     // Admin Dashboard
-    adminNavTitle: 'ក្រាបហ្វិក',
+    adminNavTitle: 'ទិដ្ឋភាពទូទៅ',
+    navLogsTitle: 'កំណត់ត្រាវត្តមានទាំងអស់',
     adminTitle: 'ក្រាបហ្វិក',
     adminSub: 'តាមដានចំនួនវត្តមានផ្ទាល់ ស្ថិតិនៃការស្រាវជ្រាវ និងគ្រប់គ្រងសមាជិកបណ្ណាល័យ',
     logsSub: 'គ្រប់គ្រង និងតាមដានរាល់កំណត់ត្រាចេញចូលទាំងអស់របស់សមាជិក',
@@ -480,6 +481,8 @@ const translations = {
     btnAddMember: 'Add Member',
 
     // Admin Dashboard
+    adminNavTitle: 'Admin Overview',
+    navLogsTitle: 'Attendance Logs',
     adminTitle: 'Attendance & Research Intelligence Dashboard',
     adminSub: 'Live occupancy monitoring, research domain analytics, and attendance history',
     liveMonitorBadge: 'Live Monitor',
