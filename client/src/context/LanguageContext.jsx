@@ -19,7 +19,7 @@ const translations = {
     footerTech: 'ប្រព័ន្ធទិន្នន័យស្រាវជ្រាវទំនើប REST API',
 
     // Navigation
-    navKiosk: 'Scan QR Code',
+    navKiosk: 'ស្កេនកូដ QR',
     navAdmin: 'Admin',
     navMobilePortal: 'បំពេញព័ត៌មាន',
 
