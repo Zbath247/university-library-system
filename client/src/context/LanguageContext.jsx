@@ -256,6 +256,11 @@ const translations = {
     analyticsWeeklyTrendsSub: 'ចំនួនអ្នកចូលប្រើប្រាស់បណ្ណាល័យប្រចាំថ្ងៃ',
     analyticsRoleBreakdown: 'ការបែងចែកតាមតួនាទីសិក្សា',
     analyticsRoleBreakdownSub: 'សមាមាត្រអ្នកចូលរួមស្រាវជ្រាវ',
+    analyticsTotalBooksTitle: 'ចំនួនសៀវភៅសរុប',
+    analyticsTotalBooksSubPrefix: 'សៀវភៅសរុបមាន ',
+    analyticsTotalBooksSubSuffix: ' ក្បាល',
+    analytics30DayActivity: 'ក្រាបហ្វិកសម្រាប់១ខែ (30-Day Activity)',
+    analytics30DayActivitySub: 'ប្រៀបធៀបចំនួនអ្នកចូលស្រាវជ្រាវ ជាមួយនឹងការខ្ចី-សងសៀវភៅ',
 
     // Notifications & Messages
     checkInSuccess: 'កត់ត្រាវត្តមានចូលជោគជ័យ! សូមស្វាគមន៍។',
@@ -522,6 +527,11 @@ const translations = {
     analyticsWeeklyTrendsSub: 'Daily visitor traffic volume',
     analyticsRoleBreakdown: 'Academic Roles Breakdown',
     analyticsRoleBreakdownSub: 'All-time participant ratio',
+    analyticsTotalBooksTitle: 'Total Books',
+    analyticsTotalBooksSubPrefix: 'Total of ',
+    analyticsTotalBooksSubSuffix: ' books available',
+    analytics30DayActivity: '30-Day Activity Trend',
+    analytics30DayActivitySub: 'Comparing library visits vs book borrowing/returning',
 
     // Notifications & Messages
     checkInSuccess: 'Check-in recorded successfully! Welcome.',

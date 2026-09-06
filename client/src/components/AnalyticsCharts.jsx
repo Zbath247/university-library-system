@@ -432,8 +432,10 @@ export default function AnalyticsCharts({ analytics }) {
                 <BookOpen className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-white">ចំនួនសៀវភៅសរុប</h4>
-                <p className="text-xs text-slate-400">សៀវភៅសរុបមាន {books.total} ក្បាល</p>
+                <h4 className="text-sm font-bold text-white">{t('analyticsTotalBooksTitle')}</h4>
+                <p className="text-xs text-slate-400">
+                  {t('analyticsTotalBooksSubPrefix')} {books.total} {t('analyticsTotalBooksSubSuffix')}
+                </p>
               </div>
             </div>
 
@@ -453,8 +455,8 @@ export default function AnalyticsCharts({ analytics }) {
               <TrendingUp className="w-4 h-4" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-white">ក្រាបហ្វិកសម្រាប់១ខែ (30-Day Activity)</h4>
-              <p className="text-xs text-slate-400">ប្រៀបធៀបចំនួនអ្នកចូលស្រាវជ្រាវ ជាមួយនឹងការខ្ចី-សងសៀវភៅ</p>
+              <h4 className="text-sm font-bold text-white">{t('analytics30DayActivity')}</h4>
+              <p className="text-xs text-slate-400">{t('analytics30DayActivitySub')}</p>
             </div>
           </div>
 
