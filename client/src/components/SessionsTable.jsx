@@ -359,7 +359,7 @@ export default function SessionsTable({
                 {t('tabAllLogs')}
               </h3>
               <p className="text-xs text-slate-400">
-                {filteredSessions.length} / {safeSessions.length} កំណត់ត្រា
+                {filteredSessions.length} / {safeSessions.length} {t('recordsCount') || 'កំណត់ត្រា'}
               </p>
             </div>
           </div>
@@ -376,7 +376,7 @@ export default function SessionsTable({
             title="សម្អាតទិន្នន័យទាំងអស់ជា ០ (ទាមទារ Password Admin)"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>សម្អាតទិន្នន័យ (Reset)</span>
+            <span>{t('btnReset') || 'សម្អាតទិន្នន័យ (Reset)'}</span>
           </button>
 
           <div className="flex bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-lg shadow-teal-500/10">
@@ -412,7 +412,7 @@ export default function SessionsTable({
               title="ទាញយកជា CSV (ទិន្នន័យចាស់)"
             >
               <Download className="w-3.5 h-3.5 text-emerald-400" />
-              <span>CSV</span>
+              <span>{t('btnCsv') || 'CSV'}</span>
             </button>
             <button
               onClick={handleExportExcel}
@@ -420,7 +420,7 @@ export default function SessionsTable({
               title="ទាញយកជា Excel ជាមួយនឹងរបាយការណ៍សង្ខេប"
             >
               <Download className="w-3.5 h-3.5 text-green-400" />
-              <span>Excel Summary</span>
+              <span>{t('btnExcel') || 'Excel Summary'}</span>
             </button>
             <button
               onClick={handleExportWord}
@@ -428,7 +428,7 @@ export default function SessionsTable({
               title="ទាញយកជា Word"
             >
               <Download className="w-3.5 h-3.5 text-blue-400" />
-              <span>Word</span>
+              <span>{t('btnWord') || 'Word'}</span>
             </button>
             <button
               onClick={handleExportPDF}
@@ -436,7 +436,7 @@ export default function SessionsTable({
               title="ទាញយកជា PDF"
             >
               <Download className="w-3.5 h-3.5 text-rose-400" />
-              <span>PDF</span>
+              <span>{t('btnPdf') || 'PDF'}</span>
             </button>
           </div>
         </div>
@@ -488,7 +488,7 @@ export default function SessionsTable({
               : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
           }`}
         >
-          <span>📑 ទាំងអស់ (All)</span>
+          <span>📑 {t('catAll') || 'ទាំងអស់ (All)'}</span>
           <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${categoryTab === 'ALL' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-slate-300'}`}>
             {countAll}
           </span>
@@ -504,7 +504,7 @@ export default function SessionsTable({
               : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
           }`}
         >
-          <span>🏛️ ចូលបណ្ណាល័យ</span>
+          <span>🏛️ {t('catVisit') || 'ចូលបណ្ណាល័យ'}</span>
           <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${categoryTab === 'VISIT' ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-300'}`}>
             {countVisit}
           </span>
@@ -520,7 +520,7 @@ export default function SessionsTable({
               : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
           }`}
         >
-          <span>📚 ខ្ចីសៀវភៅ</span>
+          <span>📚 {t('catBorrow') || 'ខ្ចីសៀវភៅ'}</span>
           <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${categoryTab === 'BORROW' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-amber-300'}`}>
             {countBorrow}
           </span>
@@ -536,7 +536,7 @@ export default function SessionsTable({
               : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
           }`}
         >
-          <span>📗 សងសៀវភៅ</span>
+          <span>📗 {t('catReturn') || 'សងសៀវភៅ'}</span>
           <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${categoryTab === 'RETURN' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-emerald-300'}`}>
             {countReturn}
           </span>
@@ -607,19 +607,19 @@ export default function SessionsTable({
             onChange={(e) => setMonthFilter(e.target.value)}
             className="w-full px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
           >
-            <option value="">គ្រប់ខែ (All Months)</option>
-            <option value="1">មករា (Jan)</option>
-            <option value="2">កុម្ភៈ (Feb)</option>
-            <option value="3">មីនា (Mar)</option>
-            <option value="4">មេសា (Apr)</option>
-            <option value="5">ឧសភា (May)</option>
-            <option value="6">មិថុនា (Jun)</option>
-            <option value="7">កក្កដា (Jul)</option>
-            <option value="8">សីហា (Aug)</option>
-            <option value="9">កញ្ញា (Sep)</option>
-            <option value="10">តុលា (Oct)</option>
-            <option value="11">វិច្ឆិកា (Nov)</option>
-            <option value="12">ធ្នូ (Dec)</option>
+            <option value="">{t('filterAllMonths') || 'គ្រប់ខែ (All Months)'}</option>
+            <option value="1">{t('month1') || 'មករា (Jan)'}</option>
+            <option value="2">{t('month2') || 'កុម្ភៈ (Feb)'}</option>
+            <option value="3">{t('month3') || 'មីនា (Mar)'}</option>
+            <option value="4">{t('month4') || 'មេសា (Apr)'}</option>
+            <option value="5">{t('month5') || 'ឧសភា (May)'}</option>
+            <option value="6">{t('month6') || 'មិថុនា (Jun)'}</option>
+            <option value="7">{t('month7') || 'កក្កដា (Jul)'}</option>
+            <option value="8">{t('month8') || 'សីហា (Aug)'}</option>
+            <option value="9">{t('month9') || 'កញ្ញា (Sep)'}</option>
+            <option value="10">{t('month10') || 'តុលា (Oct)'}</option>
+            <option value="11">{t('month11') || 'វិច្ឆិកា (Nov)'}</option>
+            <option value="12">{t('month12') || 'ធ្នូ (Dec)'}</option>
           </select>
         </div>
 
@@ -630,7 +630,7 @@ export default function SessionsTable({
             onChange={(e) => setYearFilter(e.target.value)}
             className="w-full px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
           >
-            <option value="">គ្រប់ឆ្នាំ (All Years)</option>
+            <option value="">{t('filterAllYears') || 'គ្រប់ឆ្នាំ (All Years)'}</option>
             {[...new Set([...safeSessions.map(s => new Date(s.check_in_time).getFullYear()), new Date().getFullYear()])].sort((a,b)=>b-a).map(y => (
               <option key={y} value={y}>{y}</option>
             ))}
