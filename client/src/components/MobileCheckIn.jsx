@@ -29,7 +29,6 @@ import {
   AlertCircle
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import html2canvas from 'html2canvas';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
 import { getCurrentPosition, getDistance } from '../utils/geolocation';
