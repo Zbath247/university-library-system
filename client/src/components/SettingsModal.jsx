@@ -103,9 +103,9 @@ export default function SettingsModal({ isOpen, onClose }) {
       },
       (err) => {
         setIsGettingLocation(false);
-        setError('Unable to retrieve your location.');
+        setError(`Unable to retrieve your location: ${err.message || 'Permission denied or timeout'}`);
       },
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      { enableHighAccuracy: false, timeout: 10000, maximumAge: 0 }
     );
   };
 
