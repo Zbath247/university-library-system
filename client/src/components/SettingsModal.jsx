@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Settings, X, Save, MapPin, RefreshCw } from 'lucide-react';
 import { api } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function SettingsModal({ isOpen, onClose }) {
+  const { t } = useLanguage();
   const [settings, setSettings] = useState({
     isLocationRequired: false,
     libraryLat: 11.5564,
@@ -72,7 +74,7 @@ export default function SettingsModal({ isOpen, onClose }) {
         <div className="flex items-center justify-between p-4 border-b border-slate-800 bg-slate-800/40 rounded-t-2xl">
           <h2 className="text-lg font-bold text-white flex items-center gap-2">
             <Settings className="w-5 h-5 text-teal-400" />
-            System Settings
+            {t('settingsTitle', 'System Settings')}
           </h2>
           <button
             onClick={onClose}
@@ -94,8 +96,8 @@ export default function SettingsModal({ isOpen, onClose }) {
               {/* Toggle Location Requirement */}
               <div className="p-4 bg-slate-800/50 border border-slate-700 rounded-xl flex items-center justify-between">
                 <div>
-                  <h3 className="text-sm font-bold text-slate-200">Require Geolocation</h3>
-                  <p className="text-xs text-slate-400 mt-1">Users must be near the library to check in.</p>
+                  <h3 className="text-sm font-bold text-slate-200">{t('requireLocation', 'Require Geolocation')}</h3>
+                  <p className="text-xs text-slate-400 mt-1">{t('requireLocationSub', 'Users must be near the library to check in.')}</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -114,12 +116,12 @@ export default function SettingsModal({ isOpen, onClose }) {
                 <div className="space-y-4 p-4 bg-slate-800/30 border border-slate-700/50 rounded-xl animate-fade-in">
                   <h3 className="text-sm font-bold text-slate-300 flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-sky-400" />
-                    Library Location
+                    {t('libraryLocation', 'Library Location')}
                   </h3>
                   
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1">
-                      <label className="text-xs text-slate-400 font-medium">Latitude</label>
+                      <label className="text-xs text-slate-400 font-medium">{t('latitude', 'Latitude')}</label>
                       <input
                         type="number"
                         name="libraryLat"
@@ -129,7 +131,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs text-slate-400 font-medium">Longitude</label>
+                      <label className="text-xs text-slate-400 font-medium">{t('longitude', 'Longitude')}</label>
                       <input
                         type="number"
                         name="libraryLng"
@@ -141,7 +143,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-medium">Max Distance (meters)</label>
+                    <label className="text-xs text-slate-400 font-medium">{t('maxDistance', 'Max Distance (meters)')}</label>
                     <input
                       type="number"
                       name="maxDistance"
@@ -149,7 +151,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                       onChange={handleChange}
                       className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500"
                     />
-                    <p className="text-[10px] text-slate-500">How close the user needs to be to check in.</p>
+                    <p className="text-[10px] text-slate-500">{t('maxDistanceSub', 'How close the user needs to be to check in.')}</p>
                   </div>
                 </div>
               )}
@@ -158,20 +160,24 @@ export default function SettingsModal({ isOpen, onClose }) {
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-slate-800 flex justify-end gap-3 bg-slate-800/40 rounded-b-2xl">
+        <div className="p-4 border-t border-slate-800 bg-slate-800/40 rounded-b-2xl flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 bg-slate-700/50 hover:bg-slate-700 transition"
+            className="px-4 py-2 rounded-xl text-sm font-bold text-slate-300 bg-slate-700 hover:bg-slate-600 transition"
           >
-            Close
+            {t('closeBtn', 'Close')}
           </button>
           <button
             onClick={handleSave}
             disabled={saving || loading}
-            className="flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-bold text-slate-950 bg-teal-500 hover:bg-teal-400 transition disabled:opacity-50"
+            className="px-4 py-2 rounded-xl text-sm font-bold text-slate-900 bg-teal-400 hover:bg-teal-300 transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {saving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            Save Changes
+            {saving ? (
+              <RefreshCw className="w-4 h-4 animate-spin" />
+            ) : (
+              <Save className="w-4 h-4" />
+            )}
+            {t('saveChangesBtn', 'Save Changes')}
           </button>
         </div>
 

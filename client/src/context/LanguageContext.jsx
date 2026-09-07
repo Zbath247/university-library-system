@@ -301,7 +301,19 @@ const translations = {
     overdueBooksTitle: 'សៀវភៅហួសកំណត់សង',
     overdueBooksMsg: 'មានសៀវភៅដែលត្រូវបានខ្ចីចាប់ពី ១០ ថ្ងៃឡើងទៅ៖',
     daysOverdue: 'ថ្ងៃ (ហួសកំណត់)',
-    noOverdueBooks: 'មិនមានសៀវភៅហួសកំណត់សងទេ'
+    noOverdueBooks: 'មិនមានសៀវភៅហួសកំណត់សងទេ',
+    
+    // System Settings Modal
+    settingsTitle: 'ការកំណត់ប្រព័ន្ធ',
+    requireLocation: 'ទាមទារទីតាំង (Location)',
+    requireLocationSub: 'អ្នកប្រើប្រាស់ត្រូវតែនៅក្បែរបណ្ណាល័យទើបអាច Check-in បាន។',
+    libraryLocation: 'ទីតាំងបណ្ណាល័យ',
+    latitude: 'រយៈទទឹង (Latitude)',
+    longitude: 'រយៈបណ្ដោយ (Longitude)',
+    maxDistance: 'ចម្ងាយអតិបរមា (គិតជាម៉ែត្រ)',
+    maxDistanceSub: 'តើអ្នកប្រើប្រាស់ត្រូវនៅជិតប៉ុណ្ណាទើបអាច Check-in បាន។',
+    closeBtn: 'បិទ',
+    saveChangesBtn: 'រក្សាទុកការផ្លាស់ប្តូរ'
   },
   en: {
     // General & App
@@ -602,7 +614,19 @@ const translations = {
     overdueBooksTitle: 'Overdue Books',
     overdueBooksMsg: 'Books borrowed for 10 days or more:',
     daysOverdue: 'days (overdue)',
-    noOverdueBooks: 'No overdue books'
+    noOverdueBooks: 'No overdue books',
+
+    // System Settings Modal
+    settingsTitle: 'System Settings',
+    requireLocation: 'Require Geolocation',
+    requireLocationSub: 'Users must be near the library to check in.',
+    libraryLocation: 'Library Location',
+    latitude: 'Latitude',
+    longitude: 'Longitude',
+    maxDistance: 'Max Distance (meters)',
+    maxDistanceSub: 'How close the user needs to be to check in.',
+    closeBtn: 'Close',
+    saveChangesBtn: 'Save Changes'
   }
 };
 
