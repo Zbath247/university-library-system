@@ -2,6 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Settings, X, Save, MapPin, RefreshCw } from 'lucide-react';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import { MapContainer, TileLayer, Marker, Circle, useMapEvents } from 'react-leaflet';
+
+// Fix for default marker icon in react-leaflet
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import iconRetina from 'leaflet/dist/images/marker-icon-2x.png';
+
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconRetinaUrl: iconRetina,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41]
+});
+L.Marker.prototype.options.icon = DefaultIcon;
 
 export default function SettingsModal({ isOpen, onClose }) {
   const { t } = useLanguage();
@@ -11,6 +28,30 @@ export default function SettingsModal({ isOpen, onClose }) {
     libraryLng: 104.9282,
     maxDistance: 500
   });
+
+  const MapClickHandler = () => {
+    useMapEvents({
+      click(e) {
+        setSettings(prev => ({
+          ...prev,
+          libraryLat: e.latlng.lat,
+          libraryLng: e.latlng.lng
+        }));
+      },
+    });
+    return null;
+  };
+
+  const MapUpdater = ({ lat, lng }) => {
+    const map = useMapEvents({});
+    useEffect(() => {
+      if (lat && lng) {
+        map.setView([lat, lng]);
+      }
+    }, [lat, lng, map]);
+    return null;
+  };
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -153,6 +194,31 @@ export default function SettingsModal({ isOpen, onClose }) {
                     />
                     <p className="text-[10px] text-slate-500">{t('maxDistanceSub', 'How close the user needs to be to check in.')}</p>
                   </div>
+                  
+                  {/* Interactive Map */}
+                  <div className="mt-4 rounded-xl overflow-hidden border border-slate-700/80 h-48 relative z-0">
+                    <MapContainer 
+                      center={[settings.libraryLat || 11.5564, settings.libraryLng || 104.9282]} 
+                      zoom={16} 
+                      style={{ height: '100%', width: '100%' }}
+                    >
+                      <TileLayer
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                      />
+                      <MapUpdater lat={settings.libraryLat} lng={settings.libraryLng} />
+                      <MapClickHandler />
+                      <Marker position={[settings.libraryLat || 11.5564, settings.libraryLng || 104.9282]} />
+                      {settings.maxDistance > 0 && (
+                        <Circle
+                          center={[settings.libraryLat || 11.5564, settings.libraryLng || 104.9282]}
+                          pathOptions={{ fillColor: 'blue', color: '#3b82f6' }}
+                          radius={settings.maxDistance}
+                        />
+                      )}
+                    </MapContainer>
+                  </div>
+                  
                 </div>
               )}
             </>
