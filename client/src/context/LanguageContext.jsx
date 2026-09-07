@@ -58,7 +58,7 @@ const translations = {
     triggerRegFlow: 'បើកទម្រង់ចុះឈ្មោះ',
     btnSimulateMobile: '📱 សាកល្បងផ្ទាំងទូរស័ព្ទដៃ (Mobile View)',
     btnManualMode: '⌨️ បញ្ចូលអត្តលេខដោយផ្ទាល់',
-    btnQrScreenMode: '📲 Scan QR Code',
+    btnQrScreenMode: '📲 ស្កេនកូដ QR',
     liveRecentCheckins: 'អ្នកទើបតែបាន Check-In ថ្មីៗផ្ទាល់៖',
     
     // Mobile Web Portal Check-In Experience
