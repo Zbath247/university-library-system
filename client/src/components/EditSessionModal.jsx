@@ -162,7 +162,7 @@ export default function EditSessionModal({
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-extrabold text-white">
-                កែសម្រួលព័ត៌មាន #{session.id}
+                កែសម្រួលព័ត៌មាន {universityId ? `- ${universityId}` : `សមាជិក`}
               </h3>
               <p className="text-[10px] sm:text-xs text-slate-400">
                 Admin Full Access Control • កែសម្រួលព័ត៌មាន User & Session
