@@ -271,7 +271,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                       <LayoutDashboard className="w-4 h-4" />
                     </div>
                     <div className="text-left">
-                      <span className="block">{t('adminTitle') || 'ទិដ្ឋភាពទូទៅ'}</span>
+                      <span className="block">{t('adminNavTitle') || 'ទិដ្ឋភាពទូទៅ'}</span>
                       <span className="text-[10px] text-slate-400 font-normal">Admin Overview</span>
                     </div>
                   </div>
@@ -292,7 +292,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                       <Layers className="w-4 h-4" />
                     </div>
                     <div className="text-left">
-                      <span className="block">កំណត់ត្រាវត្តមានទាំងអស់</span>
+                      <span className="block">{t('navLogsTitle') || 'កំណត់ត្រាវត្តមានទាំងអស់'}</span>
                       <span className="text-[10px] text-slate-400 font-normal">Attendance Logs</span>
                     </div>
                   </div>
