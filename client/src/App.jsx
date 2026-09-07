@@ -4,6 +4,7 @@ import KioskMode from './components/KioskMode';
 import MobileCheckIn from './components/MobileCheckIn';
 import AdminDashboard from './components/AdminDashboard';
 import AdminLoginModal from './components/AdminLoginModal';
+import SettingsModal from './components/SettingsModal';
 import { api } from './services/api';
 import { useLanguage } from './context/LanguageContext';
 import { io } from 'socket.io-client';
@@ -27,6 +28,7 @@ export default function App() {
   });
 
   const [showAdminLoginModal, setShowAdminLoginModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [activeCount, setActiveCount] = useState(0);
   const { t } = useLanguage();
 
@@ -100,6 +102,7 @@ export default function App() {
           activeCount={activeCount}
           isAdminLoggedIn={isAdminLoggedIn}
           onLogout={handleAdminLogout}
+          onOpenSettings={() => setShowSettingsModal(true)}
         />
       )}
 
@@ -154,6 +157,14 @@ export default function App() {
           isOpen={showAdminLoginModal}
           onClose={() => setShowAdminLoginModal(false)}
           onLoginSuccess={handleAdminLoginSuccess}
+        />
+      )}
+
+      {/* Settings Modal (Admin Only) */}
+      {isAdminLoggedIn && showSettingsModal && (
+        <SettingsModal
+          isOpen={showSettingsModal}
+          onClose={() => setShowSettingsModal(false)}
         />
       )}
 

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { LayoutDashboard, QrCode, Smartphone, Globe, Menu, X, ChevronRight, LogOut, ScanLine, Layers } from 'lucide-react';
+import { LayoutDashboard, QrCode, Smartphone, Globe, Menu, X, ChevronRight, LogOut, ScanLine, Layers, MapPin } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { api } from '../services/api';
 
-export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLoggedIn, onLogout }) {
+export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLoggedIn, onLogout, onOpenSettings }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { lang, toggleLanguage, t } = useLanguage();
 
@@ -160,6 +160,23 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                 <span className={lang === 'en' ? 'text-teal-400 font-bold' : 'text-slate-500'}>🇬🇧 EN</span>
               </span>
             </button>
+
+            {/* Admin Settings Button */}
+            {isAdminLoggedIn && onOpenSettings && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenSettings();
+                }}
+                title={t('settingsTitle') || 'System Settings'}
+                className="flex items-center justify-between p-3 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-200 transition-all shadow-sm active:scale-95 w-full"
+              >
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-sky-400" />
+                  <span>{t('settingsTitle') || 'ការកំណត់ប្រព័ន្ធ'}</span>
+                </div>
+              </button>
+            )}
 
             {/* Admin Logout */}
             {isAdminLoggedIn && onLogout && (

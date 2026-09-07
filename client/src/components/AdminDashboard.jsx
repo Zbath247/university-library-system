@@ -195,13 +195,6 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
-          <button
-            onClick={() => setShowSettingsModal(true)}
-            className="flex items-center justify-center p-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700/80 shadow-sm transition active:scale-95 focus:outline-none"
-            title="System Settings"
-          >
-            <Sparkles className="w-4 h-4 text-teal-400" />
-          </button>
           
           {/* Notification Bell */}
           <div className="relative z-50">
