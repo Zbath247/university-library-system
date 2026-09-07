@@ -410,17 +410,21 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
         />
       )}
 
-      <RegistrationModal
-        isOpen={showAddUserModal}
-        onClose={() => setShowAddUserModal(false)}
-        initialId={`ACAD-${Math.floor(1000 + Math.random() * 9000)}`}
-        roles={roles}
-        departments={departments}
-        onSuccess={() => {
-          fetchAllData();
-        }}
-      />
+    <RegistrationModal
+      isOpen={showAddUserModal}
+      onClose={() => setShowAddUserModal(false)}
+      initialId={`ACAD-${Math.floor(1000 + Math.random() * 9000)}`}
+      roles={roles}
+      departments={departments}
+      onSuccess={() => {
+        fetchAllData();
+      }}
+    />
 
-    </div>
-  );
+    {showSettingsModal && (
+      <SettingsModal isOpen={showSettingsModal} onClose={() => setShowSettingsModal(false)} />
+    )}
+
+  </div>
+);
 }
