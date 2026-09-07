@@ -14,6 +14,16 @@ router.get('/meta', async (req, res) => {
   }
 });
 
+// GET /api/kiosk/settings - Public settings
+router.get('/settings', async (req, res) => {
+  try {
+    const settings = await db.getSettings();
+    res.json({ success: true, settings });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // POST /api/kiosk/lookup - Fast scan or ID entry lookup
 router.post('/lookup', async (req, res) => {
   try {

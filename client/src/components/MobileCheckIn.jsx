@@ -17,11 +17,22 @@ import {
   Zap,
   ChevronRight,
   Phone,
-  Edit3
+  Edit3,
+  Book,
+  CheckCircle,
+  Search,
+  Save,
+  Settings,
+  Info,
+  Download,
+  AlertTriangle,
+  AlertCircle
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import html2canvas from 'html2canvas';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
+import { getCurrentPosition, getDistance } from '../utils/geolocation';
 import DigitalPassModal from './DigitalPassModal';
 
 export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, isQRScan = false }) {
@@ -131,6 +142,24 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
     };
   }, [savedUser?.university_id, activeSession?.status, activeSession?.id]);
 
+  const verifyLocation = async () => {
+    const settingsRes = await api.getPublicSettings();
+    if (settingsRes.success && settingsRes.settings?.isLocationRequired) {
+      const { libraryLat, libraryLng, maxDistance } = settingsRes.settings;
+      setMessage({ type: 'info', text: 'កំពុងពិនិត្យទីតាំងរបស់អ្នក... (Checking location...)' });
+      let position;
+      try {
+        position = await getCurrentPosition();
+      } catch (err) {
+        throw new Error('ទីតាំងត្រូវបានបិទ។ សូមបើកទីតាំង (Location) ដើម្បីបន្ត។');
+      }
+      const distance = getDistance(position.coords.latitude, position.coords.longitude, libraryLat, libraryLng);
+      if (distance > maxDistance) {
+        throw new Error(`អ្នកនៅឆ្ងាយពីបណ្ណាល័យពេក! ចម្ងាយបច្ចុប្បន្ន: ${Math.round(distance)}m។`);
+      }
+    }
+  };
+
   // Handle One-Tap Check-In for returning user
   const handleOneTapCheckIn = async () => {
     if (!savedUser) return;
@@ -150,6 +179,8 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
     setLoading(true);
     setMessage(null);
     try {
+      await verifyLocation();
+
       const topic = isBookAction && bookTitle.trim()
         ? `[${selectedPurpose === 'Book Borrowing' ? 'ខ្ចី' : 'សង'} ${bookQty} ក្បាល] ${bookTitle.trim()}`
         : savedUser.research_field || 'Academic Research';
@@ -238,6 +269,8 @@ export default function MobileCheckIn({ onNavigateEntrance, initialUser = null, 
     setLoading(true);
     setMessage(null);
     try {
+      await verifyLocation();
+
       const finalTopic = isBookAction && bookTitle.trim()
         ? `[${formData.purpose_of_visit === 'Book Borrowing' ? 'ខ្ចី' : 'សង'} ${bookQty} ក្បាល] ${bookTitle.trim()}`
         : formData.research_field || 'Academic Research';

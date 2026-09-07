@@ -24,6 +24,7 @@ import SessionsTable from './SessionsTable';
 import DigitalPassModal from './DigitalPassModal';
 import UsersDirectoryModal from './UsersDirectoryModal';
 import RegistrationModal from './RegistrationModal';
+import SettingsModal from './SettingsModal';
 import { playCheckoutChime, playSuccessChime } from '../utils/audioChime';
 
 export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLogout }) {
@@ -44,6 +45,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
   const [selectedPassUser, setSelectedPassUser] = useState(null);
   const [showDirectoryModal, setShowDirectoryModal] = useState(false);
   const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
   const overdueBooks = React.useMemo(() => {
@@ -193,6 +195,14 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
+          <button
+            onClick={() => setShowSettingsModal(true)}
+            className="flex items-center justify-center p-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700/80 shadow-sm transition active:scale-95 focus:outline-none"
+            title="System Settings"
+          >
+            <Sparkles className="w-4 h-4 text-teal-400" />
+          </button>
+          
           {/* Notification Bell */}
           <div className="relative z-50">
             <button

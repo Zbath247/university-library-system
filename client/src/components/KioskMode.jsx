@@ -24,6 +24,7 @@ import QRCode from 'qrcode';
 import { api } from '../services/api';
 import { playBeep, playSuccessChime, playCheckoutChime, playErrorSound } from '../utils/audioChime';
 import { useLanguage } from '../context/LanguageContext';
+import { getCurrentPosition, getDistance } from '../utils/geolocation';
 import WelcomeCard from './WelcomeCard';
 import CheckoutCard from './CheckoutCard';
 import DigitalPassModal from './DigitalPassModal';
@@ -175,6 +176,28 @@ export default function KioskMode({ onSessionUpdate, activeOccupantsCount = 0, o
         if (onSessionUpdate) onSessionUpdate();
         fetchKioskData();
       } else {
+        // --- Geolocation Check Start ---
+        const settingsRes = await api.getPublicSettings();
+        if (settingsRes.success && settingsRes.settings?.isLocationRequired) {
+          const { libraryLat, libraryLng, maxDistance } = settingsRes.settings;
+          setStatusMessage({ type: 'info', text: 'កំពុងពិនិត្យទីតាំងរបស់អ្នក... (Checking location...)' });
+          
+          let position;
+          try {
+            position = await getCurrentPosition();
+          } catch (geoErr) {
+            throw new Error('ទីតាំងត្រូវបានបិទ។ សូមបើកទីតាំង (Location) ដើម្បីបន្ត។ (Please enable location access.)');
+          }
+          
+          const { latitude, longitude } = position.coords;
+          const distance = getDistance(latitude, longitude, libraryLat, libraryLng);
+          
+          if (distance > maxDistance) {
+            throw new Error(`អ្នកនៅឆ្ងាយពីបណ្ណាល័យពេក! ចម្ងាយបច្ចុប្បន្ន: ${Math.round(distance)}m។ (You are too far from the library. Max allowed: ${maxDistance}m)`);
+          }
+        }
+        // --- Geolocation Check End ---
+
         const lookup = await api.lookupId(cleanId);
         
         if (!lookup.registered) {

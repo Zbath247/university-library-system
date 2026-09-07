@@ -2,6 +2,7 @@ const User = require('./models/User');
 const Session = require('./models/Session');
 const Role = require('./models/Role');
 const Department = require('./models/Department');
+const Setting = require('./models/Setting');
 
 class DatabaseWrapper {
   constructor() {
@@ -35,9 +36,48 @@ class DatabaseWrapper {
         { id: 11, name: 'សេដ្ឋកិច្ចនីជីថល', code: 'DE', faculty: 'សេដ្ឋកិច្ច' }
       ]);
     }
+
+    const settingCount = await Setting.countDocuments();
+    if (settingCount === 0) {
+      await Setting.create({
+        id: 'system_settings',
+        isLocationRequired: false,
+        libraryLat: 11.5564,
+        libraryLng: 104.9282,
+        maxDistance: 500
+      });
+    }
   }
 
   // --- QUERY METHODS ---
+
+  async getSettings() {
+    let settings = await Setting.findOne({ id: 'system_settings' }).lean();
+    if (!settings) {
+      settings = await Setting.create({
+        id: 'system_settings',
+        isLocationRequired: false,
+        libraryLat: 11.5564,
+        libraryLng: 104.9282,
+        maxDistance: 500
+      });
+    }
+    return settings;
+  }
+
+  async updateSettings(payload) {
+    let settings = await Setting.findOne({ id: 'system_settings' });
+    if (!settings) {
+      settings = new Setting({ id: 'system_settings' });
+    }
+    if (payload.isLocationRequired !== undefined) settings.isLocationRequired = payload.isLocationRequired;
+    if (payload.libraryLat !== undefined) settings.libraryLat = payload.libraryLat;
+    if (payload.libraryLng !== undefined) settings.libraryLng = payload.libraryLng;
+    if (payload.maxDistance !== undefined) settings.maxDistance = payload.maxDistance;
+    
+    await settings.save();
+    return settings;
+  }
 
   async getRoles() {
     return await Role.find({}).lean();

@@ -100,6 +100,26 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// GET /api/admin/settings - Get system settings
+router.get('/settings', async (req, res) => {
+  try {
+    const settings = await db.getSettings();
+    res.json({ success: true, settings });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// POST /api/admin/settings - Update system settings
+router.post('/settings', async (req, res) => {
+  try {
+    const settings = await db.updateSettings(req.body);
+    res.json({ success: true, settings, message: 'Settings updated successfully.' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // DELETE /api/admin/sessions/:sessionId - Delete attendance session
 router.delete('/sessions/:sessionId', async (req, res) => {
   try {

@@ -10,6 +10,11 @@ export const api = {
     return res.json();
   },
 
+  getPublicSettings: async () => {
+    const res = await fetch(`${API_BASE}/kiosk/settings`);
+    return res.json();
+  },
+
   lookupId: async (universityId) => {
     const res = await fetch(`${API_BASE}/kiosk/lookup`, {
       method: 'POST',
@@ -71,6 +76,20 @@ export const api = {
   },
 
   // Admin endpoints
+  getSettings: async () => {
+    const res = await fetch(`${API_BASE}/admin/settings`);
+    return res.json();
+  },
+
+  updateSettings: async (settingsData) => {
+    const res = await fetch(`${API_BASE}/admin/settings`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(settingsData)
+    });
+    return res.json();
+  },
+
   getAdminStats: async () => {
     const res = await fetch(`${API_BASE}/admin/stats`);
     return res.json();
