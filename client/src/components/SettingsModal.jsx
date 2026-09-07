@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, X, Save, MapPin, RefreshCw, Search } from 'lucide-react';
+import { Settings, X, Save, MapPin, RefreshCw, Search, Navigation } from 'lucide-react';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
 import 'leaflet/dist/leaflet.css';
@@ -81,6 +81,32 @@ export default function SettingsModal({ isOpen, onClose }) {
     } finally {
       setIsSearching(false);
     }
+  };
+
+  const [isGettingLocation, setIsGettingLocation] = useState(false);
+  const handleGetCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setError('Geolocation is not supported by your browser.');
+      return;
+    }
+    
+    setIsGettingLocation(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setSettings(prev => ({
+          ...prev,
+          libraryLat: position.coords.latitude,
+          libraryLng: position.coords.longitude
+        }));
+        setIsGettingLocation(false);
+        setError('');
+      },
+      (err) => {
+        setIsGettingLocation(false);
+        setError('Unable to retrieve your location.');
+      },
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+    );
   };
 
   useEffect(() => {
@@ -236,8 +262,17 @@ export default function SettingsModal({ isOpen, onClose }) {
                         onClick={handleSearchLocation}
                         disabled={isSearching}
                         className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-white transition disabled:opacity-50"
+                        title="Search"
                       >
                         {isSearching ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+                      </button>
+                      <button
+                        onClick={handleGetCurrentLocation}
+                        disabled={isGettingLocation}
+                        className="px-3 py-2 bg-teal-500/20 hover:bg-teal-500/30 text-teal-400 rounded-lg transition disabled:opacity-50 border border-teal-500/30"
+                        title="Get Current Location"
+                      >
+                        {isGettingLocation ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Navigation className="w-4 h-4" />}
                       </button>
                     </div>
                     
