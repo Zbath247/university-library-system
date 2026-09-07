@@ -264,6 +264,8 @@ export default function SettingsModal({ isOpen, onClose }) {
                     </MapContainer>
                   </div>
                   
+                  </div>
+                  
                 </div>
               )}
             </>
