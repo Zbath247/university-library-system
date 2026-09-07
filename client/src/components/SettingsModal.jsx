@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, X, Save, MapPin, RefreshCw } from 'lucide-react';
+import { Settings, X, Save, MapPin, RefreshCw, Search } from 'lucide-react';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
 import 'leaflet/dist/leaflet.css';
@@ -56,6 +56,32 @@ export default function SettingsModal({ isOpen, onClose }) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+
+  const handleSearchLocation = async () => {
+    if (!searchQuery.trim()) return;
+    try {
+      setIsSearching(true);
+      setError('');
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}`);
+      const data = await response.json();
+      if (data && data.length > 0) {
+        const result = data[0];
+        setSettings(prev => ({
+          ...prev,
+          libraryLat: parseFloat(result.lat),
+          libraryLng: parseFloat(result.lon)
+        }));
+      } else {
+        setError('Location not found. Please try a different search term.');
+      }
+    } catch (err) {
+      setError('Error searching location.');
+    } finally {
+      setIsSearching(false);
+    }
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -195,8 +221,27 @@ export default function SettingsModal({ isOpen, onClose }) {
                     <p className="text-[10px] text-slate-500">{t('maxDistanceSub', 'How close the user needs to be to check in.')}</p>
                   </div>
                   
-                  {/* Interactive Map */}
-                  <div className="mt-4 rounded-xl overflow-hidden border border-slate-700/80 h-48 relative z-0">
+                  {/* Location Search & Interactive Map */}
+                  <div className="mt-4 pt-4 border-t border-slate-700/50">
+                    <div className="flex gap-2 mb-3">
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSearchLocation()}
+                        placeholder="ស្វែងរកទីតាំង (Search Location)..."
+                        className="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500"
+                      />
+                      <button
+                        onClick={handleSearchLocation}
+                        disabled={isSearching}
+                        className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-white transition disabled:opacity-50"
+                      >
+                        {isSearching ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+                      </button>
+                    </div>
+                    
+                    <div className="rounded-xl overflow-hidden border border-slate-700/80 h-48 relative z-0">
                     <MapContainer 
                       center={[settings.libraryLat || 11.5564, settings.libraryLng || 104.9282]} 
                       zoom={16} 
