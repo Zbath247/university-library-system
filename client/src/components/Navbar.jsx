@@ -168,12 +168,12 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                   setMobileMenuOpen(false);
                   onOpenSettings();
                 }}
-                title={t('settingsTitle') || 'System Settings'}
+                title={lang === 'km' ? 'ទីតាំង' : 'Location'}
                 className="flex items-center justify-between p-3 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-200 transition-all shadow-sm active:scale-95 w-full"
               >
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-sky-400" />
-                  <span>{t('settingsTitle') || 'ការកំណត់ប្រព័ន្ធ'}</span>
+                  <span>{lang === 'km' ? 'ទីតាំង' : 'Location'}</span>
                 </div>
               </button>
             )}
@@ -354,6 +354,23 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
 
             {/* Drawer Footer */}
             <div className="p-4 border-t border-slate-800 flex flex-col gap-4 mt-auto shrink-0">
+              {/* Admin Settings Button in Drawer */}
+              {isAdminLoggedIn && onOpenSettings && (
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenSettings();
+                  }}
+                  title={lang === 'km' ? 'ទីតាំង' : 'Location'}
+                  className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-200 transition-all shadow-sm active:scale-95 w-full"
+                >
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-sky-400" />
+                    <span>{lang === 'km' ? 'ទីតាំង' : 'Location'}</span>
+                  </div>
+                </button>
+              )}
+
               {/* Admin Logout in Drawer */}
               {isAdminLoggedIn && onLogout && (
                 <button
