@@ -476,13 +476,13 @@ export default function SessionsTable({
       )}
 
       {/* Segmented Category Filter Tabs */}
-      <div className="px-6 py-3 bg-slate-950/80 border-b border-slate-800/80 flex flex-wrap items-center gap-2">
+      <div className="px-6 py-3 bg-slate-950/80 border-b border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-3">
         
         {/* All */}
         <button
           type="button"
           onClick={() => setCategoryTab('ALL')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-between gap-2 ${
             categoryTab === 'ALL'
               ? 'bg-teal-500 text-slate-950 shadow-md shadow-teal-500/20'
               : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
@@ -498,7 +498,7 @@ export default function SessionsTable({
         <button
           type="button"
           onClick={() => setCategoryTab('VISIT')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-between gap-2 ${
             categoryTab === 'VISIT'
               ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
               : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
@@ -514,7 +514,7 @@ export default function SessionsTable({
         <button
           type="button"
           onClick={() => setCategoryTab('BORROW')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-between gap-2 ${
             categoryTab === 'BORROW'
               ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
               : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
@@ -530,7 +530,7 @@ export default function SessionsTable({
         <button
           type="button"
           onClick={() => setCategoryTab('RETURN')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-between gap-2 ${
             categoryTab === 'RETURN'
               ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
               : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
