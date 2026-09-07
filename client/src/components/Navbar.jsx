@@ -333,6 +333,10 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                 </button>
               </div>
 
+            </div>
+
+            {/* Drawer Footer */}
+            <div className="p-4 border-t border-slate-800 flex flex-col gap-4 mt-auto shrink-0">
               {/* Admin Logout in Drawer */}
               {isAdminLoggedIn && onLogout && (
                 <button
@@ -340,18 +344,16 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                     setMobileMenuOpen(false);
                     onLogout();
                   }}
-                  className="mt-3 w-full flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/25 text-xs font-bold text-rose-400 hover:bg-rose-500/20 transition-all shadow-sm active:scale-95"
+                  className="w-full flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/25 text-xs font-bold text-rose-400 hover:bg-rose-500/20 transition-all shadow-sm active:scale-95"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Logout</span>
                 </button>
               )}
-
-            </div>
-
-            {/* Drawer Footer */}
-            <div className="pt-4 border-t border-slate-800 text-center text-[11px] text-slate-500">
-              <span>Digital University of Cambodia</span>
+              
+              <div className="text-center text-[11px] text-slate-500">
+                <span>Digital University of Cambodia</span>
+              </div>
             </div>
 
           </div>
