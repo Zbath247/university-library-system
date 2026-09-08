@@ -190,7 +190,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                  </div>
                  {t('settingsTitle', 'System Settings')}
                </h2>
-               <p className="text-xs sm:text-sm text-slate-400 mt-2">Configure global variables, application limits, and system-wide behaviors.</p>
+               <p className="text-xs sm:text-sm text-slate-400 mt-2">{t('settingsSub', 'Configure global variables, application limits, and system-wide behaviors.')}</p>
              </div>
              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">
                <X className="w-6 h-6" />
@@ -203,16 +203,12 @@ export default function SettingsModal({ isOpen, onClose }) {
                 onClick={() => setActiveTab('borrowing')}
                 className={`whitespace-nowrap px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2 ${activeTab === 'borrowing' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'text-slate-400 bg-slate-800/30'}`}
               >
-                 <Calendar className="w-4 h-4" />
-                 Borrowing Rules
-              </button>
+                 <Calendar className="w-4 h-4" />{t('settingsBorrowingRules', 'Borrowing Rules')}</button>
               <button 
                 onClick={() => setActiveTab('location')}
                 className={`whitespace-nowrap px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2 ${activeTab === 'location' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'text-slate-400 bg-slate-800/30'}`}
               >
-                 <MapPin className="w-4 h-4" />
-                 Location Setup
-              </button>
+                 <MapPin className="w-4 h-4" />{t('settingsLocationSetup', 'Location Setup')}</button>
            </div>
         </div>
 
@@ -223,25 +219,19 @@ export default function SettingsModal({ isOpen, onClose }) {
                 onClick={() => setActiveTab('borrowing')}
                 className={`w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-bold transition ${activeTab === 'borrowing' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border border-transparent'}`}
               >
-                 <Calendar className="w-4 h-4" />
-                 Borrowing Rules
-              </button>
+                 <Calendar className="w-4 h-4" />{t('settingsBorrowingRules', 'Borrowing Rules')}</button>
               <button 
                 onClick={() => setActiveTab('location')}
                 className={`w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-bold transition ${activeTab === 'location' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border border-transparent'}`}
               >
-                 <MapPin className="w-4 h-4" />
-                 Location Setup
-              </button>
+                 <MapPin className="w-4 h-4" />{t('settingsLocationSetup', 'Location Setup')}</button>
            </div>
 
            {/* Content */}
            <div className="flex-1 overflow-y-auto p-6 sm:p-8">
              {loading ? (
                <div className="py-12 text-center text-slate-500 animate-pulse flex flex-col items-center justify-center h-full">
-                 <RefreshCw className="w-8 h-8 animate-spin mb-4 text-indigo-500/50" />
-                 Loading configurations...
-               </div>
+                 <RefreshCw className="w-8 h-8 animate-spin mb-4 text-indigo-500/50" />{t('settingsLoading', 'Loading configurations...')}</div>
              ) : (
                <div className="max-w-2xl animate-fade-in space-y-6">
                  {error && <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl text-rose-400 text-sm font-medium">{error}</div>}
@@ -250,13 +240,11 @@ export default function SettingsModal({ isOpen, onClose }) {
                  {activeTab === 'borrowing' && (
                     <div className="bg-[#12161F] border border-slate-800/80 rounded-2xl p-6 shadow-sm">
                        <h3 className="text-base font-bold text-slate-200 flex items-center gap-2 mb-1">
-                         <Calendar className="w-5 h-5 text-indigo-400" />
-                         Borrowing Durations
-                       </h3>
-                       <p className="text-sm text-slate-400 mb-8">Select the allowed time students can borrow physical books.</p>
+                         <Calendar className="w-5 h-5 text-indigo-400" />{t('settingsBorrowingDurations', 'Borrowing Durations')}</h3>
+                       <p className="text-sm text-slate-400 mb-8">{t('settingsBorrowingDesc', 'Select the allowed time students can borrow physical books.')}</p>
                        
                        <div className="space-y-4">
-                          <label className="text-xs font-bold tracking-widest text-slate-500 uppercase">Configured Options</label>
+                          <label className="text-xs font-bold tracking-widest text-slate-500 uppercase">{t('settingsConfiguredOptions', 'Configured Options')}</label>
                           <div className="flex flex-wrap gap-3">
                             {presetDays.map(days => {
                               // If a custom day is currently selected that is not in the preset list, 
@@ -272,7 +260,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                                       : 'bg-slate-800/40 border-slate-700/50 text-slate-300 hover:bg-slate-700 hover:border-slate-600'
                                   }`}
                                 >
-                                  {days} Days
+                                  {days} {t('settingsDays', 'Days')}
                                 </button>
                               );
                             })}
@@ -282,7 +270,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                                 <button
                                   className="px-4 py-2.5 rounded-xl text-sm font-bold transition border bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/20"
                                 >
-                                  {settings.maxBorrowDays} Days
+                                  {settings.maxBorrowDays} {t('settingsDays', 'Days')}
                                 </button>
                             )}
                           </div>
@@ -297,16 +285,12 @@ export default function SettingsModal({ isOpen, onClose }) {
                                placeholder="e.g. 7"
                                className="w-24 bg-[#0B0E14] border border-slate-700 rounded-xl px-4 py-2.5 text-sm font-bold text-white focus:outline-none focus:border-indigo-500"
                              />
-                             <div className="bg-[#0B0E14] border border-slate-700 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-400 select-none flex-1 max-w-[120px]">
-                               Days
-                             </div>
+                             <div className="bg-[#0B0E14] border border-slate-700 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-400 select-none flex-1 max-w-[120px]">{t('settingsDays', 'Days')}</div>
                              <button
                                onClick={handleCustomSubmit}
                                disabled={!customDays}
                                className="px-6 py-2.5 bg-indigo-500 hover:bg-indigo-400 disabled:bg-slate-800 disabled:text-slate-500 text-white text-sm font-bold rounded-xl transition"
-                             >
-                               Add
-                             </button>
+                             >{t('settingsAdd', 'Add')}</button>
                           </div>
                        </div>
                     </div>
@@ -316,8 +300,8 @@ export default function SettingsModal({ isOpen, onClose }) {
                    <div className="space-y-6">
                      <div className="bg-[#12161F] border border-slate-800/80 rounded-2xl p-6 shadow-sm flex items-start justify-between gap-4">
                        <div>
-                         <h3 className="text-base font-bold text-slate-200">Require Geolocation</h3>
-                         <p className="text-sm text-slate-400 mt-1">Users must be near the library coordinates to successfully check in.</p>
+                         <h3 className="text-base font-bold text-slate-200">{t('requireLocation', 'Require Geolocation')}</h3>
+                         <p className="text-sm text-slate-400 mt-1">{t('requireLocationSub', 'Users must be near the library coordinates to successfully check in.')}</p>
                        </div>
                        <label className="relative inline-flex items-center cursor-pointer shrink-0 mt-1">
                          <input
@@ -334,13 +318,11 @@ export default function SettingsModal({ isOpen, onClose }) {
                      {settings.isLocationRequired && (
                        <div className="bg-[#12161F] border border-slate-800/80 rounded-2xl p-6 shadow-sm animate-fade-in space-y-6">
                           <h3 className="text-base font-bold text-slate-200 flex items-center gap-2">
-                             <MapPin className="w-5 h-5 text-indigo-400" />
-                             Library Geofence Settings
-                          </h3>
+                             <MapPin className="w-5 h-5 text-indigo-400" />{t('settingsGeofence', 'Library Geofence Settings')}</h3>
                           
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-1.5">
-                              <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Latitude</label>
+                              <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">{t('latitude', 'Latitude')}</label>
                               <input
                                 type="number"
                                 name="libraryLat"
@@ -350,7 +332,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                               />
                             </div>
                             <div className="space-y-1.5">
-                              <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Longitude</label>
+                              <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">{t('longitude', 'Longitude')}</label>
                               <input
                                 type="number"
                                 name="libraryLng"
@@ -362,7 +344,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                           </div>
 
                           <div className="space-y-1.5">
-                            <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Max Allowed Distance (Meters)</label>
+                            <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">{t('maxDistance', 'Max Allowed Distance (Meters)')}</label>
                             <input
                               type="number"
                               name="maxDistance"
@@ -374,14 +356,14 @@ export default function SettingsModal({ isOpen, onClose }) {
 
                           {/* Map Preview */}
                           <div className="pt-4 border-t border-slate-800/60">
-                             <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Map Preview & Search</label>
+                             <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">{t('settingsMapPreview', 'Map Preview & Search')}</label>
                              <div className="flex gap-2 mb-3">
                                 <input
                                   type="text"
                                   value={searchQuery}
                                   onChange={(e) => setSearchQuery(e.target.value)}
                                   onKeyDown={(e) => e.key === 'Enter' && handleSearchLocation()}
-                                  placeholder="Search location..."
+                                  placeholder={t('settingsSearchLoc', 'Search location...')}
                                   className="flex-1 bg-[#0B0E14] border border-slate-700 rounded-xl px-4 py-2 text-sm font-medium text-white focus:outline-none focus:border-indigo-500"
                                 />
                                 <button

@@ -319,7 +319,21 @@ const translations = {
     longitude: 'រយៈបណ្ដោយ (Longitude)',
     maxDistance: 'ចម្ងាយអតិបរមា (គិតជាម៉ែត្រ)',
     maxDistanceSub: 'តើអ្នកប្រើប្រាស់ត្រូវនៅជិតប៉ុណ្ណាទើបអាច Check-in បាន។',
+    
+    settingsSub: 'កំណត់អថេរប្រព័ន្ធ ទំហំកំណត់កម្មវិធី និងសកម្មភាពទូទៅ។',
+    settingsBorrowingRules: 'ច្បាប់នៃការខ្ចី',
+    settingsLocationSetup: 'ការកំណត់ទីតាំង',
+    settingsBorrowingDurations: 'រយៈពេលនៃការខ្ចី',
+    settingsBorrowingDesc: 'ជ្រើសរើសរយៈពេលអនុញ្ញាតឱ្យនិស្សិតខ្ចីសៀវភៅ។',
+    settingsConfiguredOptions: 'ជម្រើសដែលបានកំណត់',
+    settingsDays: 'ថ្ងៃ',
+    settingsAdd: 'បន្ថែម',
+    settingsGeofence: 'ការកំណត់តំបន់បណ្ណាល័យ (Geofence)',
+    settingsMapPreview: 'ផែនទី និងទីតាំង',
+    settingsSearchLoc: 'ស្វែងរកទីតាំង...',
+    settingsLoading: 'កំពុងទាញយកទិន្នន័យ...',
     closeBtn: 'បិទ',
+
     saveChangesBtn: 'រក្សាទុកការផ្លាស់ប្តូរ'
   },
   en: {
@@ -622,6 +636,32 @@ const translations = {
     // Notifications & Messages
     checkInSuccess: 'Check-in recorded successfully! Welcome.',
     checkOutSuccess: 'Check-out successful! Thank you.',
+
+    // System Settings Modal
+
+    settingsTitle: 'System Settings',
+    requireLocation: 'Require Location',
+    requireLocationSub: 'Users must be near the library coordinates to successfully check in.',
+    libraryLocation: 'Library Location',
+    latitude: 'Latitude',
+    longitude: 'Longitude',
+    maxDistance: 'Max Allowed Distance (Meters)',
+    maxDistanceSub: 'How close a user must be to check in.',
+    settingsSub: 'Configure global variables, application limits, and system-wide behaviors.',
+    settingsBorrowingRules: 'Borrowing Rules',
+    settingsLocationSetup: 'Location Setup',
+    settingsBorrowingDurations: 'Borrowing Durations',
+    settingsBorrowingDesc: 'Select the allowed time students can borrow physical books.',
+    settingsConfiguredOptions: 'Configured Options',
+    settingsDays: 'Days',
+    settingsAdd: 'Add',
+    settingsGeofence: 'Library Geofence Settings',
+    settingsMapPreview: 'Map Preview & Search',
+    settingsSearchLoc: 'Search location...',
+    settingsLoading: 'Loading configurations...',
+    closeBtn: 'Cancel',
+    saveChangesBtn: 'Save Changes'
+
     userNotFound: 'ID not found. Please register as a new library member.',
     alreadyCheckedIn: 'Already checked in! Currently active inside library.',
     notCheckedIn: 'No active session found for this ID.',
