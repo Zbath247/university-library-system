@@ -320,12 +320,12 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
           </div>
         </div>
 
-        {/* Card 3: Total Registered Members */}
+        {/* Card 3: Total Library Visits */}
         <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-purple-950/20 border border-purple-500/25 shadow-xl backdrop-blur-xl flex flex-col justify-between hover:border-purple-500/40 transition-all duration-300 group">
           <div>
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold uppercase tracking-wider text-purple-400">
-                {t('statTotalMembers') || 'ចំនួនសមាជិកសរុប'}
+                ចំនួនចូលបណ្ណាល័យជាក់ស្តែងសរុបមក
               </span>
               <div className="p-2.5 rounded-2xl bg-purple-500/15 text-purple-300 border border-purple-500/20 group-hover:scale-110 transition-transform">
                 <Users className="w-4 h-4" />
@@ -334,13 +334,13 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
 
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-4xl sm:text-5xl font-black text-white font-mono tracking-tight bg-gradient-to-r from-purple-300 to-indigo-200 bg-clip-text text-transparent">
-                {stats?.totalRegisteredUsers ?? 0}
+                {stats?.totalAllTimeSessions ?? 0}
               </span>
             </div>
           </div>
 
           <p className="text-[11px] text-slate-400 mt-5 pt-3 border-t border-slate-800/80 truncate">
-            សមាជិកទាំងអស់ដែលបានចុះឈ្មោះក្នុងប្រព័ន្ធ
+            ចំនួនដងសរុបដែលបានកត់ត្រាក្នុងប្រព័ន្ធ
           </p>
         </div>
 
