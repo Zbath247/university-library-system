@@ -64,23 +64,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
         <div className="hidden md:flex flex-col flex-1 px-4 pb-6 overflow-y-auto w-full">
           
           <nav className="flex flex-col gap-2 w-full mt-4">
-            {/* 1. Scan QR Code */}
-            <button
-              onClick={() => handleNavClick('kiosk')}
-              className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
-                activeTab === 'kiosk'
-                  ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 font-black shadow-lg shadow-teal-500/25 scale-[1.02]'
-                  : 'bg-slate-900/40 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800/50'
-              }`}
-            >
-              <QrCode className="w-5 h-5 shrink-0" />
-              <div className="text-left leading-tight flex-1">
-                <span className="block">{t('navKiosk')}</span>
-                <span className={`text-[10px] font-normal ${activeTab === 'kiosk' ? 'text-slate-800' : 'text-slate-500'}`}>Entrance Scanner</span>
-              </div>
-            </button>
-
-            {/* 3. Admin Overview */}
+            {/* 1. Admin Overview */}
             <button
               onClick={() => handleNavClick('admin')}
               className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
@@ -93,6 +77,38 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               <div className="text-left leading-tight flex-1">
                 <span className="block">{t('adminNavTitle') || 'ទិដ្ឋភាពទូទៅ'}</span>
                 <span className={`text-[10px] font-normal ${activeTab === 'admin' ? 'text-amber-100' : 'text-slate-500'}`}>Admin Overview</span>
+              </div>
+            </button>
+
+            {/* 2. ចូលបណ្ណាល័យ (Library Visits) */}
+            <button
+              onClick={() => handleNavClick('library_visits')}
+              className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
+                activeTab === 'library_visits'
+                  ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-black shadow-lg shadow-blue-500/25 scale-[1.02]'
+                  : 'bg-slate-900/40 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800/50'
+              }`}
+            >
+              <Building className="w-5 h-5 shrink-0" />
+              <div className="text-left leading-tight flex-1">
+                <span className="block">{t('catVisit') || 'ចូលបណ្ណាល័យ'}</span>
+                <span className={`text-[10px] font-normal ${activeTab === 'library_visits' ? 'text-blue-100' : 'text-slate-500'}`}>Library Visits</span>
+              </div>
+            </button>
+
+            {/* 3. កំណត់ត្រាខ្ចីនឹងសង (Library Transactions) */}
+            <button
+              onClick={() => handleNavClick('library_transactions')}
+              className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
+                activeTab === 'library_transactions'
+                  ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black shadow-lg shadow-emerald-500/25 scale-[1.02]'
+                  : 'bg-slate-900/40 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800/50'
+              }`}
+            >
+              <BookOpen className="w-5 h-5 shrink-0" />
+              <div className="text-left leading-tight flex-1">
+                <span className="block">{t('navLibraryTransactions') || 'កំណត់ត្រាខ្ចីនឹងសង'}</span>
+                <span className={`text-[10px] font-normal ${activeTab === 'library_transactions' ? 'text-emerald-100' : 'text-slate-500'}`}>Borrow & Return Logs</span>
               </div>
             </button>
 
@@ -112,39 +128,23 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               </div>
             </button>
 
-            {/* 5. ចូលបណ្ណាល័យ (Library Visits) */}
+            {/* 5. Scan QR Code */}
             <button
-              onClick={() => handleNavClick('library_visits')}
+              onClick={() => handleNavClick('kiosk')}
               className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
-                activeTab === 'library_visits'
-                  ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-black shadow-lg shadow-blue-500/25 scale-[1.02]'
+                activeTab === 'kiosk'
+                  ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 font-black shadow-lg shadow-teal-500/25 scale-[1.02]'
                   : 'bg-slate-900/40 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800/50'
               }`}
             >
-              <Building className="w-5 h-5 shrink-0" />
+              <QrCode className="w-5 h-5 shrink-0" />
               <div className="text-left leading-tight flex-1">
-                <span className="block">{t('catVisit') || 'ចូលបណ្ណាល័យ'}</span>
-                <span className={`text-[10px] font-normal ${activeTab === 'library_visits' ? 'text-blue-100' : 'text-slate-500'}`}>Library Visits</span>
+                <span className="block">{t('navKiosk')}</span>
+                <span className={`text-[10px] font-normal ${activeTab === 'kiosk' ? 'text-slate-800' : 'text-slate-500'}`}>Entrance Scanner</span>
               </div>
             </button>
 
-            {/* 6. កំណត់ត្រាខ្ចីនឹងសង (Library Transactions) */}
-            <button
-              onClick={() => handleNavClick('library_transactions')}
-              className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
-                activeTab === 'library_transactions'
-                  ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black shadow-lg shadow-emerald-500/25 scale-[1.02]'
-                  : 'bg-slate-900/40 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800/50'
-              }`}
-            >
-              <BookOpen className="w-5 h-5 shrink-0" />
-              <div className="text-left leading-tight flex-1">
-                <span className="block">{t('navLibraryTransactions') || 'កំណត់ត្រាខ្ចីនឹងសង'}</span>
-                <span className={`text-[10px] font-normal ${activeTab === 'library_transactions' ? 'text-emerald-100' : 'text-slate-500'}`}>Borrow & Return Logs</span>
-              </div>
-            </button>
-
-            {/* 7. បំពេញព័ត៌មាន (Mobile Portal) */}
+            {/* 6. បំពេញព័ត៌មាន (Mobile Portal) */}
             <button
               onClick={() => handleNavClick('mobile')}
               className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
@@ -264,28 +264,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               {/* Navigation Items */}
               <div className="space-y-2">
 
-                {/* 1. Scan QR Code */}
-                <button
-                  onClick={() => handleNavClick('kiosk')}
-                  className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
-                    activeTab === 'kiosk'
-                      ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 shadow-lg shadow-teal-500/20'
-                      : 'bg-slate-950/60 hover:bg-slate-800 text-slate-300 border border-slate-800'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-xl bg-teal-500/20 text-teal-300">
-                      <ScanLine className="w-4 h-4" />
-                    </div>
-                    <div className="text-left">
-                      <span className="block">{t('navKiosk')}</span>
-                      <span className="text-[10px] text-slate-400 font-normal">Entrance Scanner</span>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-slate-500" />
-                </button>
-
-                {/* 3. Admin Overview */}
+                {/* 1. Admin Overview */}
                 <button
                   onClick={() => handleNavClick('admin')}
                   className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
@@ -301,6 +280,48 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                     <div className="text-left">
                       <span className="block">{t('adminNavTitle') || 'ទិដ្ឋភាពទូទៅ'}</span>
                       <span className="text-[10px] text-slate-400 font-normal">Admin Overview</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-500" />
+                </button>
+
+                {/* 2. ចូលបណ្ណាល័យ (Library Visits) */}
+                <button
+                  onClick={() => handleNavClick('library_visits')}
+                  className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
+                    activeTab === 'library_visits'
+                      ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/20'
+                      : 'bg-slate-950/60 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-blue-500/20 text-blue-300">
+                      <Building className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <span className="block">{t('catVisit') || 'ចូលបណ្ណាល័យ'}</span>
+                      <span className="text-[10px] text-slate-400 font-normal">Library Visits</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-500" />
+                </button>
+
+                {/* 3. កំណត់ត្រាខ្ចីនឹងសង (Library Transactions) */}
+                <button
+                  onClick={() => handleNavClick('library_transactions')}
+                  className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
+                    activeTab === 'library_transactions'
+                      ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/20'
+                      : 'bg-slate-950/60 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-300">
+                      <BookOpen className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <span className="block">{t('navLibraryTransactions') || 'កំណត់ត្រាខ្ចីនឹងសង'}</span>
+                      <span className="text-[10px] text-slate-400 font-normal">Borrow & Return Logs</span>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-500" />
@@ -327,49 +348,28 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </button>
 
-                {/* 5. ចូលបណ្ណាល័យ (Library Visits) */}
+                {/* 5. Scan QR Code */}
                 <button
-                  onClick={() => handleNavClick('library_visits')}
+                  onClick={() => handleNavClick('kiosk')}
                   className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
-                    activeTab === 'library_visits'
-                      ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/20'
+                    activeTab === 'kiosk'
+                      ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 shadow-lg shadow-teal-500/20'
                       : 'bg-slate-950/60 hover:bg-slate-800 text-slate-300 border border-slate-800'
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-xl bg-blue-500/20 text-blue-300">
-                      <Building className="w-4 h-4" />
+                    <div className="p-2 rounded-xl bg-teal-500/20 text-teal-300">
+                      <ScanLine className="w-4 h-4" />
                     </div>
                     <div className="text-left">
-                      <span className="block">{t('catVisit') || 'ចូលបណ្ណាល័យ'}</span>
-                      <span className="text-[10px] text-slate-400 font-normal">Library Visits</span>
+                      <span className="block">{t('navKiosk')}</span>
+                      <span className="text-[10px] text-slate-400 font-normal">Entrance Scanner</span>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </button>
 
-                {/* 6. កំណត់ត្រាខ្ចីនឹងសង (Library Transactions) */}
-                <button
-                  onClick={() => handleNavClick('library_transactions')}
-                  className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
-                    activeTab === 'library_transactions'
-                      ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/20'
-                      : 'bg-slate-950/60 hover:bg-slate-800 text-slate-300 border border-slate-800'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-300">
-                      <BookOpen className="w-4 h-4" />
-                    </div>
-                    <div className="text-left">
-                      <span className="block">{t('navLibraryTransactions') || 'កំណត់ត្រាខ្ចីនឹងសង'}</span>
-                      <span className="text-[10px] text-slate-400 font-normal">Borrow & Return Logs</span>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-slate-500" />
-                </button>
-
-                {/* 7. បំពេញព័ត៌មាន (Mobile Portal) */}
+                {/* 6. បំពេញព័ត៌មាន (Mobile Portal) */}
                 <button
                   onClick={() => handleNavClick('mobile')}
                   className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
