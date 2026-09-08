@@ -34,6 +34,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -50,6 +51,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
 
   const overdueBooks = React.useMemo(() => {
     const now = Date.now();
+    const maxDays = settings?.maxBorrowDays || 10;
     const overdue = sessions.filter(session => {
       if (session.status !== 'ACTIVE') return false;
       if (session.purpose_of_visit !== 'Book Borrowing' && session.purpose_of_visit !== 'ខ្ចីសៀវភៅ') {
@@ -58,20 +60,21 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
       const checkInTime = new Date(session.check_in_time).getTime();
       const diffDays = Math.floor((now - checkInTime) / (1000 * 60 * 60 * 24));
       session.days_overdue = diffDays;
-      return diffDays >= 10;
+      return diffDays >= maxDays;
     });
     return overdue.sort((a, b) => b.days_overdue - a.days_overdue);
-  }, [sessions]);
+  }, [sessions, settings]);
 
   const fetchAllData = async () => {
     try {
       setLoading(true);
-      const [statsRes, analyticsRes, sessionsRes, usersRes, metaRes] = await Promise.all([
+      const [statsRes, analyticsRes, sessionsRes, usersRes, metaRes, settingsRes] = await Promise.all([
         api.getAdminStats(),
         api.getAdminAnalytics(),
         api.getSessions(),
         api.getUsers(),
-        api.getKioskMeta()
+        api.getKioskMeta(),
+        api.getSettings()
       ]);
 
       if (statsRes.success) setStats(statsRes.stats);
@@ -82,6 +85,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
         setRoles(metaRes.roles);
         setDepartments(metaRes.departments);
       }
+      if (settingsRes.success) setSettings(settingsRes.settings);
 
       if (onStatsUpdate && statsRes.stats) {
         onStatsUpdate(statsRes.stats.activeCount);

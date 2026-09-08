@@ -26,7 +26,8 @@ export default function SettingsModal({ isOpen, onClose }) {
     isLocationRequired: false,
     libraryLat: 11.5564,
     libraryLng: 104.9282,
-    maxDistance: 500
+    maxDistance: 500,
+    maxBorrowDays: 10
   });
 
   const MapClickHandler = () => {
@@ -202,6 +203,27 @@ export default function SettingsModal({ isOpen, onClose }) {
                   />
                   <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500"></div>
                 </label>
+              </div>
+
+              {/* Library Rules / Borrowing Duration */}
+              <div className="p-4 bg-slate-800/50 border border-slate-700 rounded-xl">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-200">{t('borrowDuration', 'Book Borrowing Duration')}</h3>
+                    <p className="text-xs text-slate-400 mt-1">{t('borrowDurationSub', 'Maximum days allowed before a book is considered overdue.')}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="number"
+                    name="maxBorrowDays"
+                    value={settings.maxBorrowDays}
+                    onChange={handleChange}
+                    min="1"
+                    className="w-24 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500 font-bold text-center"
+                  />
+                  <span className="text-xs font-medium text-slate-400">{t('days', 'Days (ថ្ងៃ)')}</span>
+                </div>
               </div>
 
               {/* Coordinates Settings */}
