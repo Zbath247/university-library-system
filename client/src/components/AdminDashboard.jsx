@@ -185,7 +185,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
     <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-6 animate-fade-in">
       
       {/* Top Banner & Quick Controls */}
-      <div className="flex flex-row items-start lg:items-center justify-between gap-4 bg-gradient-to-r from-slate-900/95 via-slate-900/90 to-slate-950/95 p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-800/90 shadow-2xl backdrop-blur-xl">
+      <div className="relative z-[60] flex flex-row items-start lg:items-center justify-between gap-4 bg-gradient-to-r from-slate-900/95 via-slate-900/90 to-slate-950/95 p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-800/90 shadow-2xl backdrop-blur-xl">
         <div className="space-y-1 pr-2">
           <div className="flex items-center gap-2.5">
             <div className="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse shadow-sm shadow-teal-400/50 shrink-0" />
