@@ -56,6 +56,7 @@ export default function SessionsTable({
   const [showBackupModal, setShowBackupModal] = useState(false);
   const [showRestoreModal, setShowRestoreModal] = useState(false);
   const [restoreData, setRestoreData] = useState(null);
+  const [viewMode, setViewMode] = useState('LOGS'); // 'LOGS' or 'USERS'
   const reportRef = useRef();
 
   const { t, tRole, tDept, tPurpose } = useLanguage();
@@ -117,8 +118,45 @@ export default function SessionsTable({
     setCurrentPage(1);
   }, [search, statusFilter, roleFilter, deptFilter, monthFilter, yearFilter, categoryTab]);
 
-  const totalPages = Math.ceil(filteredSessions.length / itemsPerPage);
-  const paginatedSessions = filteredSessions.slice(
+  const displayItems = React.useMemo(() => {
+    if (viewMode === 'LOGS') return filteredSessions;
+
+    const userMap = new Map();
+    filteredSessions.forEach(session => {
+      const user = session.user || {};
+      const uid = user.university_id || user.full_name;
+      if (!uid) return;
+      if (!userMap.has(uid)) {
+        userMap.set(uid, {
+          id: `agg-${uid}`,
+          user,
+          isAggregated: true,
+          visitCount: 1,
+          totalDuration: session.duration_minutes || 0,
+          check_in_time: session.check_in_time,
+          check_out_time: session.check_out_time,
+          status: session.status,
+          purpose_of_visit: session.purpose_of_visit,
+          research_topic: session.research_topic
+        });
+      } else {
+        const existing = userMap.get(uid);
+        existing.visitCount += 1;
+        existing.totalDuration += (session.duration_minutes || 0);
+        if (new Date(session.check_in_time) > new Date(existing.check_in_time)) {
+          existing.check_in_time = session.check_in_time;
+          existing.check_out_time = session.check_out_time;
+          existing.status = session.status;
+          existing.purpose_of_visit = session.purpose_of_visit;
+          existing.research_topic = session.research_topic;
+        }
+      }
+    });
+    return Array.from(userMap.values());
+  }, [filteredSessions, viewMode]);
+
+  const totalPages = Math.ceil(displayItems.length / itemsPerPage);
+  const paginatedItems = displayItems.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -359,7 +397,7 @@ export default function SessionsTable({
                 {t('tabAllLogs')}
               </h3>
               <p className="text-xs text-slate-400">
-                {filteredSessions.length} / {safeSessions.length} {t('recordsCount') || 'កំណត់ត្រា'}
+                {displayItems.length} / {safeSessions.length} {t('recordsCount') || 'កំណត់ត្រា'}
               </p>
             </div>
           </div>
@@ -367,6 +405,21 @@ export default function SessionsTable({
 
         {/* Actions: Refresh, Reset & Export CSV */}
         <div className="flex items-center gap-2.5 flex-wrap">
+
+          <div className="flex bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-lg shadow-teal-500/10">
+            <button
+              onClick={() => setViewMode('LOGS')}
+              className={`px-3 py-2 text-xs font-bold transition border-r border-slate-700 ${viewMode === 'LOGS' ? 'bg-teal-500 text-slate-950' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}
+            >
+              Logs View
+            </button>
+            <button
+              onClick={() => setViewMode('USERS')}
+              className={`px-3 py-2 text-xs font-bold transition ${viewMode === 'USERS' ? 'bg-teal-500 text-slate-950' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}
+            >
+              Group By User
+            </button>
+          </div>
 
 
           {/* Reset Logs Button */}
@@ -654,14 +707,14 @@ export default function SessionsTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800/60">
-                {paginatedSessions.length === 0 ? (
+                {paginatedItems.length === 0 ? (
                   <tr>
                     <td colSpan="8" className="py-12 text-center text-slate-500 font-medium">
                       មិនមានទិន្នន័យ (No records found)
                     </td>
                   </tr>
                 ) : (
-                  paginatedSessions.map((session, index) => {
+                  paginatedItems.map((session, index) => {
                 const user = session.user || {};
                 const isActive = session.status === 'ACTIVE';
                 const isPending = session.status === 'PENDING_APPROVAL';
@@ -669,8 +722,8 @@ export default function SessionsTable({
                 const inDate = new Date(session.check_in_time).toLocaleDateString([], { month: 'short', day: 'numeric' });
                 const outTime = session.check_out_time ? new Date(session.check_out_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : (isActive ? t('statusActive') : '-');
 
-                const hours = Math.floor(session.duration_minutes / 60);
-                const mins = session.duration_minutes % 60;
+                const hours = Math.floor((session.isAggregated ? session.totalDuration : session.duration_minutes) / 60);
+                const mins = (session.isAggregated ? session.totalDuration : session.duration_minutes) % 60;
                 const durationFormatted = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
 
                 return (
@@ -683,8 +736,13 @@ export default function SessionsTable({
                           {(user.full_name || 'U').charAt(0)}
                         </div>
                         <div>
-                          <p className="font-bold text-white leading-tight">
+                          <p className="font-bold text-white leading-tight flex items-center gap-2">
                             {user.full_name || 'Visitor'}
+                            {session.isAggregated && (
+                              <span className="px-1.5 py-0.5 bg-teal-500/20 text-teal-300 rounded text-[10px] font-bold">
+                                Visits: {session.visitCount}
+                              </span>
+                            )}
                           </p>
                           <p className="font-mono text-[10px] text-teal-400">
                             {user.university_id}
@@ -773,10 +831,13 @@ export default function SessionsTable({
                       <div>
                         <span className="font-mono text-slate-200 block">
                           {inTime} <span className="text-slate-500">({inDate})</span>
+                          {session.isAggregated && <span className="ml-1 text-[10px] text-indigo-400">(Last Visit)</span>}
                         </span>
-                        <span className="font-mono text-[10px] text-slate-400">
-                          {isPending ? 'Waiting for approval' : `→ ${outTime}`}
-                        </span>
+                        {!session.isAggregated && (
+                          <span className="font-mono text-[10px] text-slate-400">
+                            {isPending ? 'Waiting for approval' : `→ ${outTime}`}
+                          </span>
+                        )}
                       </div>
                     </td>
 
@@ -822,16 +883,18 @@ export default function SessionsTable({
                         </button>
 
                         {/* Edit Record Button */}
-                        <button
-                          onClick={() => setEditingSession(session)}
-                          title="កែសម្រួលកំណត់ត្រា (Edit Record)"
-                          className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-300 transition"
-                        >
-                          <Edit3 className="w-3.5 h-3.5" />
-                        </button>
+                        {!session.isAggregated && (
+                          <button
+                            onClick={() => setEditingSession(session)}
+                            title="កែសម្រួលកំណត់ត្រា (Edit Record)"
+                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-300 transition"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
 
                         {/* Approve/Reject Buttons if Pending */}
-                        {isPending && (
+                        {isPending && !session.isAggregated && (
                           <>
                             <button
                               onClick={() => onApproveSession && onApproveSession(session.id)}
@@ -853,7 +916,7 @@ export default function SessionsTable({
                         )}
 
                         {/* Force Check-Out */}
-                        {isActive && (
+                        {isActive && !session.isAggregated && (
                           <button
                             onClick={() => onForceCheckout(session.id)}
                             disabled={actionLoading === session.id}
@@ -877,12 +940,12 @@ export default function SessionsTable({
 
       {/* Sessions List - Mobile Cards View (Optimized for Phone Screens) */}
       <div className="block md:hidden p-4 space-y-3">
-        {paginatedSessions.length === 0 ? (
+        {paginatedItems.length === 0 ? (
           <div className="py-8 text-center text-slate-500 text-xs">
             {t('noSessionsFound')}
           </div>
         ) : (
-          paginatedSessions.map((session) => {
+          paginatedItems.map((session) => {
             const user = session.user || {};
             const isActive = session.status === 'ACTIVE';
             const isPending = session.status === 'PENDING_APPROVAL';
@@ -893,8 +956,8 @@ export default function SessionsTable({
               ? new Date(session.check_out_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
               : (isPending ? 'Waiting for approval' : (isActive ? t('statusActive') : '-'));
 
-            const hours = Math.floor(session.duration_minutes / 60);
-            const mins = session.duration_minutes % 60;
+            const hours = Math.floor((session.isAggregated ? session.totalDuration : session.duration_minutes) / 60);
+            const mins = (session.isAggregated ? session.totalDuration : session.duration_minutes) % 60;
             const durationFormatted = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
 
             const purpose = session.purpose_of_visit || user.default_purpose || 'Study & Revision';
@@ -915,8 +978,13 @@ export default function SessionsTable({
                       {(user.full_name || 'U').charAt(0)}
                     </div>
                     <div>
-                      <h4 className="font-bold text-white text-sm leading-tight">
+                      <h4 className="font-bold text-white text-sm leading-tight flex items-center gap-2">
                         {user.full_name || 'Visitor'}
+                        {session.isAggregated && (
+                          <span className="px-1.5 py-0.5 bg-teal-500/20 text-teal-300 rounded text-[10px] font-bold">
+                            Visits: {session.visitCount}
+                          </span>
+                        )}
                       </h4>
                       <span className="font-mono text-[11px] text-teal-400 font-bold">
                         {user.university_id}
@@ -1011,14 +1079,16 @@ export default function SessionsTable({
 
                 {/* Action Buttons for Mobile Screen */}
                 <div className="pt-2 border-t border-slate-800/80 flex items-center gap-2 flex-wrap">
-                  <button
-                    type="button"
-                    onClick={() => setEditingSession(session)}
-                    className="flex-1 py-2 px-3 rounded-xl text-xs font-bold bg-indigo-500/20 hover:bg-indigo-500 text-indigo-300 hover:text-white border border-indigo-500/30 transition flex items-center justify-center gap-1.5 shadow-sm min-w-[100px]"
-                  >
-                    <Edit3 className="w-3.5 h-3.5" />
-                    <span>កែសម្រួល</span>
-                  </button>
+                  {!session.isAggregated && (
+                    <button
+                      type="button"
+                      onClick={() => setEditingSession(session)}
+                      className="flex-1 py-2 px-3 rounded-xl text-xs font-bold bg-indigo-500/20 hover:bg-indigo-500 text-indigo-300 hover:text-white border border-indigo-500/30 transition flex items-center justify-center gap-1.5 shadow-sm min-w-[100px]"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span>កែសម្រួល</span>
+                    </button>
+                  )}
 
                   <button
                     type="button"
@@ -1030,7 +1100,7 @@ export default function SessionsTable({
                   </button>
 
                   {/* Approve & Reject for Mobile if Pending */}
-                  {isPending && (
+                  {isPending && !session.isAggregated && (
                     <>
                       <button
                         type="button"
@@ -1058,7 +1128,7 @@ export default function SessionsTable({
                   )}
 
                   {/* Force Check-Out for Mobile if Active */}
-                  {isActive && (
+                  {isActive && !session.isAggregated && (
                     <button
                       type="button"
                       onClick={() => onForceCheckout(session.id)}
@@ -1085,7 +1155,7 @@ export default function SessionsTable({
       {totalPages > 1 && (
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-slate-900/60 rounded-2xl border border-slate-800">
           <span className="text-sm text-slate-400 font-medium">
-            បង្ហាញ {((currentPage - 1) * itemsPerPage) + 1} - {Math.min(currentPage * itemsPerPage, filteredSessions.length)} នៃ {filteredSessions.length} ទិន្នន័យ
+            បង្ហាញ {((currentPage - 1) * itemsPerPage) + 1} - {Math.min(currentPage * itemsPerPage, displayItems.length)} នៃ {displayItems.length} ទិន្នន័យ
           </span>
           <div className="flex items-center gap-2">
             <button
