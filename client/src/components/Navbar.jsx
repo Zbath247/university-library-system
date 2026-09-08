@@ -76,7 +76,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               <LayoutDashboard className="w-5 h-5 shrink-0" />
               <div className="text-left leading-tight flex-1">
                 <span className="block">{t('adminNavTitle') || 'ទិដ្ឋភាពទូទៅ'}</span>
-                <span className={`text-[10px] font-normal ${activeTab === 'admin' ? 'text-amber-100' : 'text-slate-500'}`}>Admin Overview</span>
               </div>
             </button>
 
@@ -92,7 +91,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               <Building className="w-5 h-5 shrink-0" />
               <div className="text-left leading-tight flex-1">
                 <span className="block">{t('catVisit') || 'ចូលបណ្ណាល័យ'}</span>
-                <span className={`text-[10px] font-normal ${activeTab === 'library_visits' ? 'text-blue-100' : 'text-slate-500'}`}>Library Visits</span>
               </div>
             </button>
 
@@ -108,7 +106,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               <BookOpen className="w-5 h-5 shrink-0" />
               <div className="text-left leading-tight flex-1">
                 <span className="block">{t('navLibraryTransactions') || 'កំណត់ត្រាខ្ចីនឹងសង'}</span>
-                <span className={`text-[10px] font-normal ${activeTab === 'library_transactions' ? 'text-emerald-100' : 'text-slate-500'}`}>Borrow & Return Logs</span>
               </div>
             </button>
 
@@ -124,7 +121,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               <Layers className="w-5 h-5 shrink-0" />
               <div className="text-left leading-tight flex-1">
                 <span className="block">{t('navLogsTitle') || 'កំណត់ត្រាវត្តមានទាំងអស់'}</span>
-                <span className={`text-[10px] font-normal ${activeTab === 'logs' ? 'text-purple-100' : 'text-slate-500'}`}>Attendance Logs</span>
               </div>
             </button>
 
@@ -140,7 +136,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               <QrCode className="w-5 h-5 shrink-0" />
               <div className="text-left leading-tight flex-1">
                 <span className="block">{t('navKiosk')}</span>
-                <span className={`text-[10px] font-normal ${activeTab === 'kiosk' ? 'text-slate-800' : 'text-slate-500'}`}>Entrance Scanner</span>
               </div>
             </button>
 
@@ -156,7 +151,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               <Smartphone className="w-5 h-5 shrink-0" />
               <div className="text-left leading-tight flex-1">
                 <span className="block">{t('navMobilePortal')}</span>
-                <span className={`text-[10px] font-normal ${activeTab === 'mobile' ? 'text-blue-100' : 'text-slate-500'}`}>Check-In & Pass</span>
               </div>
             </button>
 
@@ -279,7 +273,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                     </div>
                     <div className="text-left">
                       <span className="block">{t('adminNavTitle') || 'ទិដ្ឋភាពទូទៅ'}</span>
-                      <span className="text-[10px] text-slate-400 font-normal">Admin Overview</span>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-500" />
@@ -300,7 +293,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                     </div>
                     <div className="text-left">
                       <span className="block">{t('catVisit') || 'ចូលបណ្ណាល័យ'}</span>
-                      <span className="text-[10px] text-slate-400 font-normal">Library Visits</span>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-500" />
@@ -321,7 +313,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                     </div>
                     <div className="text-left">
                       <span className="block">{t('navLibraryTransactions') || 'កំណត់ត្រាខ្ចីនឹងសង'}</span>
-                      <span className="text-[10px] text-slate-400 font-normal">Borrow & Return Logs</span>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-500" />
@@ -342,7 +333,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                     </div>
                     <div className="text-left">
                       <span className="block">{t('navLogsTitle') || 'កំណត់ត្រាវត្តមានទាំងអស់'}</span>
-                      <span className="text-[10px] text-slate-400 font-normal">Attendance Logs</span>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-500" />
@@ -363,7 +353,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                     </div>
                     <div className="text-left">
                       <span className="block">{t('navKiosk')}</span>
-                      <span className="text-[10px] text-slate-400 font-normal">Entrance Scanner</span>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-500" />
@@ -384,7 +373,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                     </div>
                     <div className="text-left">
                       <span className="block">{t('navMobilePortal')}</span>
-                      <span className="text-[10px] text-slate-400 font-normal">Check-In & Digital Pass</span>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-500" />
