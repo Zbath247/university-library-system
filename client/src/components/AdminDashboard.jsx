@@ -255,10 +255,10 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
 
       {/* Primary KPI Summary Cards */}
       {view === 'OVERVIEW' && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="flex flex-nowrap overflow-x-auto gap-4 lg:grid lg:grid-cols-3 pb-2 snap-x snap-mandatory hide-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
         
         {/* Card 1: Active Occupants */}
-        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-teal-950/20 border border-teal-500/30 shadow-xl backdrop-blur-xl flex flex-col justify-between hover:border-teal-500/50 transition-all duration-300 group">
+        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-teal-950/20 border border-teal-500/30 shadow-xl backdrop-blur-xl flex flex-col justify-between hover:border-teal-500/50 transition-all duration-300 group min-w-[85vw] sm:min-w-[320px] lg:min-w-0 shrink-0 snap-center">
           <div>
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
@@ -293,7 +293,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
         </div>
 
         {/* Card 2: Today's Total Visits */}
-        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-indigo-950/20 border border-indigo-500/25 shadow-xl backdrop-blur-xl flex flex-col justify-between hover:border-indigo-500/40 transition-all duration-300 group">
+        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-indigo-950/20 border border-indigo-500/25 shadow-xl backdrop-blur-xl flex flex-col justify-between hover:border-indigo-500/40 transition-all duration-300 group min-w-[85vw] sm:min-w-[320px] lg:min-w-0 shrink-0 snap-center">
           <div>
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
@@ -316,7 +316,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
         </div>
 
         {/* Card 3: Total Library Visits */}
-        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-purple-950/20 border border-purple-500/25 shadow-xl backdrop-blur-xl flex flex-col justify-between hover:border-purple-500/40 transition-all duration-300 group">
+        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-purple-950/20 border border-purple-500/25 shadow-xl backdrop-blur-xl flex flex-col justify-between hover:border-purple-500/40 transition-all duration-300 group min-w-[85vw] sm:min-w-[320px] lg:min-w-0 shrink-0 snap-center">
           <div>
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold uppercase tracking-wider text-purple-400">
