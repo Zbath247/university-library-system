@@ -111,7 +111,7 @@ export default function SessionsTable({
   });
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
+  const [itemsPerPage, setItemsPerPage] = useState(15);
 
   // Reset page when filters change
   React.useEffect(() => {
@@ -1160,12 +1160,33 @@ export default function SessionsTable({
       </div>
 
       {/* Pagination Controls */}
-      {totalPages > 1 && (
+      {(totalPages > 1 || displayItems.length > 0) && (
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-slate-900/60 rounded-2xl border border-slate-800">
-          <span className="text-sm text-slate-400 font-medium">
-            បង្ហាញ {((currentPage - 1) * itemsPerPage) + 1} - {Math.min(currentPage * itemsPerPage, displayItems.length)} នៃ {displayItems.length} ទិន្នន័យ
-          </span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-slate-400 font-medium">
+              បង្ហាញ {displayItems.length > 0 ? ((currentPage - 1) * itemsPerPage) + 1 : 0} - {Math.min(currentPage * itemsPerPage, displayItems.length)} នៃ {displayItems.length} ទិន្នន័យ
+            </span>
+            <div className="flex items-center gap-2 border-l border-slate-700 pl-3">
+              <label className="text-sm text-slate-400 font-bold">Rows:</label>
+              <select
+                value={itemsPerPage}
+                onChange={(e) => {
+                  setItemsPerPage(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+                className="bg-slate-800 border border-slate-700 text-slate-200 text-sm font-medium rounded-lg focus:ring-teal-500 focus:border-teal-500 block px-2 py-1 outline-none transition cursor-pointer"
+              >
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+                <option value={displayItems.length > 0 ? displayItems.length : 1000}>All</option>
+              </select>
+            </div>
+          </div>
+          
+          {totalPages > 1 && (
+            <div className="flex items-center gap-2">
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
@@ -1212,6 +1233,7 @@ export default function SessionsTable({
               បន្ទាប់ (Next)
             </button>
           </div>
+          )}
         </div>
       )}
 
