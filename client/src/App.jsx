@@ -15,7 +15,7 @@ export default function App() {
     if (params.get('mode') === 'mobile') {
       return 'mobile';
     }
-    return 'kiosk'; // 'kiosk' | 'mobile' | 'admin'
+    return 'admin'; // Default to admin overview
   });
 
   const [isQRScan] = useState(() => {
@@ -71,6 +71,13 @@ export default function App() {
   };
 
   useEffect(() => {
+    // If the initial tab is an admin tab but user is not logged in, prompt them
+    if (['admin', 'logs', 'library_visits', 'library_transactions'].includes(activeTab) && !isAdminLoggedIn) {
+      setPendingAdminTab(activeTab);
+      setShowAdminLoginModal(true);
+      setActiveTab('kiosk');
+    }
+
     fetchActiveCount();
     
     // Set up Socket.IO for real-time updates
