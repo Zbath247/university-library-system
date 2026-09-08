@@ -414,9 +414,9 @@ export default function SessionsTable({
         </div>
 
         {/* Actions: Refresh, Reset & Export CSV */}
-        <div className="flex items-center gap-2.5 flex-wrap">
+        <div className="flex items-center gap-2.5 overflow-x-auto pb-2 w-full lg:w-auto justify-start lg:justify-end">
 
-          <div className="flex bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-lg shadow-teal-500/10">
+          <div className="flex shrink-0 bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-lg shadow-teal-500/10">
             <button
               onClick={() => setViewMode('LOGS')}
               className={`px-3 py-2 text-xs font-bold transition border-r border-slate-700 ${viewMode === 'LOGS' ? 'bg-teal-500 text-slate-950' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}
@@ -435,14 +435,14 @@ export default function SessionsTable({
           {/* Reset Logs Button */}
           <button
             onClick={() => setShowResetModal(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-500/15 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition shadow-sm"
+            className="flex shrink-0 items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-500/15 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition shadow-sm"
             title="សម្អាតទិន្នន័យទាំងអស់ជា ០ (ទាមទារ Password Admin)"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>{t('btnReset') || 'សម្អាតទិន្នន័យ (Reset)'}</span>
           </button>
 
-          <div className="flex bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-lg shadow-teal-500/10">
+          <div className="flex shrink-0 bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-lg shadow-teal-500/10">
             <button
               onClick={handleBackup}
               className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-amber-300 transition border-r border-slate-700"
@@ -468,7 +468,7 @@ export default function SessionsTable({
             />
           </div>
 
-          <div className="flex bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-lg shadow-teal-500/10">
+          <div className="flex shrink-0 bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-lg shadow-teal-500/10">
             <button
               onClick={handleExportCsv}
               className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 transition border-r border-slate-700"
