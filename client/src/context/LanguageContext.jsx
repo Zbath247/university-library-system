@@ -186,6 +186,18 @@ const translations = {
     passValidText: 'ប័ណ្ណមានសុពលភាពសម្រាប់ប្រើប្រាស់បណ្ណាល័យ',
     btnDownloadPass: 'ទាញយករូបភាពប័ណ្ណ',
     btnPrintPass: 'បោះពុម្ពប័ណ្ណ (Print)',
+    settingsSub: 'កំណត់អថេរប្រព័ន្ធ ទំហំកំណត់កម្មវិធី និងសកម្មភាពទូទៅ។',
+    settingsBorrowingRules: 'ច្បាប់នៃការខ្ចី',
+    settingsLocationSetup: 'ការកំណត់ទីតាំង',
+    settingsBorrowingDurations: 'រយៈពេលនៃការខ្ចី',
+    settingsBorrowingDesc: 'ជ្រើសរើសរយៈពេលអនុញ្ញាតឱ្យនិស្សិតខ្ចីសៀវភៅ។',
+    settingsConfiguredOptions: 'ជម្រើសដែលបានកំណត់',
+    settingsDays: 'ថ្ងៃ',
+    settingsAdd: 'បន្ថែម',
+    settingsGeofence: 'ការកំណត់តំបន់បណ្ណាល័យ (Geofence)',
+    settingsMapPreview: 'ផែនទី និងទីតាំង',
+    settingsSearchLoc: 'ស្វែងរកទីតាំង...',
+    settingsLoading: 'កំពុងទាញយកទិន្នន័យ...',
     btnClose: 'បិទ',
 
     // Camera Scanner Modal
@@ -660,7 +672,7 @@ const translations = {
     settingsSearchLoc: 'Search location...',
     settingsLoading: 'Loading configurations...',
     closeBtn: 'Cancel',
-    saveChangesBtn: 'Save Changes'
+    saveChangesBtn: 'Save Changes',
 
     userNotFound: 'ID not found. Please register as a new library member.',
     alreadyCheckedIn: 'Already checked in! Currently active inside library.',
@@ -681,7 +693,7 @@ const translations = {
     maxDistance: 'Max Distance (meters)',
     maxDistanceSub: 'How close the user needs to be to check in.',
     closeBtn: 'Close',
-    saveChangesBtn: 'Save Changes'
+    saveChangesBtn: 'Save Changes',
   }
 };
 
