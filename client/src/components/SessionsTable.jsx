@@ -1162,11 +1162,11 @@ export default function SessionsTable({
       {/* Pagination Controls */}
       {(totalPages > 1 || displayItems.length > 0) && (
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-slate-900/60 rounded-2xl border border-slate-800">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto text-center sm:text-left">
             <span className="text-sm text-slate-400 font-medium">
               បង្ហាញ {displayItems.length > 0 ? ((currentPage - 1) * itemsPerPage) + 1 : 0} - {Math.min(currentPage * itemsPerPage, displayItems.length)} នៃ {displayItems.length} ទិន្នន័យ
             </span>
-            <div className="flex items-center gap-2 border-l border-slate-700 pl-3">
+            <div className="flex items-center justify-center gap-2 border-t sm:border-t-0 sm:border-l border-slate-700 pt-3 sm:pt-0 sm:pl-3 w-full sm:w-auto">
               <label className="text-sm text-slate-400 font-bold">Rows:</label>
               <select
                 value={itemsPerPage}
