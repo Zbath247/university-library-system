@@ -173,16 +173,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
 
           {/* Bottom Area (Language, Logout, Stats) */}
           <div className="mt-auto w-full flex flex-col gap-3 pt-6 border-t border-slate-800/80">
-            {/* Live Stats */}
-            <div className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 flex items-center justify-between">
-              <span className="text-xs text-slate-400 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
-                <span>Active</span>
-              </span>
-              <span className="text-xs font-bold text-teal-300 font-mono">
-                {activeCount} {t('activeOccupants')}
-              </span>
-            </div>
+
 
             {/* Language Switcher */}
             <button
@@ -401,18 +392,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
 
               </div>
 
-              {/* Live Occupants Status in Drawer */}
-              <div className="mt-5 p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
-                    <span>{t('insideLibrary')}</span>
-                  </span>
-                  <span className="font-bold text-teal-300 font-mono">
-                    {activeCount} {t('activeOccupants')}
-                  </span>
-                </div>
-              </div>
+
 
               {/* Language Switcher in Mobile Drawer */}
               <div className="mt-4 p-3 rounded-2xl bg-slate-950/90 border border-slate-800 flex items-center justify-between shadow-sm">
