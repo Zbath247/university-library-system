@@ -540,7 +540,7 @@ export default function SessionsTable({
 
       {/* Segmented Category Filter Tabs */}
       {!hideCategoryFilters && (
-        <div className="px-6 py-3 bg-slate-950/80 border-b border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="px-6 py-3 bg-slate-950/80 border-b border-slate-800/80 grid grid-cols-2 sm:flex sm:flex-wrap gap-3">
           
           {/* All */}
         <button
