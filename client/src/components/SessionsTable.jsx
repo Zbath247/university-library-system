@@ -611,12 +611,12 @@ export default function SessionsTable({
 
       {/* Borrow & Return Sub-filters (Only in LIBRARY_TRANSACTIONS view) */}
       {initialCategory === 'BOOKS' && (
-        <div className="px-6 py-3 bg-slate-950/80 border-b border-slate-800/80 grid grid-cols-2 gap-3">
+        <div className="px-6 py-3 bg-slate-950/80 border-b border-slate-800/80 grid grid-cols-2 sm:flex sm:flex-row gap-3">
           {/* ខ្ចីសៀវភៅ */}
           <button
             type="button"
             onClick={() => setCategoryTab(categoryTab === 'BORROW' ? 'BOOKS' : 'BORROW')}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-between gap-2 whitespace-nowrap flex-1 ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-between gap-2 whitespace-nowrap ${
               categoryTab === 'BORROW'
                 ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
                 : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
@@ -632,7 +632,7 @@ export default function SessionsTable({
           <button
             type="button"
             onClick={() => setCategoryTab(categoryTab === 'RETURN' ? 'BOOKS' : 'RETURN')}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-between gap-2 whitespace-nowrap flex-1 ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-between gap-2 whitespace-nowrap ${
               categoryTab === 'RETURN'
                 ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
                 : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
