@@ -114,6 +114,8 @@ export default function SessionsTable({
       if (s.purpose_of_visit !== 'Book Borrowing') return false;
     } else if (categoryTab === 'RETURN') {
       if (s.purpose_of_visit !== 'Book Return') return false;
+    } else if (categoryTab === 'BOOKS') {
+      if (s.purpose_of_visit !== 'Book Borrowing' && s.purpose_of_visit !== 'Book Return') return false;
     }
     return true;
   });
@@ -402,7 +404,7 @@ export default function SessionsTable({
             </div>
             <div>
               <h3 className="text-base font-bold text-white">
-                {hideCategoryFilters ? 'កំណត់ត្រាចូលបណ្ណាល័យ' : t('tabAllLogs')}
+                {hideCategoryFilters ? (categoryTab === 'BOOKS' ? 'កំណត់ត្រាខ្ចីនឹងសង' : 'កំណត់ត្រាចូលបណ្ណាល័យ') : t('tabAllLogs')}
               </h3>
               <p className="text-xs text-slate-400">
                 {displayItems.length} / {safeSessions.length} {t('recordsCount') || 'កំណត់ត្រា'}

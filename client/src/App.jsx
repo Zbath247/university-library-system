@@ -35,7 +35,7 @@ export default function App() {
   const [pendingAdminTab, setPendingAdminTab] = useState('admin');
 
   const handleTabSelect = (tab) => {
-    if (tab === 'admin' || tab === 'logs' || tab === 'library_visits') {
+    if (tab === 'admin' || tab === 'logs' || tab === 'library_visits' || tab === 'library_transactions') {
       if (isAdminLoggedIn) {
         setActiveTab(tab);
       } else {
@@ -122,9 +122,9 @@ export default function App() {
               onNavigateEntrance={() => handleTabSelect('kiosk')}
               isQRScan={isQRScan}
             />
-          ) : isAdminLoggedIn && (activeTab === 'admin' || activeTab === 'logs' || activeTab === 'library_visits') ? (
+          ) : isAdminLoggedIn && (activeTab === 'admin' || activeTab === 'logs' || activeTab === 'library_visits' || activeTab === 'library_transactions') ? (
             <AdminDashboard
-              view={activeTab === 'logs' ? 'LOGS' : activeTab === 'library_visits' ? 'LIBRARY_VISITS' : 'OVERVIEW'}
+              view={activeTab === 'logs' ? 'LOGS' : activeTab === 'library_visits' ? 'LIBRARY_VISITS' : activeTab === 'library_transactions' ? 'LIBRARY_TRANSACTIONS' : 'OVERVIEW'}
               onStatsUpdate={setActiveCount}
               onLogout={handleAdminLogout}
             />

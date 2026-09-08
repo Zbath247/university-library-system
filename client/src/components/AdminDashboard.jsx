@@ -186,11 +186,11 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
           <div className="flex items-center gap-2.5">
             <div className="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse shadow-sm shadow-teal-400/50" />
             <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-              {view === 'OVERVIEW' ? t('adminTitle') : view === 'LIBRARY_VISITS' ? 'កំណត់ត្រាចូលបណ្ណាល័យ' : t('tabAllLogs')}
+              {view === 'OVERVIEW' ? t('adminTitle') : view === 'LIBRARY_VISITS' ? 'កំណត់ត្រាចូលបណ្ណាល័យ' : view === 'LIBRARY_TRANSACTIONS' ? 'កំណត់ត្រាខ្ចីនឹងសង' : t('tabAllLogs')}
             </h1>
           </div>
           <p className="text-xs sm:text-sm text-slate-400 font-medium pl-5">
-            {view === 'OVERVIEW' ? t('adminSub') : view === 'LIBRARY_VISITS' ? 'គ្រប់គ្រង និងតាមដានរាល់កំណត់ត្រាចូលបណ្ណាល័យរបស់សមាជិក' : t('logsSub')}
+            {view === 'OVERVIEW' ? t('adminSub') : view === 'LIBRARY_VISITS' ? 'គ្រប់គ្រង និងតាមដានរាល់កំណត់ត្រាចូលបណ្ណាល័យរបស់សមាជិក' : view === 'LIBRARY_TRANSACTIONS' ? 'គ្រប់គ្រង និងតាមដានរាល់កំណត់ត្រាខ្ចីនិងសងសៀវភៅរបស់សមាជិក' : t('logsSub')}
           </p>
         </div>
 
@@ -357,7 +357,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
       )}
 
       {/* Tab 2: Attendance Logs View */}
-      {(view === 'LOGS' || view === 'LIBRARY_VISITS') && (
+      {(view === 'LOGS' || view === 'LIBRARY_VISITS' || view === 'LIBRARY_TRANSACTIONS') && (
         <div className="space-y-6 animate-fade-in">
           <SessionsTable
             sessions={sessions}
@@ -370,8 +370,8 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
             onApproveSession={handleApproveSession}
             onRejectSession={handleRejectSession}
             onViewPass={handleViewPass}
-            initialCategory={view === 'LIBRARY_VISITS' ? 'VISIT' : 'ALL'}
-            hideCategoryFilters={view === 'LIBRARY_VISITS'}
+            initialCategory={view === 'LIBRARY_VISITS' ? 'VISIT' : view === 'LIBRARY_TRANSACTIONS' ? 'BOOKS' : 'ALL'}
+            hideCategoryFilters={view === 'LIBRARY_VISITS' || view === 'LIBRARY_TRANSACTIONS'}
           />
         </div>
       )}
