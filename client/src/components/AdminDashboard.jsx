@@ -312,12 +312,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-slate-400 mt-5 pt-3 border-t border-slate-800/80">
-            <span>{t('totalMembersCount')}:</span>
-            <strong className="text-white font-mono bg-slate-800/90 px-2 py-0.5 rounded-lg border border-slate-700/60">
-              {stats?.totalAllTimeSessions ?? 0}
-            </strong>
-          </div>
+
         </div>
 
         {/* Card 3: Total Library Visits */}
