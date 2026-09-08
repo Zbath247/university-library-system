@@ -357,7 +357,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
       )}
 
       {/* Tab 2: Attendance Logs View */}
-      {view === 'LOGS' && (
+      {(view === 'LOGS' || view === 'LIBRARY_VISITS') && (
         <div className="space-y-6 animate-fade-in">
           <SessionsTable
             sessions={sessions}
@@ -370,6 +370,8 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
             onApproveSession={handleApproveSession}
             onRejectSession={handleRejectSession}
             onViewPass={handleViewPass}
+            initialCategory={view === 'LIBRARY_VISITS' ? 'VISIT' : 'ALL'}
+            hideCategoryFilters={view === 'LIBRARY_VISITS'}
           />
         </div>
       )}

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Search,
   Filter,
@@ -39,7 +39,9 @@ export default function SessionsTable({
   onForceCheckout,
   onApproveSession,
   onRejectSession,
-  onViewPass
+  onViewPass,
+  initialCategory = 'ALL',
+  hideCategoryFilters = false
 }) {
   const safeSessions = Array.isArray(sessions) ? sessions : [];
   const safeRoles = Array.isArray(roles) ? roles : [];
@@ -51,7 +53,11 @@ export default function SessionsTable({
   const [deptFilter, setDeptFilter] = useState('');
   const [monthFilter, setMonthFilter] = useState('');
   const [yearFilter, setYearFilter] = useState('');
-  const [categoryTab, setCategoryTab] = useState('ALL'); // 'ALL', 'VISIT', 'BORROW', 'RETURN'
+  const [categoryTab, setCategoryTab] = useState(initialCategory); // 'ALL', 'VISIT', 'BORROW', 'RETURN'
+
+  useEffect(() => {
+    setCategoryTab(initialCategory);
+  }, [initialCategory]);
   const [editingSession, setEditingSession] = useState(null);
   const [showResetModal, setShowResetModal] = useState(false);
   const [showExportPrompt, setShowExportPrompt] = useState(false);
@@ -531,9 +537,10 @@ export default function SessionsTable({
       )}
 
       {/* Segmented Category Filter Tabs */}
-      <div className="px-6 py-3 bg-slate-950/80 border-b border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-3">
-        
-        {/* All */}
+      {!hideCategoryFilters && (
+        <div className="px-6 py-3 bg-slate-950/80 border-b border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-3">
+          
+          {/* All */}
         <button
           type="button"
           onClick={() => setCategoryTab('ALL')}
@@ -597,7 +604,8 @@ export default function SessionsTable({
           </span>
         </button>
 
-      </div>
+        </div>
+      )}
 
       {/* Filter Bar */}
       <div className="p-4 bg-slate-950/60 border-b border-slate-800 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
