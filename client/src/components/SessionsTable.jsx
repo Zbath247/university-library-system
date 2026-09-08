@@ -16,7 +16,9 @@ import {
   Edit3,
   Trash2,
   RotateCcw,
-  AlertTriangle
+  AlertTriangle,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
@@ -1186,53 +1188,27 @@ export default function SessionsTable({
           </div>
           
           {totalPages > 1 && (
-            <div className="flex items-center gap-2">
-            <button
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
-            >
-              ថយក្រោយ (Prev)
-            </button>
-            <div className="flex items-center gap-1">
-              {[...Array(totalPages)].map((_, i) => {
-                const page = i + 1;
-                // Show only a few page numbers around the current page
-                if (
-                  page === 1 || 
-                  page === totalPages || 
-                  (page >= currentPage - 1 && page <= currentPage + 1)
-                ) {
-                  return (
-                    <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`w-8 h-8 rounded-lg text-sm font-bold flex items-center justify-center transition ${
-                        currentPage === page
-                          ? 'bg-teal-500 text-slate-950 shadow-md shadow-teal-500/20'
-                          : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  );
-                } else if (
-                  page === currentPage - 2 ||
-                  page === currentPage + 2
-                ) {
-                  return <span key={page} className="text-slate-500">...</span>;
-                }
-                return null;
-              })}
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              
+              <span className="text-sm font-bold text-slate-200">
+                Page {currentPage} of {totalPages}
+              </span>
+
+              <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
-            <button
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-              className="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
-            >
-              បន្ទាប់ (Next)
-            </button>
-          </div>
           )}
         </div>
       )}
