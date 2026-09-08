@@ -80,22 +80,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               </div>
             </button>
 
-            {/* 2. បំពេញព័ត៌មាន (Mobile Portal) */}
-            <button
-              onClick={() => handleNavClick('mobile')}
-              className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
-                activeTab === 'mobile'
-                  ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black shadow-lg shadow-cyan-500/25 scale-[1.02]'
-                  : 'bg-slate-900/40 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800/50'
-              }`}
-            >
-              <Smartphone className="w-5 h-5 shrink-0" />
-              <div className="text-left leading-tight flex-1">
-                <span className="block">{t('navMobilePortal')}</span>
-                <span className={`text-[10px] font-normal ${activeTab === 'mobile' ? 'text-blue-100' : 'text-slate-500'}`}>Check-In & Pass</span>
-              </div>
-            </button>
-
             {/* 3. Admin Overview */}
             <button
               onClick={() => handleNavClick('admin')}
@@ -125,6 +109,22 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               <div className="text-left leading-tight flex-1">
                 <span className="block">{t('navLogsTitle') || 'កំណត់ត្រាវត្តមានទាំងអស់'}</span>
                 <span className={`text-[10px] font-normal ${activeTab === 'logs' ? 'text-purple-100' : 'text-slate-500'}`}>Attendance Logs</span>
+              </div>
+            </button>
+
+            {/* 5. បំពេញព័ត៌មាន (Mobile Portal) */}
+            <button
+              onClick={() => handleNavClick('mobile')}
+              className={`w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 ${
+                activeTab === 'mobile'
+                  ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black shadow-lg shadow-cyan-500/25 scale-[1.02]'
+                  : 'bg-slate-900/40 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800/50'
+              }`}
+            >
+              <Smartphone className="w-5 h-5 shrink-0" />
+              <div className="text-left leading-tight flex-1">
+                <span className="block">{t('navMobilePortal')}</span>
+                <span className={`text-[10px] font-normal ${activeTab === 'mobile' ? 'text-blue-100' : 'text-slate-500'}`}>Check-In & Pass</span>
               </div>
             </button>
 
@@ -253,27 +253,6 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </button>
 
-                {/* 2. បំពេញព័ត៌មាន (Mobile Portal) */}
-                <button
-                  onClick={() => handleNavClick('mobile')}
-                  className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
-                    activeTab === 'mobile'
-                      ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20'
-                      : 'bg-slate-950/60 hover:bg-slate-800 text-slate-300 border border-slate-800'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-300">
-                      <Smartphone className="w-4 h-4" />
-                    </div>
-                    <div className="text-left">
-                      <span className="block">{t('navMobilePortal')}</span>
-                      <span className="text-[10px] text-slate-400 font-normal">Check-In & Digital Pass</span>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-slate-500" />
-                </button>
-
                 {/* 3. Admin Overview */}
                 <button
                   onClick={() => handleNavClick('admin')}
@@ -311,6 +290,27 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                     <div className="text-left">
                       <span className="block">{t('navLogsTitle') || 'កំណត់ត្រាវត្តមានទាំងអស់'}</span>
                       <span className="text-[10px] text-slate-400 font-normal">Attendance Logs</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-500" />
+                </button>
+
+                {/* 5. បំពេញព័ត៌មាន (Mobile Portal) */}
+                <button
+                  onClick={() => handleNavClick('mobile')}
+                  className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all ${
+                    activeTab === 'mobile'
+                      ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20'
+                      : 'bg-slate-950/60 hover:bg-slate-800 text-slate-300 border border-slate-800'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-300">
+                      <Smartphone className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <span className="block">{t('navMobilePortal')}</span>
+                      <span className="text-[10px] text-slate-400 font-normal">Check-In & Digital Pass</span>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-500" />
