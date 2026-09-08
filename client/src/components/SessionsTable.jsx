@@ -1043,9 +1043,17 @@ export default function SessionsTable({
                 {/* Meta details: Time, Duration, Status */}
                 <div className="grid grid-cols-2 gap-2 text-[11px] pt-1">
                   <div>
-                    <span className="text-slate-500 block text-[10px]">ចូល / ចេញ៖</span>
+                    <span className="text-slate-500 block text-[10px]">
+                      {session.isAggregated ? 'ពេលចូលចុងក្រោយ៖' : 'ចូល / ចេញ៖'}
+                    </span>
                     <span className="font-mono text-slate-300 font-medium text-[11px]">
-                      {inTime} → {outTime}
+                      {session.isAggregated ? (
+                        <>
+                          {inTime} <span className="text-indigo-400 ml-1">(Last Visit)</span>
+                        </>
+                      ) : (
+                        <>{inTime} → {outTime}</>
+                      )}
                     </span>
                   </div>
                   <div>
