@@ -139,7 +139,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
             >
               <BookOpen className="w-5 h-5 shrink-0" />
               <div className="text-left leading-tight flex-1">
-                <span className="block">កំណត់ត្រាខ្ចីនឹងសង</span>
+                <span className="block">{t('navLibraryTransactions') || 'កំណត់ត្រាខ្ចីនឹងសង'}</span>
                 <span className={`text-[10px] font-normal ${activeTab === 'library_transactions' ? 'text-emerald-100' : 'text-slate-500'}`}>Borrow & Return Logs</span>
               </div>
             </button>
@@ -362,7 +362,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                       <BookOpen className="w-4 h-4" />
                     </div>
                     <div className="text-left">
-                      <span className="block">កំណត់ត្រាខ្ចីនឹងសង</span>
+                      <span className="block">{t('navLibraryTransactions') || 'កំណត់ត្រាខ្ចីនឹងសង'}</span>
                       <span className="text-[10px] text-slate-400 font-normal">Borrow & Return Logs</span>
                     </div>
                   </div>

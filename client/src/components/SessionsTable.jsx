@@ -404,7 +404,7 @@ export default function SessionsTable({
             </div>
             <div>
               <h3 className="text-base font-bold text-white">
-                {hideCategoryFilters ? (categoryTab === 'BOOKS' ? 'កំណត់ត្រាខ្ចីនឹងសង' : 'កំណត់ត្រាចូលបណ្ណាល័យ') : t('tabAllLogs')}
+                {hideCategoryFilters ? (categoryTab === 'BOOKS' ? (t('titleLibraryTransactions') || 'កំណត់ត្រាខ្ចីនឹងសង') : (t('titleLibraryVisits') || 'កំណត់ត្រាចូលបណ្ណាល័យ')) : t('tabAllLogs')}
               </h3>
               <p className="text-xs text-slate-400">
                 {displayItems.length} / {safeSessions.length} {t('recordsCount') || 'កំណត់ត្រា'}
