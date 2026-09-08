@@ -316,8 +316,17 @@ class DatabaseWrapper {
     if (!session) throw new Error('Session not found.');
     if (session.status !== 'PENDING_APPROVAL') throw new Error('Session is not pending approval.');
 
-    session.status = 'ACTIVE';
-    session.check_in_time = new Date().toISOString();
+    const now = new Date().toISOString();
+    if (session.purpose_of_visit === 'Book Borrowing' || session.purpose_of_visit === 'Book Return') {
+      session.status = 'COMPLETED';
+      session.check_in_time = now;
+      session.check_out_time = now;
+      session.duration_minutes = 1;
+    } else {
+      session.status = 'ACTIVE';
+      session.check_in_time = now;
+    }
+    
     await session.save();
     
     return {
