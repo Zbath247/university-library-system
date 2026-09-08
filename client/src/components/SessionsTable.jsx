@@ -611,7 +611,7 @@ export default function SessionsTable({
 
       {/* Borrow & Return Sub-filters (Only in LIBRARY_TRANSACTIONS view) */}
       {initialCategory === 'BOOKS' && (
-        <div className="px-6 py-3 bg-slate-950/80 border-b border-slate-800/80 flex sm:grid sm:grid-cols-2 gap-3 overflow-x-auto">
+        <div className="px-6 py-3 bg-slate-950/80 border-b border-slate-800/80 grid grid-cols-2 gap-3">
           {/* ខ្ចីសៀវភៅ */}
           <button
             type="button"
