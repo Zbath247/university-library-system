@@ -219,8 +219,6 @@ class DatabaseWrapper {
         if (purposeOfVisit) updateDoc.purpose_of_visit = purposeOfVisit;
         if (researchTopic) updateDoc.research_topic = researchTopic;
         
-        // If purpose changes to borrowing/returning, it should become PENDING_APPROVAL.
-        // If purpose changes from borrowing to normal reading, it should become ACTIVE.
         const requiresApproval = (purposeOfVisit === 'Book Borrowing' || purposeOfVisit === 'Book Return');
         const newStatus = requiresApproval ? 'PENDING_APPROVAL' : 'ACTIVE';
         updateDoc.status = newStatus;
@@ -237,10 +235,26 @@ class DatabaseWrapper {
       };
     }
 
+    const isBorrowOrReturn = (purposeOfVisit === 'Book Borrowing' || purposeOfVisit === 'Book Return');
+    if (!isBorrowOrReturn) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      const previousVisitToday = await Session.findOne({
+        user_id: Number(userId),
+        check_in_time: { $gte: today.toISOString() },
+        purpose_of_visit: { $nin: ['Book Borrowing', 'Book Return'] }
+      });
+      
+      if (previousVisitToday) {
+        throw new Error('ថ្ងៃនេះលោកអ្នកបានស្កេនចូលបណ្ណាល័យរួចរាល់ហើយ។ (You have already entered the library today). លោកអ្នកអាចចូលអានបានតែ ១ដងប៉ុណ្ណោះក្នុងមួយថ្ងៃ។ បើចង់ខ្ចី ឬសងសៀវភៅ សូមជ្រើសរើសគោលបំណងខាងលើ។');
+      }
+    }
+
     const now = new Date();
     const lastSession = await Session.findOne().sort({ id: -1 });
     const nextId = lastSession ? lastSession.id + 1 : 1;
-    const requiresApproval = (purposeOfVisit === 'Book Borrowing' || purposeOfVisit === 'Book Return');
+    const requiresApproval = isBorrowOrReturn;
     const initialStatus = requiresApproval ? 'PENDING_APPROVAL' : 'ACTIVE';
 
     const newSession = new Session({
