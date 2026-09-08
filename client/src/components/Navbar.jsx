@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LayoutDashboard, QrCode, Smartphone, Globe, Menu, X, ChevronRight, LogOut, ScanLine, Layers, MapPin, Building, BookOpen } from 'lucide-react';
+import { LayoutDashboard, QrCode, Smartphone, Globe, Menu, X, ChevronRight, LogOut, ScanLine, Layers, MapPin, Building, BookOpen, Settings } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { api } from '../services/api';
 
@@ -154,6 +154,20 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               </div>
             </button>
 
+            {/* 7. Admin Settings */}
+            {isAdminLoggedIn && onOpenSettings && (
+              <button
+                onClick={onOpenSettings}
+                className="relative w-full flex items-center gap-3 p-3.5 rounded-2xl text-xs font-bold transition-all duration-200 bg-slate-900/40 text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-800/50 overflow-hidden"
+              >
+                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-500 rounded-r-md opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                <Settings className="w-5 h-5 shrink-0 ml-1 text-slate-400" />
+                <div className="text-left leading-tight flex-1">
+                  <span className="block tracking-wide">Settings</span>
+                </div>
+              </button>
+            )}
+
 
           </nav>
 
@@ -187,22 +201,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
               </span>
             </button>
 
-            {/* Admin Settings Button */}
-            {isAdminLoggedIn && onOpenSettings && (
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenSettings();
-                }}
-                title={lang === 'km' ? 'ទីតាំង' : 'Location'}
-                className="flex items-center justify-between p-3 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-200 transition-all shadow-sm active:scale-95 w-full"
-              >
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-sky-400" />
-                  <span>{lang === 'km' ? 'ទីតាំង' : 'Location'}</span>
-                </div>
-              </button>
-            )}
+
 
             {/* Admin Logout */}
             {isAdminLoggedIn && onLogout && (
@@ -377,6 +376,26 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </button>
+
+                {/* 7. Admin Settings */}
+                {isAdminLoggedIn && onOpenSettings && (
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onOpenSettings();
+                    }}
+                    className="relative w-full flex items-center justify-between p-3.5 rounded-2xl text-xs font-bold transition-all bg-slate-900/40 text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-800/50 overflow-hidden"
+                  >
+                    <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-500 rounded-r-md opacity-80 transition-opacity"></div>
+                    <div className="flex items-center gap-3 ml-1">
+                      <Settings className="w-4 h-4 text-slate-400" />
+                      <div className="text-left">
+                        <span className="block tracking-wide">Settings</span>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500" />
+                  </button>
+                )}
 
 
 
