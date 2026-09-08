@@ -255,31 +255,31 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
 
       {/* Primary KPI Summary Cards */}
       {view === 'OVERVIEW' && (
-        <div className="flex flex-nowrap overflow-x-auto gap-4 lg:grid lg:grid-cols-3 pb-2 snap-x snap-mandatory hide-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 lg:gap-5 pb-2">
         
         {/* Card 1: Active Occupants */}
-        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-teal-950/20 border border-teal-500/30 shadow-xl backdrop-blur-xl flex flex-col justify-between hover:border-teal-500/50 transition-all duration-300 group min-w-[85vw] sm:min-w-[320px] lg:min-w-0 shrink-0 snap-center">
+        <div className="p-3 sm:p-6 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-teal-950/20 border border-teal-500/30 shadow-xl backdrop-blur-xl flex flex-col justify-between hover:border-teal-500/50 transition-all duration-300 group">
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
-                {t('statInsideNow')}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 sm:mb-3 gap-2">
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1 sm:gap-1.5 leading-tight">
+                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-teal-400 animate-ping shrink-0" />
+                <span className="line-clamp-2">{t('statInsideNow')}</span>
               </span>
-              <div className="p-2.5 rounded-2xl bg-teal-500/15 text-teal-300 border border-teal-500/20 group-hover:scale-110 transition-transform">
+              <div className="hidden sm:flex p-2.5 rounded-2xl bg-teal-500/15 text-teal-300 border border-teal-500/20 group-hover:scale-110 transition-transform">
                 <Activity className="w-4 h-4" />
               </div>
             </div>
 
-            <div className="flex items-baseline gap-2.5 mt-1">
-              <span className="text-4xl sm:text-5xl font-black text-white font-mono tracking-tight">
+            <div className="flex flex-col sm:flex-row sm:items-baseline gap-0.5 sm:gap-2.5 mt-1">
+              <span className="text-2xl sm:text-5xl font-black text-white font-mono tracking-tight">
                 {stats?.activeCount ?? 0}
               </span>
-              <span className="text-xs text-teal-300 font-semibold">{t('statInsideFacility')}</span>
+              <span className="text-[9px] sm:text-xs text-teal-300 font-semibold line-clamp-1">{t('statInsideFacility')}</span>
             </div>
           </div>
 
           {/* Breakdown Pills */}
-          <div className="flex items-center gap-1.5 mt-5 pt-3 border-t border-slate-800/80 text-[11px] flex-wrap">
+          <div className="hidden sm:flex items-center gap-1.5 mt-5 pt-3 border-t border-slate-800/80 text-[11px] flex-wrap">
             <span className="px-2 py-0.5 rounded-lg bg-blue-500/15 text-blue-300 border border-blue-500/20 font-mono font-medium">
               {stats?.activeBreakdown?.students ?? 0} {tRole('Student')}
             </span>
@@ -293,48 +293,46 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
         </div>
 
         {/* Card 2: Today's Total Visits */}
-        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-indigo-950/20 border border-indigo-500/25 shadow-xl backdrop-blur-xl flex flex-col justify-between hover:border-indigo-500/40 transition-all duration-300 group min-w-[85vw] sm:min-w-[320px] lg:min-w-0 shrink-0 snap-center">
+        <div className="p-3 sm:p-6 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-indigo-950/20 border border-indigo-500/25 shadow-xl backdrop-blur-xl flex flex-col justify-between hover:border-indigo-500/40 transition-all duration-300 group">
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 sm:mb-3 gap-2">
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-indigo-400 line-clamp-2 leading-tight">
                 {t('statTodayVisits')}
               </span>
-              <div className="p-2.5 rounded-2xl bg-indigo-500/15 text-indigo-300 border border-indigo-500/20 group-hover:scale-110 transition-transform">
+              <div className="hidden sm:flex p-2.5 rounded-2xl bg-indigo-500/15 text-indigo-300 border border-indigo-500/20 group-hover:scale-110 transition-transform">
                 <UserCheck className="w-4 h-4" />
               </div>
             </div>
 
-            <div className="flex items-baseline gap-2.5 mt-1">
-              <span className="text-4xl sm:text-5xl font-black text-white font-mono tracking-tight">
+            <div className="flex flex-col sm:flex-row sm:items-baseline gap-0.5 sm:gap-2.5 mt-1">
+              <span className="text-2xl sm:text-5xl font-black text-white font-mono tracking-tight">
                 {stats?.todayVisits ?? 0}
               </span>
-              <span className="text-xs text-slate-400 font-semibold">{t('activeOccupants')}</span>
+              <span className="text-[9px] sm:text-xs text-slate-400 font-semibold line-clamp-1">{t('activeOccupants')}</span>
             </div>
           </div>
-
-
         </div>
 
         {/* Card 3: Total Library Visits */}
-        <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-purple-950/20 border border-purple-500/25 shadow-xl backdrop-blur-xl flex flex-col justify-between hover:border-purple-500/40 transition-all duration-300 group min-w-[85vw] sm:min-w-[320px] lg:min-w-0 shrink-0 snap-center">
+        <div className="p-3 sm:p-6 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-900/85 to-purple-950/20 border border-purple-500/25 shadow-xl backdrop-blur-xl flex flex-col justify-between hover:border-purple-500/40 transition-all duration-300 group">
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-purple-400">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 sm:mb-3 gap-2">
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-purple-400 line-clamp-2 leading-tight">
                 {t('statTotalVisits') || 'ចំនួនចូលបណ្ណាល័យសរុប'}
               </span>
-              <div className="p-2.5 rounded-2xl bg-purple-500/15 text-purple-300 border border-purple-500/20 group-hover:scale-110 transition-transform">
+              <div className="hidden sm:flex p-2.5 rounded-2xl bg-purple-500/15 text-purple-300 border border-purple-500/20 group-hover:scale-110 transition-transform">
                 <Users className="w-4 h-4" />
               </div>
             </div>
 
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-4xl sm:text-5xl font-black text-white font-mono tracking-tight bg-gradient-to-r from-purple-300 to-indigo-200 bg-clip-text text-transparent">
+              <span className="text-2xl sm:text-5xl font-black text-white font-mono tracking-tight bg-gradient-to-r from-purple-300 to-indigo-200 bg-clip-text text-transparent">
                 {stats?.totalLibraryVisits ?? 0}
               </span>
             </div>
           </div>
 
-          <p className="text-[11px] text-slate-400 mt-5 pt-3 border-t border-slate-800/80 truncate">
+          <p className="hidden sm:block text-[11px] text-slate-400 mt-5 pt-3 border-t border-slate-800/80 truncate">
             {t('statTotalVisitsDesc') || 'ចំនួនដងសរុបដែលបានកត់ត្រាក្នុងប្រព័ន្ធ'}
           </p>
         </div>
