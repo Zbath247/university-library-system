@@ -548,6 +548,7 @@ class DatabaseWrapper {
     });
 
     const totalUsers = await User.countDocuments();
+    const totalLibraryVisits = allSessions.filter(s => s.purpose_of_visit !== 'Book Borrowing' && s.purpose_of_visit !== 'Book Return').length;
 
     return {
       activeCount: activeSessions.length,
@@ -556,7 +557,8 @@ class DatabaseWrapper {
       avgDurationMinutes: avgDuration,
       peakHour: `${peakHour.toString().padStart(2, '0')}:00 - ${(peakHour + 1).toString().padStart(2, '0')}:00`,
       totalRegisteredUsers: totalUsers,
-      totalAllTimeSessions: allSessions.length
+      totalAllTimeSessions: allSessions.length,
+      totalLibraryVisits: totalLibraryVisits
     };
   }
 

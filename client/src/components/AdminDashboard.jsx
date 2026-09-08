@@ -325,7 +325,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
           <div>
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold uppercase tracking-wider text-purple-400">
-                ចំនួនចូលបណ្ណាល័យជាក់ស្តែងសរុបមក
+                {t('statTotalVisits') || 'ចំនួនចូលបណ្ណាល័យសរុប'}
               </span>
               <div className="p-2.5 rounded-2xl bg-purple-500/15 text-purple-300 border border-purple-500/20 group-hover:scale-110 transition-transform">
                 <Users className="w-4 h-4" />
@@ -334,13 +334,13 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
 
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-4xl sm:text-5xl font-black text-white font-mono tracking-tight bg-gradient-to-r from-purple-300 to-indigo-200 bg-clip-text text-transparent">
-                {stats?.totalAllTimeSessions ?? 0}
+                {stats?.totalLibraryVisits ?? 0}
               </span>
             </div>
           </div>
 
           <p className="text-[11px] text-slate-400 mt-5 pt-3 border-t border-slate-800/80 truncate">
-            ចំនួនដងសរុបដែលបានកត់ត្រាក្នុងប្រព័ន្ធ
+            {t('statTotalVisitsDesc') || 'ចំនួនដងសរុបដែលបានកត់ត្រាក្នុងប្រព័ន្ធ'}
           </p>
         </div>
 
