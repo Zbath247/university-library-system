@@ -181,20 +181,20 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
     <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-6 animate-fade-in">
       
       {/* Top Banner & Quick Controls */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-gradient-to-r from-slate-900/95 via-slate-900/90 to-slate-950/95 p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-800/90 shadow-2xl backdrop-blur-xl">
-        <div className="space-y-1">
+      <div className="flex flex-row items-start lg:items-center justify-between gap-4 bg-gradient-to-r from-slate-900/95 via-slate-900/90 to-slate-950/95 p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-800/90 shadow-2xl backdrop-blur-xl">
+        <div className="space-y-1 pr-2">
           <div className="flex items-center gap-2.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse shadow-sm shadow-teal-400/50" />
-            <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+            <div className="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse shadow-sm shadow-teal-400/50 shrink-0" />
+            <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight leading-tight">
               {view === 'OVERVIEW' ? t('adminTitle') : view === 'LIBRARY_VISITS' ? (t('titleLibraryVisits') || 'កំណត់ត្រាចូលបណ្ណាល័យ') : view === 'LIBRARY_TRANSACTIONS' ? (t('titleLibraryTransactions') || 'កំណត់ត្រាខ្ចីនឹងសង') : t('tabAllLogs')}
             </h1>
           </div>
-          <p className="text-xs sm:text-sm text-slate-400 font-medium pl-5">
+          <p className="text-[11px] sm:text-sm text-slate-400 font-medium pl-5 leading-relaxed">
             {view === 'OVERVIEW' ? t('adminSub') : view === 'LIBRARY_VISITS' ? (t('subLibraryVisits') || 'គ្រប់គ្រង និងតាមដានរាល់កំណត់ត្រាចូលបណ្ណាល័យរបស់សមាជិក') : view === 'LIBRARY_TRANSACTIONS' ? (t('subLibraryTransactions') || 'គ្រប់គ្រង និងតាមដានរាល់កំណត់ត្រាខ្ចីនិងសងសៀវភៅរបស់សមាជិក') : t('logsSub')}
           </p>
         </div>
 
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex items-center gap-3 shrink-0">
           
           {/* Notification Bell */}
           <div className="relative z-50">
