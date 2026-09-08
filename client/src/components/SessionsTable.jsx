@@ -609,6 +609,43 @@ export default function SessionsTable({
         </div>
       )}
 
+      {/* Borrow & Return Sub-filters (Only in LIBRARY_TRANSACTIONS view) */}
+      {initialCategory === 'BOOKS' && (
+        <div className="px-6 py-3 bg-slate-950/80 border-b border-slate-800/80 flex sm:grid sm:grid-cols-2 gap-3 overflow-x-auto">
+          {/* ខ្ចីសៀវភៅ */}
+          <button
+            type="button"
+            onClick={() => setCategoryTab(categoryTab === 'BORROW' ? 'BOOKS' : 'BORROW')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-between gap-2 whitespace-nowrap flex-1 ${
+              categoryTab === 'BORROW'
+                ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+                : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
+            }`}
+          >
+            <span>📚 {t('catBorrow') || 'ខ្ចីសៀវភៅ'}</span>
+            <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${categoryTab === 'BORROW' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-amber-300'}`}>
+              {countBorrow}
+            </span>
+          </button>
+
+          {/* សងសៀវភៅ */}
+          <button
+            type="button"
+            onClick={() => setCategoryTab(categoryTab === 'RETURN' ? 'BOOKS' : 'RETURN')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-between gap-2 whitespace-nowrap flex-1 ${
+              categoryTab === 'RETURN'
+                ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
+                : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
+            }`}
+          >
+            <span>📗 {t('catReturn') || 'សងសៀវភៅ'}</span>
+            <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${categoryTab === 'RETURN' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-emerald-300'}`}>
+              {countReturn}
+            </span>
+          </button>
+        </div>
+      )}
+
       {/* Filter Bar */}
       <div className="p-4 bg-slate-950/60 border-b border-slate-800 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         
