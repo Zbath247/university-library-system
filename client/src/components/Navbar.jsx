@@ -212,7 +212,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
 
       {/* Mobile Drawer Menu (Slide-Out Sidebar triggered by ☰) */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden animate-fade-in">
+        <div className="fixed inset-0 z-[100] md:hidden animate-fade-in">
           {/* Backdrop */}
           <div 
             className="fixed inset-0 bg-slate-950/80 backdrop-blur-md"
@@ -220,7 +220,7 @@ export default function Navbar({ activeTab, setActiveTab, activeCount, isAdminLo
           />
 
           {/* Drawer Panel */}
-          <div className="fixed top-0 left-0 bottom-0 w-[280px] sm:w-[320px] bg-slate-900 border-r border-slate-800 shadow-2xl z-50 flex flex-col p-5 animate-slide-right overflow-hidden">
+          <div className="fixed top-0 left-0 bottom-0 w-[280px] sm:w-[320px] bg-slate-900 border-r border-slate-800 shadow-2xl z-[100] flex flex-col p-5 animate-slide-right overflow-hidden">
             
             <div className="flex-1 overflow-y-auto pr-2 pb-4">
               {/* Drawer Header */}
