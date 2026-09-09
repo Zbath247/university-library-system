@@ -34,11 +34,16 @@ export const exportDashboardToExcel = async (data, chartsBase64) => {
   sheet.getColumn('R').width = 10;
   sheet.getColumn('S').width = 10;
 
+  // Set default font for all columns
+  sheet.columns.forEach(column => {
+    column.font = { name: 'Khmer OS Battambang', size: 11 };
+  });
+
   // Title
   sheet.mergeCells('A1:S2');
   const titleCell = sheet.getCell('A1');
   titleCell.value = `Monthly Students' Reading in Library Report - ${year}`;
-  titleCell.font = { name: 'Arial', size: 16, bold: true, color: { argb: 'FF1F497D' } };
+  titleCell.font = { name: 'Khmer OS Battambang', size: 16, bold: true, color: { argb: 'FF1F497D' } };
   titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
 
   // Helper function to create headers
@@ -48,7 +53,7 @@ export const exportDashboardToExcel = async (data, chartsBase64) => {
     }
     const cell = sheet.getCell(cellRef);
     cell.value = text;
-    cell.font = { bold: true, color: { argb: 'FF1F497D' } };
+    cell.font = { name: 'Khmer OS Battambang', bold: true, color: { argb: 'FF1F497D' } };
     cell.alignment = { horizontal: 'left', vertical: 'middle' };
   };
 
@@ -58,7 +63,7 @@ export const exportDashboardToExcel = async (data, chartsBase64) => {
       const colLetter = String.fromCharCode(startCol.charCodeAt(0) + index);
       const cell = sheet.getCell(`${colLetter}${startRow}`);
       cell.value = header;
-      cell.font = { bold: true, color: { argb: 'FF1F497D' } };
+      cell.font = { name: 'Khmer OS Battambang', bold: true, color: { argb: 'FF1F497D' } };
       cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFF00' } };
       cell.alignment = { horizontal: 'center', vertical: 'middle' };
       cell.border = {
@@ -95,14 +100,14 @@ export const exportDashboardToExcel = async (data, chartsBase64) => {
   const totalLabelCell = sheet.getCell(`A${currentRow}`);
   totalLabelCell.value = 'Total:';
   totalLabelCell.alignment = { horizontal: 'right', vertical: 'middle' };
-  totalLabelCell.font = { bold: true };
+  totalLabelCell.font = { name: 'Khmer OS Battambang', bold: true };
   totalLabelCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFF00' } };
   totalLabelCell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
 
   const totalValueCell = sheet.getCell(`C${currentRow}`);
   totalValueCell.value = totalQty;
   totalValueCell.alignment = { horizontal: 'center', vertical: 'middle' };
-  totalValueCell.font = { bold: true };
+  totalValueCell.font = { name: 'Khmer OS Battambang', bold: true };
   totalValueCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFF00' } };
   totalValueCell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
   
@@ -138,14 +143,14 @@ export const exportDashboardToExcel = async (data, chartsBase64) => {
   const tgLabelCell = sheet.getCell(`A${genderRow}`);
   tgLabelCell.value = 'Total:';
   tgLabelCell.alignment = { horizontal: 'right', vertical: 'middle' };
-  tgLabelCell.font = { bold: true };
+  tgLabelCell.font = { name: 'Khmer OS Battambang', bold: true };
   tgLabelCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFF00' } };
   tgLabelCell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
 
   const tgValueCell = sheet.getCell(`C${genderRow}`);
   tgValueCell.value = totalGenderQty;
   tgValueCell.alignment = { horizontal: 'center', vertical: 'middle' };
-  tgValueCell.font = { bold: true };
+  tgValueCell.font = { name: 'Khmer OS Battambang', bold: true };
   tgValueCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFF00' } };
   tgValueCell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
   
@@ -180,14 +185,14 @@ export const exportDashboardToExcel = async (data, chartsBase64) => {
   const tbLabelCell = sheet.getCell(`O${bookRow}`);
   tbLabelCell.value = 'Total:';
   tbLabelCell.alignment = { horizontal: 'right', vertical: 'middle' };
-  tbLabelCell.font = { bold: true };
+  tbLabelCell.font = { name: 'Khmer OS Battambang', bold: true };
   tbLabelCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFF00' } };
   tbLabelCell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
 
   const tbValueCell = sheet.getCell(`Q${bookRow}`);
   tbValueCell.value = totalBookQty;
   tbValueCell.alignment = { horizontal: 'center', vertical: 'middle' };
-  tbValueCell.font = { bold: true };
+  tbValueCell.font = { name: 'Khmer OS Battambang', bold: true };
   tbValueCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFF00' } };
   tbValueCell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
   

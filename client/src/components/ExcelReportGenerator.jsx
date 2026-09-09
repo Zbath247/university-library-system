@@ -28,6 +28,8 @@ ChartJS.register(
   ChartDataLabels
 );
 
+ChartJS.defaults.font.family = "'Khmer OS Battambang', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif";
+
 const computeData = (sessions) => {
   const safeSessions = Array.isArray(sessions) ? sessions : [];
   
