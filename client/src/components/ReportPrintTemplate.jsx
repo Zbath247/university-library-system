@@ -138,10 +138,24 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
         </div>
 
         {/* Date and Signatures */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '30px', fontFamily: '"Battambang", "Khmer OS Battambang", sans-serif', fontSize: '10.5pt' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '30px', fontFamily: '"Battambang", "Khmer OS Battambang", sans-serif', fontSize: '11pt', color: '#1e3a8a' }}>
           <div style={{ textAlign: 'center' }}>
-            <p style={{ margin: '0 0 8px 0' }}>ថ្ងៃ .................... ខែ ............... ឆ្នាំរោង ឆស័ក ព.ស. ២៥៦៨</p>
-            <p style={{ margin: '0' }}>កំណត់ធ្វើថ្ងៃទី {day} ខែ {month} ឆ្នាំ {year}</p>
+            <p style={{ margin: '0 0 8px 0' }}>
+              {(() => {
+                const khmerDays = ['អាទិត្យ', 'ចន្ទ', 'អង្គារ', 'ពុធ', 'ព្រហស្បតិ៍', 'សុក្រ', 'សៅរ៍'];
+                const dayName = khmerDays[new Date().getDay()];
+                return `ថ្ងៃ${dayName} ១២រោច ខែស្រាពណ៍ ឆ្នាំមមី អដ្ឋស័ក ព.ស. ២៥៧០`;
+              })()}
+            </p>
+            <p style={{ margin: '0' }}>
+              {(() => {
+                const khmerMonths = ['មករា', 'កុម្ភៈ', 'មីនា', 'មេសា', 'ឧសភា', 'មិថុនា', 'កក្កដា', 'សីហា', 'កញ្ញា', 'តុលា', 'វិច្ឆិកា', 'ធ្នូ'];
+                const khmerNumerals = ['០', '១', '២', '៣', '៤', '៥', '៦', '៧', '៨', '៩'];
+                const toKhmerNum = (num) => num.toString().split('').map(d => khmerNumerals[parseInt(d)]).join('');
+                const today = new Date();
+                return `កំពង់ស្ពឺ ថ្ងៃទី${toKhmerNum(today.getDate())} ខែ${khmerMonths[today.getMonth()]} ឆ្នាំ${toKhmerNum(today.getFullYear())}`;
+              })()}
+            </p>
           </div>
         </div>
 
