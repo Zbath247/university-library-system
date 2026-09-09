@@ -37,7 +37,9 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
           backgroundColor: '#fff',
           width: '100%',
           minHeight: '100vh',
-          boxSizing: 'border-box'
+          boxSizing: 'border-box',
+          display: 'flex',
+          flexDirection: 'column'
         }}
       >
         <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Moul&family=Moulpali&display=swap" rel="stylesheet" />
@@ -170,7 +172,7 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
         </div>
 
         {/* Footer Address */}
-        <div style={{ marginTop: '60px', textAlign: 'center', fontFamily: '"Battambang", "Khmer OS Battambang", sans-serif', fontSize: '9pt', color: '#4b5563', borderTop: '1px solid #e5e7eb', paddingTop: '15px' }}>
+        <div style={{ marginTop: 'auto', textAlign: 'center', fontFamily: '"Battambang", "Khmer OS Battambang", sans-serif', fontSize: '9pt', color: '#4b5563', borderTop: '1px solid #e5e7eb', paddingTop: '15px' }}>
           អាសយដ្ឋាន៖ សាកលវិទ្យាល័យ ឌីជីថល កម្ពុជា ៖ភូមិត្រពាំងស្លា ឃុំព្រះនិព្វាន ស្រុកគង់ពិសី ខេត្តកំពង់ស្ពឺ។ ទូរស័ព្ទ …….
         </div>
 
