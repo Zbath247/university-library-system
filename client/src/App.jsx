@@ -5,6 +5,7 @@ import MobileCheckIn from './components/MobileCheckIn';
 import AdminDashboard from './components/AdminDashboard';
 import AdminLoginModal from './components/AdminLoginModal';
 import SettingsModal from './components/SettingsModal';
+import ExcelReportGenerator from './components/ExcelReportGenerator';
 import { api } from './services/api';
 import { useLanguage } from './context/LanguageContext';
 import { io } from 'socket.io-client';
@@ -35,7 +36,7 @@ export default function App() {
   const [pendingAdminTab, setPendingAdminTab] = useState('admin');
 
   const handleTabSelect = (tab) => {
-    if (tab === 'admin' || tab === 'logs' || tab === 'library_visits' || tab === 'library_transactions') {
+    if (tab === 'admin' || tab === 'logs' || tab === 'library_visits' || tab === 'library_transactions' || tab === 'reports') {
       if (isAdminLoggedIn) {
         setActiveTab(tab);
       } else {
@@ -72,7 +73,7 @@ export default function App() {
 
   useEffect(() => {
     // If the initial tab is an admin tab but user is not logged in, prompt them
-    if (['admin', 'logs', 'library_visits', 'library_transactions'].includes(activeTab) && !isAdminLoggedIn) {
+    if (['admin', 'logs', 'library_visits', 'library_transactions', 'reports'].includes(activeTab) && !isAdminLoggedIn) {
       setPendingAdminTab(activeTab);
       setShowAdminLoginModal(true);
       setActiveTab('kiosk');
@@ -129,6 +130,8 @@ export default function App() {
               onNavigateEntrance={() => handleTabSelect('kiosk')}
               isQRScan={isQRScan}
             />
+          ) : activeTab === 'reports' && isAdminLoggedIn ? (
+            <ExcelReportGenerator />
           ) : isAdminLoggedIn && (activeTab === 'admin' || activeTab === 'logs' || activeTab === 'library_visits' || activeTab === 'library_transactions') ? (
             <AdminDashboard
               view={activeTab === 'logs' ? 'LOGS' : activeTab === 'library_visits' ? 'LIBRARY_VISITS' : activeTab === 'library_transactions' ? 'LIBRARY_TRANSACTIONS' : 'OVERVIEW'}
