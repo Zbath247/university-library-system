@@ -18,7 +18,8 @@ import {
   RotateCcw,
   AlertTriangle,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Printer
 } from 'lucide-react';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
@@ -477,11 +478,11 @@ export default function SessionsTable({
             </button>
             <button
               onClick={handleExportPDF}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 transition"
-              title="ទាញយកជា PDF"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition"
+              title="Print PDF"
             >
-              <Download className="w-3.5 h-3.5 text-rose-400" />
-              <span>{t('btnPdf') || 'PDF'}</span>
+              <Printer className="w-4 h-4" />
+              <span>Print PDF</span>
             </button>
           </div>
         </div>

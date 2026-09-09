@@ -7,24 +7,31 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
   const month = (today.getMonth() + 1).toString().padStart(2, '0');
   const year = today.getFullYear();
   
-  // Determine report title based on category
-  let reportTitle = 'ស្ដីពីបញ្ជីឈ្មោះអ្នកចូលបណ្ណាល័យ';
-  if (category === 'BORROW') {
-    reportTitle = 'ស្ដីពីបញ្ជីឈ្មោះអ្នកខ្ចីសៀវភៅ';
-  } else if (category === 'RETURN') {
-    reportTitle = 'ស្ដីពីបញ្ជីឈ្មោះអ្នកសងសៀវភៅ';
-  } else if (category === 'VISIT') {
-    reportTitle = 'ស្ដីពីបញ្ជីឈ្មោះអ្នកចូលអានសៀវភៅ';
-  }
-  
-  reportTitle += `ប្រចាំថ្ងៃទី ${day} ខែ ${month} ឆ្នាំ ${year}`;
+  // Aggregate data
+  const userMap = new Map();
+  (sessions || []).forEach(session => {
+    const user = session.user || {};
+    const uid = user.university_id || user.full_name;
+    if (!uid) return;
+    if (!userMap.has(uid)) {
+      userMap.set(uid, {
+        user,
+        visitCount: 1,
+      });
+    } else {
+      userMap.get(uid).visitCount += 1;
+    }
+  });
+  const groupedData = Array.from(userMap.values());
+  const totalCheckins = groupedData.reduce((acc, curr) => acc + curr.visitCount, 0);
+  const totalUsers = groupedData.length;
 
   return (
     <div style={{ display: 'none' }}>
       <div 
         ref={ref} 
         style={{ 
-          padding: '40px',
+          padding: '40px 60px',
           fontFamily: '"Khmer OS Battambang", "Khmer OS", Arial, sans-serif',
           color: '#000',
           backgroundColor: '#fff',
@@ -33,93 +40,114 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
           boxSizing: 'border-box'
         }}
       >
-        {/* Header - Kingdom of Cambodia */}
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h2 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '18pt', margin: '0 0 5px 0', fontWeight: 'normal' }}>ព្រះរាជាណាចក្រកម្ពុជា</h2>
-          <h3 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '16pt', margin: '0', fontWeight: 'normal' }}>ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
-          <div style={{ width: '130px', height: '2px', backgroundColor: '#000', margin: '8px auto' }}></div>
-        </div>
-
-        {/* University Header */}
-        <div style={{ textAlign: 'left', marginBottom: '30px' }}>
-          <img src="/duc-logo.png" alt="DUC Logo" style={{ width: '80px', height: 'auto', marginBottom: '10px' }} />
-          <h3 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '14pt', margin: '0', fontWeight: 'normal' }}>សាកលវិទ្យាល័យឌីជីថលកម្ពុជា</h3>
-          <p style={{ fontFamily: 'Arial, sans-serif', fontSize: '10pt', margin: '0', fontWeight: 'bold', color: '#666' }}>DIGITAL UNIVERSITY OF CAMBODIA</p>
+        {/* Header Section */}
+        <div style={{ display: 'flex', position: 'relative', marginBottom: '30px' }}>
+          {/* Left Logo & Uni Name */}
+          <div style={{ textAlign: 'center', width: '200px' }}>
+            <img src="/duc-logo.png" alt="DUC Logo" style={{ width: '70px', height: 'auto', marginBottom: '5px' }} />
+            <h3 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0' }}>សាកលវិទ្យាល័យឌីជីថលកម្ពុជា</h3>
+            <h3 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0' }}>បណ្ណាល័យសិក្សា</h3>
+          </div>
+          
+          {/* Center Kingdom */}
+          <div style={{ flex: 1, textAlign: 'center', paddingTop: '10px' }}>
+            <h2 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '13pt', margin: '0 0 5px 0', fontWeight: 'normal' }}>ព្រះរាជាណាចក្រកម្ពុជា</h2>
+            <h3 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '12pt', margin: '0', fontWeight: 'normal' }}>ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
+            <div style={{ width: '100px', height: '1px', backgroundColor: '#000', margin: '10px auto' }}></div>
+          </div>
+          
+          {/* Right Spacer */}
+          <div style={{ width: '200px' }}></div>
         </div>
 
         {/* Report Title */}
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h2 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '16pt', color: '#1a56db', margin: '0 0 10px 0', fontWeight: 'normal' }}>របាយការណ៍</h2>
-          <h3 style={{ fontSize: '14pt', color: '#1a56db', margin: '0', fontWeight: 'normal' }}>{reportTitle}</h3>
+        <div style={{ textAlign: 'center', marginBottom: '25px' }}>
+          <h2 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '12pt', margin: '0 0 8px 0', fontWeight: 'normal' }}>របាយការណ៍សិស្សចូលក្នុងបណ្ណាល័យ</h2>
+          <p style={{ fontFamily: '"Khmer OS Battambang", sans-serif', fontSize: '11pt', margin: '0', fontWeight: 'bold' }}>កាលបរិច្ឆេទ ៖ ទាំងអស់</p>
         </div>
 
         {/* Data Table */}
         <table style={{ 
           width: '100%', 
           borderCollapse: 'collapse', 
-          marginBottom: '50px',
-          fontSize: '11pt'
+          marginBottom: '30px',
+          fontSize: '10pt',
+          fontFamily: '"Khmer OS Battambang", sans-serif'
         }}>
           <thead>
-            <tr>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>ល.រ</th>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>អត្តលេខ<br/>និស្សិត</th>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>គោត្តនាមនិង<br/>នាម</th>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>ភេទ</th>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>លេខទូរស័ព្ទ</th>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>តួនាទី<br/>សិក្សា</th>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>ដេប៉ាតឺម៉ង់</th>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>បន្ទប់</th>
-              <th style={{ border: '1px solid #000', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>គោលបំណងនៃការចូលបណ្ណាល័យ</th>
+            <tr style={{ backgroundColor: '#111827', color: '#fff' }}>
+              <th style={{ padding: '10px 15px', textAlign: 'left', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ឈ្មោះសិស្ស / សមាជិក</th>
+              <th style={{ padding: '10px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ភេទ</th>
+              <th style={{ padding: '10px 15px', textAlign: 'left', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ជំនាញ</th>
+              <th style={{ padding: '10px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ថ្នាក់</th>
+              <th style={{ padding: '10px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ចំនួនចូលសរុប</th>
             </tr>
           </thead>
           <tbody>
-            {sessions.map((session, index) => {
-              const user = session.user || {};
-              let purposeDisplay = session.purpose_of_visit || 'ចូលបណ្ណាល័យ';
-              let finalText = purposeDisplay;
-              if (session.purpose_of_visit === 'Book Borrowing') {
-                finalText = session.research_topic ? session.research_topic : 'ខ្ចីសៀវភៅ';
-              } else if (session.purpose_of_visit === 'Book Return') {
-                finalText = session.research_topic ? session.research_topic : 'សងសៀវភៅ';
-              } else {
-                finalText = session.research_topic ? `${purposeDisplay} - ${session.research_topic}` : purposeDisplay;
-              }
-
+            {groupedData.map((row, index) => {
+              const gender = row.user.gender === 'Male' || row.user.gender === 'ប្រុស' ? 'ប្រុស' : 
+                            (row.user.gender === 'Female' || row.user.gender === 'ស្រី' ? 'ស្រី' : (row.user.gender || '-'));
+              
               return (
-                <tr key={session.id || index}>
-                  <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{index + 1}</td>
-                  <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.university_id || '-'}</td>
-                  <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.full_name || '-'}</td>
-                  <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.gender || '-'}</td>
-                  <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.phone || '-'}</td>
-                  <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.role_name || '-'}</td>
-                  <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.department_name || '-'}</td>
-                  <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>{user.room || '-'}</td>
-                  <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'left' }}>{finalText}</td>
+                <tr key={index}>
+                  <td style={{ padding: '10px 15px', border: '1px solid #e5e7eb', fontWeight: 'bold' }}>{row.user.full_name || '-'}</td>
+                  <td style={{ padding: '10px 15px', textAlign: 'center', border: '1px solid #e5e7eb' }}>{gender}</td>
+                  <td style={{ padding: '10px 15px', border: '1px solid #e5e7eb', fontWeight: 'bold' }}>{row.user.department_name || '-'}</td>
+                  <td style={{ padding: '10px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'bold' }}>{row.user.room || '-'}</td>
+                  <td style={{ padding: '10px 15px', textAlign: 'center', border: '1px solid #e5e7eb' }}>
+                    <span style={{ 
+                      display: 'inline-block', 
+                      width: '26px', 
+                      height: '26px', 
+                      lineHeight: '26px', 
+                      backgroundColor: '#f3f4f6', 
+                      borderRadius: '50%', 
+                      textAlign: 'center',
+                      fontWeight: 'bold'
+                    }}>
+                      {row.visitCount}
+                    </span>
+                  </td>
                 </tr>
               );
             })}
-            {sessions.length === 0 && (
+            {groupedData.length === 0 && (
               <tr>
-                <td colSpan="9" style={{ border: '1px solid #000', padding: '20px', textAlign: 'center' }}>មិនមានទិន្នន័យទេ</td>
+                <td colSpan="5" style={{ padding: '20px', textAlign: 'center', border: '1px solid #e5e7eb' }}>មិនមានទិន្នន័យទេ</td>
               </tr>
             )}
           </tbody>
         </table>
 
-        {/* Signatures */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '50px', fontSize: '11pt' }}>
+        {/* Summary Box */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '30px' }}>
+          <div style={{ width: '400px', border: '1px solid #e5e7eb', borderRadius: '6px', overflow: 'hidden', fontFamily: '"Khmer OS Battambang", sans-serif', fontSize: '10pt' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 20px', backgroundColor: '#fff', borderBottom: '1px solid #e5e7eb' }}>
+              <span>សរុបសិស្សដែលបានចូល (Total Users)</span>
+              <span style={{ fontWeight: 'bold' }}>{totalUsers}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 20px', backgroundColor: '#111827', color: '#fff' }}>
+              <span>សរុបការចូលទាំងអស់ (TOTAL CHECK-INS)</span>
+              <span style={{ fontWeight: 'bold' }}>{totalCheckins}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Date and Signatures */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px', fontFamily: '"Khmer OS Battambang", sans-serif', fontSize: '10pt' }}>
           <div style={{ textAlign: 'center' }}>
-            <p style={{ margin: '0 0 80px 0', fontWeight: 'bold', fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive' }}>អ្នកត្រួតពិនិត្យ</p>
-            {/* Signature space */}
+            <p style={{ margin: '0 0 5px 0' }}>ថ្ងៃ .................... ខែ ............... ឆ្នាំរោង ឆស័ក ព.ស. ២៥៦៨</p>
+            <p style={{ margin: '0' }}>កំណត់ធ្វើថ្ងៃទី {day} ខែ {month} ឆ្នាំ {year}</p>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '30px', fontSize: '11pt', fontFamily: '"Khmer OS Battambang", sans-serif' }}>
+          <div style={{ textAlign: 'center', marginLeft: '60px' }}>
+            <p style={{ margin: '0' }}>អ្នកត្រួតពិនិត្យ</p>
           </div>
           
-          <div style={{ textAlign: 'center' }}>
-            <p style={{ margin: '0 0 5px 0' }}>ថ្ងៃ .................... ខែ ស្រាពណ៍ ឆ្នាំរោង ឆស័ក ព.ស ២៥៦៨</p>
-            <p style={{ margin: '0 0 20px 0' }}>កំពង់ស្ពឺ ថ្ងៃទី ......... ខែ ........... ឆ្នាំ 2026</p>
-            <p style={{ margin: '0 0 80px 0', fontWeight: 'bold', fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive' }}>អ្នកធ្វើរបាយការណ៍</p>
-            {/* Signature space */}
+          <div style={{ textAlign: 'center', marginRight: '100px' }}>
+            <p style={{ margin: '0' }}>អ្នកធ្វើរបាយការណ៍</p>
           </div>
         </div>
 
