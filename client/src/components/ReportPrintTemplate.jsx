@@ -172,7 +172,7 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
         </div>
 
         {/* Footer Address */}
-        <div style={{ marginTop: '100px', textAlign: 'center', fontFamily: '"Battambang", "Khmer OS Battambang", sans-serif', fontSize: '9pt', color: '#4b5563', borderTop: '1px solid #e5e7eb', paddingTop: '15px' }}>
+        <div style={{ marginTop: '160px', textAlign: 'center', fontFamily: '"Battambang", "Khmer OS Battambang", sans-serif', fontSize: '9pt', color: '#4b5563', borderTop: '1px solid #e5e7eb', paddingTop: '15px' }}>
           អាសយដ្ឋាន៖ សាកលវិទ្យាល័យ ឌីជីថល កម្ពុជា ៖ភូមិត្រពាំងស្លា ឃុំព្រះនិព្វាន ស្រុកគង់ពិសី ខេត្តកំពង់ស្ពឺ។ ទូរស័ព្ទ …….
         </div>
 
