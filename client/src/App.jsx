@@ -5,7 +5,7 @@ import MobileCheckIn from './components/MobileCheckIn';
 import AdminDashboard from './components/AdminDashboard';
 import AdminLoginModal from './components/AdminLoginModal';
 import SettingsModal from './components/SettingsModal';
-import ExcelReportGenerator from './components/ExcelReportGenerator';
+
 import { api } from './services/api';
 import { useLanguage } from './context/LanguageContext';
 import { io } from 'socket.io-client';
@@ -130,8 +130,7 @@ export default function App() {
               onNavigateEntrance={() => handleTabSelect('kiosk')}
               isQRScan={isQRScan}
             />
-          ) : activeTab === 'reports' && isAdminLoggedIn ? (
-            <ExcelReportGenerator />
+
           ) : isAdminLoggedIn && (activeTab === 'admin' || activeTab === 'logs' || activeTab === 'library_visits' || activeTab === 'library_transactions') ? (
             <AdminDashboard
               view={activeTab === 'logs' ? 'LOGS' : activeTab === 'library_visits' ? 'LIBRARY_VISITS' : activeTab === 'library_transactions' ? 'LIBRARY_TRANSACTIONS' : 'OVERVIEW'}

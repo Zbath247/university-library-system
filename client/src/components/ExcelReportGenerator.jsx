@@ -54,11 +54,13 @@ const mockData = {
   ]
 };
 
-export const ExcelReportGenerator = () => {
+export const ExcelReportGenerator = ({ isOpen, onClose }) => {
   const lineChartRef = useRef(null);
   const pieChartRef = useRef(null);
   const barChartRef = useRef(null);
   const [isExporting, setIsExporting] = useState(false);
+
+  if (!isOpen) return null;
 
   const handleExport = async () => {
     setIsExporting(true);
@@ -123,43 +125,55 @@ export const ExcelReportGenerator = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-[#1F497D]">Excel Export Demo</h1>
-        <button
-          onClick={handleExport}
-          disabled={isExporting}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow disabled:opacity-50"
-        >
-          {isExporting ? 'Exporting...' : 'Export to Excel'}
-        </button>
-      </div>
-
-      <p className="text-gray-600 mb-6">The charts below will be embedded into the Excel file along with the tables.</p>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Line Chart */}
-        <div className="bg-white p-4 shadow rounded h-64">
-          <h2 className="text-center font-bold text-sm text-[#1F497D] mb-2">Monthly Student Reading Qty in Library Report</h2>
-          <div className="h-48">
-            <Line ref={lineChartRef} data={lineData} options={chartOptions} />
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
+        <div className="p-6 bg-gray-50">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-bold text-[#1F497D]">Excel Export Demo</h1>
+            <div className="flex gap-3">
+              <button
+                onClick={handleExport}
+                disabled={isExporting}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow disabled:opacity-50"
+              >
+                {isExporting ? 'Exporting...' : 'Export to Excel'}
+              </button>
+              <button
+                onClick={onClose}
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded shadow"
+              >
+                Close
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* Pie Chart */}
-        <div className="bg-white p-4 shadow rounded h-64">
-           <h2 className="text-center font-bold text-sm text-[#1F497D] mb-2">Monthly Reading Qty By Gender</h2>
-           <div className="h-48">
-            <Pie ref={pieChartRef} data={pieData} options={chartOptions} />
-           </div>
-        </div>
+          <p className="text-gray-600 mb-6">The charts below will be embedded into the Excel file along with the tables.</p>
 
-        {/* Bar Chart */}
-        <div className="bg-white p-4 shadow rounded h-64 md:col-span-2">
-           <h2 className="text-center font-bold text-sm text-[#1F497D] mb-2">Top 10 Books' Title Reading</h2>
-           <div className="h-48">
-            <Bar ref={barChartRef} data={barData} options={chartOptions} />
-           </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Line Chart */}
+            <div className="bg-white p-4 shadow rounded h-64 w-full">
+              <h2 className="text-center font-bold text-sm text-[#1F497D] mb-2">Monthly Student Reading Qty in Library Report</h2>
+              <div className="h-48 w-full">
+                <Line ref={lineChartRef} data={lineData} options={chartOptions} />
+              </div>
+            </div>
+
+            {/* Pie Chart */}
+            <div className="bg-white p-4 shadow rounded h-64 w-full">
+               <h2 className="text-center font-bold text-sm text-[#1F497D] mb-2">Monthly Reading Qty By Gender</h2>
+               <div className="h-48 w-full">
+                <Pie ref={pieChartRef} data={pieData} options={chartOptions} />
+               </div>
+            </div>
+
+            {/* Bar Chart */}
+            <div className="bg-white p-4 shadow rounded h-64 md:col-span-2 w-full">
+               <h2 className="text-center font-bold text-sm text-[#1F497D] mb-2">Top 10 Books' Title Reading</h2>
+               <div className="h-48 w-full">
+                <Bar ref={barChartRef} data={barData} options={chartOptions} />
+               </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

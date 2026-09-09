@@ -28,6 +28,7 @@ import { useReactToPrint } from 'react-to-print';
 import { Document, Packer, Paragraph, Table, TableCell, TableRow, TextRun, AlignmentType, WidthType, ImageRun, SectionType } from 'docx';
 import { saveAs } from 'file-saver';
 import ReportPrintTemplate from './ReportPrintTemplate';
+import { ExcelReportGenerator } from './ExcelReportGenerator';
 
 export default function SessionsTable({
   sessions = [],
@@ -65,6 +66,7 @@ export default function SessionsTable({
   const [showRestoreModal, setShowRestoreModal] = useState(false);
   const [restoreData, setRestoreData] = useState(null);
   const [viewMode, setViewMode] = useState('LOGS'); // 'LOGS' or 'USERS'
+  const [showExcelReportModal, setShowExcelReportModal] = useState(false);
   const reportRef = useRef();
 
   const { t, tRole, tDept, tPurpose } = useLanguage();
@@ -200,31 +202,7 @@ export default function SessionsTable({
   };
 
   const handleExportExcel = () => {
-    let startDate, endDate;
-    if (yearFilter || monthFilter) {
-      const y = yearFilter ? parseInt(yearFilter) : new Date().getFullYear();
-      if (monthFilter) {
-        const m = parseInt(monthFilter);
-        startDate = new Date(y, m - 1, 1).toISOString();
-        endDate = new Date(y, m, 0, 23, 59, 59, 999).toISOString();
-      } else {
-        startDate = new Date(y, 0, 1).toISOString();
-        endDate = new Date(y, 11, 31, 23, 59, 59, 999).toISOString();
-      }
-    }
-
-    const exportUrl = api.getExportExcelUrl({
-      status: statusFilter,
-      role_id: roleFilter,
-      department_id: deptFilter,
-      search,
-      category: categoryTab !== 'ALL' ? categoryTab : undefined,
-      startDate,
-      endDate,
-      viewMode
-    });
-    window.open(exportUrl, '_blank');
-    setShowExportPrompt(true);
+    setShowExcelReportModal(true);
   };
 
   const fileInputRef = useRef(null);
@@ -509,6 +487,11 @@ export default function SessionsTable({
       </div>
 
       <ReportPrintTemplate ref={reportRef} sessions={filteredSessions} category={categoryTab} />
+      
+      <ExcelReportGenerator 
+        isOpen={showExcelReportModal} 
+        onClose={() => setShowExcelReportModal(false)} 
+      />
 
       {/* Post Export Reset Notice Banner */}
       {showExportPrompt && (
