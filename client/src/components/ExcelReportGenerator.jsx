@@ -26,39 +26,72 @@ ChartJS.register(
   Legend
 );
 
-const mockData = {
-  monthlyData: [
-    { month: 'January', qty: 179, ratio: '15%', average: 6 },
-    { month: 'February', qty: 108, ratio: '9%', average: 4 },
-    { month: 'March', qty: 281, ratio: '24%', average: 9 },
-    { month: 'April', qty: 103, ratio: '9%', average: 3 },
-    { month: 'May', qty: 287, ratio: '24%', average: 10 },
-    { month: 'June', qty: 180, ratio: '15%', average: 6 },
-    { month: 'July', qty: 50, ratio: '4%', average: 2 },
-  ],
-  genderData: [
-    { gender: 'Male', qty: 713, ratio: '60%', remark: '' },
-    { gender: 'Female', qty: 475, ratio: '40%', remark: '' },
-  ],
-  bookData: [
-    { name: 'ប្រលោមលោក', qty: 54, ratio: '15%' },
-    { name: 'រឿងព្រេង', qty: 48, ratio: '13%' },
-    { name: 'កំណាព្យ', qty: 46, ratio: '12%' },
-    { name: 'ចិត្តវិទ្យា', qty: 42, ratio: '11%' },
-    { name: 'អប់រំ', qty: 37, ratio: '10%' },
-    { name: 'ទស្សនៈវិជ្ជា', qty: 34, ratio: '9%' },
-    { name: 'ប្រវត្តិសាស្ត្រ', qty: 31, ratio: '8%' },
-    { name: 'ការគ្រប់គ្រង', qty: 28, ratio: '8%' },
-    { name: 'វិទ្យាសាស្ត្រ', qty: 27, ratio: '7%' },
-    { name: 'សាសនា', qty: 22, ratio: '6%' },
-  ]
+const computeData = (sessions) => {
+  const safeSessions = Array.isArray(sessions) ? sessions : [];
+  
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const monthCounts = Array(12).fill(0);
+  
+  let maleCount = 0;
+  let femaleCount = 0;
+  const bookCounts = {};
+
+  safeSessions.forEach(s => {
+    if (s.check_in_time) {
+      const m = new Date(s.check_in_time).getMonth();
+      monthCounts[m]++;
+    }
+
+    const gender = s.user?.gender;
+    if (gender === 'Male' || gender === 'ប្រុស') maleCount++;
+    else if (gender === 'Female' || gender === 'ស្រី') femaleCount++;
+
+    const purpose = s.purpose_of_visit || '';
+    if (purpose.includes('Book') || purpose.includes('សៀវភៅ') || s.research_topic) {
+      const bookName = s.research_topic || 'សៀវភៅផ្សេងៗ (Other)';
+      bookCounts[bookName] = (bookCounts[bookName] || 0) + 1;
+    }
+  });
+
+  const totalMonthly = monthCounts.reduce((a, b) => a + b, 0);
+  const monthlyData = months.map((month, index) => {
+    const qty = monthCounts[index];
+    const ratio = totalMonthly > 0 ? Math.round((qty / totalMonthly) * 100) + '%' : '0%';
+    const average = Math.round(qty / 30);
+    return { month, qty, ratio, average };
+  }).filter(m => m.qty > 0 || m.month === 'January'); // Keep at least one to prevent empty chart
+
+  const totalGender = maleCount + femaleCount;
+  const genderData = [
+    { gender: 'Male', qty: maleCount, ratio: totalGender > 0 ? Math.round((maleCount / totalGender) * 100) + '%' : '0%', remark: '' },
+    { gender: 'Female', qty: femaleCount, ratio: totalGender > 0 ? Math.round((femaleCount / totalGender) * 100) + '%' : '0%', remark: '' }
+  ];
+
+  const sortedBooks = Object.entries(bookCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10);
+  const totalBooks = sortedBooks.reduce((acc, curr) => acc + curr[1], 0);
+
+  let bookData = sortedBooks.map(([name, qty]) => ({
+    name,
+    qty,
+    ratio: totalBooks > 0 ? Math.round((qty / totalBooks) * 100) + '%' : '0%'
+  }));
+
+  if (bookData.length === 0) {
+     bookData = [{ name: 'No Data', qty: 0, ratio: '0%' }];
+  }
+
+  return { monthlyData, genderData, bookData };
 };
 
-export const ExcelReportGenerator = forwardRef(({ onClose }, ref) => {
+export const ExcelReportGenerator = forwardRef(({ onClose, sessions = [] }, ref) => {
   const lineChartRef = useRef(null);
   const pieChartRef = useRef(null);
   const barChartRef = useRef(null);
   const [isExporting, setIsExporting] = useState(false);
+
+  const realData = computeData(sessions);
 
   useImperativeHandle(ref, () => ({
     generate: async () => {
@@ -74,7 +107,7 @@ export const ExcelReportGenerator = forwardRef(({ onClose }, ref) => {
           barChart: barChartRef.current ? barChartRef.current.toBase64Image() : null,
         };
 
-        await exportDashboardToExcel(mockData, chartsBase64);
+        await exportDashboardToExcel(realData, chartsBase64);
       } catch (error) {
         console.error("Failed to export Excel:", error);
         alert("Failed to export Excel. See console for details.");
@@ -86,11 +119,11 @@ export const ExcelReportGenerator = forwardRef(({ onClose }, ref) => {
   }));
 
   const lineData = {
-    labels: mockData.monthlyData.map(d => d.month.substring(0, 3)),
+    labels: realData.monthlyData.map(d => d.month.substring(0, 3)),
     datasets: [
       {
         label: 'Reading Qty',
-        data: mockData.monthlyData.map(d => d.qty),
+        data: realData.monthlyData.map(d => d.qty),
         borderColor: 'red',
         backgroundColor: 'red',
         borderDash: [5, 5],
@@ -100,10 +133,10 @@ export const ExcelReportGenerator = forwardRef(({ onClose }, ref) => {
   };
 
   const pieData = {
-    labels: mockData.genderData.map(d => d.gender),
+    labels: realData.genderData.map(d => d.gender),
     datasets: [
       {
-        data: mockData.genderData.map(d => d.qty),
+        data: realData.genderData.map(d => d.qty),
         backgroundColor: ['#d2b48c', '#ffff00'],
         borderWidth: 1,
       },
@@ -111,11 +144,11 @@ export const ExcelReportGenerator = forwardRef(({ onClose }, ref) => {
   };
 
   const barData = {
-    labels: mockData.bookData.map(d => d.name),
+    labels: realData.bookData.map(d => d.name),
     datasets: [
       {
         label: 'Qty',
-        data: mockData.bookData.map(d => d.qty),
+        data: realData.bookData.map(d => d.qty),
         backgroundColor: ['#a9a9a9', '#f5deb3', '#ffff00', '#f4a460', '#ffebcd', '#778899', '#ff6347', '#87ceeb', '#696969', '#dc143c'],
         borderWidth: 1,
       },

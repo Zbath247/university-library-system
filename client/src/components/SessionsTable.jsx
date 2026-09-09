@@ -490,7 +490,7 @@ export default function SessionsTable({
 
       <ReportPrintTemplate ref={reportRef} sessions={filteredSessions} category={categoryTab} />
       
-      <ExcelReportGenerator ref={excelReportRef} />
+      <ExcelReportGenerator ref={excelReportRef} sessions={filteredSessions} />
 
       {/* Post Export Reset Notice Banner */}
       {showExportPrompt && (
