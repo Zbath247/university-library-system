@@ -389,8 +389,10 @@ router.get('/export/csv', async (req, res) => {
     workbook.eachSheet((s) => {
       s.eachRow({ includeEmpty: false }, (row) => {
         row.eachCell({ includeEmpty: false }, (cell) => {
-          const isBold = cell.font && cell.font.bold;
-          cell.font = { name: 'Khmer OS Battambang', size: 11, bold: isBold };
+          const isBold = cell.font && cell.font.bold === true;
+          const newFont = { name: 'Khmer OS Battambang', size: 11 };
+          if (isBold) newFont.bold = true;
+          cell.font = newFont;
         });
       });
     });
@@ -752,8 +754,10 @@ router.get('/export/excel', async (req, res) => {
     workbook.eachSheet((sheet) => {
       sheet.eachRow({ includeEmpty: false }, (row) => {
         row.eachCell({ includeEmpty: false }, (cell) => {
-          const isBold = cell.font && cell.font.bold;
-          cell.font = { name: 'Khmer OS Battambang', size: 11, bold: isBold };
+          const isBold = cell.font && cell.font.bold === true;
+          const newFont = { name: 'Khmer OS Battambang', size: 11 };
+          if (isBold) newFont.bold = true;
+          cell.font = newFont;
         });
       });
     });
