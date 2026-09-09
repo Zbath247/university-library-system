@@ -1,13 +1,13 @@
 import React from 'react';
 
-const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
+const ReportPrintTemplate = React.forwardRef(({ sessions, displayItems, viewMode, category }, ref) => {
   // Format current date
   const today = new Date();
   const day = today.getDate().toString().padStart(2, '0');
   const month = (today.getMonth() + 1).toString().padStart(2, '0');
   const year = today.getFullYear();
   
-  // Aggregate data
+  // Aggregate data for summary (always useful)
   const userMap = new Map();
   (sessions || []).forEach(session => {
     const user = session.user || {};
@@ -25,6 +25,8 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
   const groupedData = Array.from(userMap.values());
   const totalCheckins = groupedData.reduce((acc, curr) => acc + curr.visitCount, 0);
   const totalUsers = groupedData.length;
+
+  const itemsToRender = displayItems || groupedData; // Fallback
 
   return (
     <div style={{ display: 'none' }}>
@@ -80,50 +82,97 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
           fontSize: '10pt',
           fontFamily: '"Battambang", "Khmer OS Battambang", sans-serif'
         }}>
-          <thead>
-            <tr style={{ backgroundColor: '#111827', color: '#fff' }}>
-              <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ល.រ</th>
-              <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>គោត្តនាម-នាម</th>
-              <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ភេទ</th>
-              <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ដេប៉ាតឺម៉ង់</th>
-              <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ចំនួនចូលសរុប</th>
-            </tr>
-          </thead>
-          <tbody>
-            {groupedData.map((row, index) => {
-              const gender = row.user.gender === 'Male' || row.user.gender === 'ប្រុស' ? 'ប្រុស' : 
-                            (row.user.gender === 'Female' || row.user.gender === 'ស្រី' ? 'ស្រី' : (row.user.gender || '-'));
-              
-              return (
-                <tr key={index}>
-                  <td style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb' }}>{index + 1}</td>
-                  <td style={{ padding: '12px 15px', border: '1px solid #e5e7eb', fontWeight: 'bold' }}>{row.user.full_name || '-'}</td>
-                  <td style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb' }}>{gender}</td>
-                  <td style={{ padding: '12px 15px', border: '1px solid #e5e7eb', fontWeight: 'bold' }}>{row.user.department_name || '-'}</td>
-                  <td style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb' }}>
-                    <span style={{ 
-                      display: 'inline-block', 
-                      width: '28px', 
-                      height: '28px', 
-                      lineHeight: '28px', 
-                      backgroundColor: '#f3f4f6', 
-                      borderRadius: '50%', 
-                      textAlign: 'center',
-                      fontWeight: 'bold',
-                      color: '#000'
-                    }}>
-                      {row.visitCount}
-                    </span>
-                  </td>
+          {viewMode === 'LOGS' ? (
+            <>
+              <thead>
+                <tr style={{ backgroundColor: '#111827', color: '#fff' }}>
+                  <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ល.រ</th>
+                  <th style={{ padding: '12px 15px', textAlign: 'left', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ឈ្មោះសិស្ស / សមាជិក</th>
+                  <th style={{ padding: '12px 15px', textAlign: 'left', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>គោលបំណង / ប្រធានបទ</th>
+                  <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ម៉ោងចូល</th>
+                  <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ម៉ោងចេញ</th>
+                  <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>រយៈពេល</th>
                 </tr>
-              );
-            })}
-            {groupedData.length === 0 && (
+              </thead>
+              <tbody>
+                {itemsToRender.map((row, index) => {
+                  const inTime = new Date(row.check_in_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                  const inDate = new Date(row.check_in_time).toLocaleDateString([], { month: 'short', day: 'numeric' });
+                  const outTime = row.check_out_time ? new Date(row.check_out_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-';
+                  
+                  const hours = Math.floor((row.duration_minutes || 0) / 60);
+                  const mins = (row.duration_minutes || 0) % 60;
+                  const duration = hours > 0 ? `${hours}ម៉ ${mins}ន` : `${mins}នទី`;
+                  
+                  let purposeDisplay = row.purpose_of_visit || 'ចូលបណ្ណាល័យ';
+                  let finalText = purposeDisplay;
+                  if (row.purpose_of_visit === 'Book Borrowing') finalText = row.research_topic ? row.research_topic : 'ខ្ចីសៀវភៅ';
+                  else if (row.purpose_of_visit === 'Book Return') finalText = row.research_topic ? row.research_topic : 'សងសៀវភៅ';
+                  else finalText = row.research_topic ? `${purposeDisplay} - ${row.research_topic}` : purposeDisplay;
+
+                  return (
+                    <tr key={index}>
+                      <td style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb' }}>{index + 1}</td>
+                      <td style={{ padding: '12px 15px', border: '1px solid #e5e7eb', fontWeight: 'bold' }}>{row.user?.full_name || '-'}</td>
+                      <td style={{ padding: '12px 15px', border: '1px solid #e5e7eb' }}>{finalText}</td>
+                      <td style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb' }}>{inDate} {inTime}</td>
+                      <td style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb' }}>{outTime}</td>
+                      <td style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb' }}>{duration}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </>
+          ) : (
+            <>
+              <thead>
+                <tr style={{ backgroundColor: '#111827', color: '#fff' }}>
+                  <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ល.រ</th>
+                  <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>គោត្តនាម-នាម</th>
+                  <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ភេទ</th>
+                  <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ដេប៉ាតឺម៉ង់</th>
+                  <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ចំនួនចូលសរុប</th>
+                </tr>
+              </thead>
+              <tbody>
+                {itemsToRender.map((row, index) => {
+                  const gender = row.user.gender === 'Male' || row.user.gender === 'ប្រុស' ? 'ប្រុស' : 
+                                (row.user.gender === 'Female' || row.user.gender === 'ស្រី' ? 'ស្រី' : (row.user.gender || '-'));
+                  
+                  return (
+                    <tr key={index}>
+                      <td style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb' }}>{index + 1}</td>
+                      <td style={{ padding: '12px 15px', border: '1px solid #e5e7eb', fontWeight: 'bold' }}>{row.user.full_name || '-'}</td>
+                      <td style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb' }}>{gender}</td>
+                      <td style={{ padding: '12px 15px', border: '1px solid #e5e7eb', fontWeight: 'bold' }}>{row.user.department_name || '-'}</td>
+                      <td style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb' }}>
+                        <span style={{ 
+                          display: 'inline-block', 
+                          width: '28px', 
+                          height: '28px', 
+                          lineHeight: '28px', 
+                          backgroundColor: '#f3f4f6', 
+                          borderRadius: '50%', 
+                          textAlign: 'center',
+                          fontWeight: 'bold',
+                          color: '#000'
+                        }}>
+                          {row.visitCount}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </>
+          )}
+          {itemsToRender.length === 0 && (
+            <tbody>
               <tr>
-                <td colSpan="5" style={{ padding: '20px', textAlign: 'center', border: '1px solid #e5e7eb' }}>មិនមានទិន្នន័យទេ</td>
+                <td colSpan={viewMode === 'LOGS' ? "6" : "5"} style={{ padding: '20px', textAlign: 'center', border: '1px solid #e5e7eb' }}>មិនមានទិន្នន័យទេ</td>
               </tr>
-            )}
-          </tbody>
+            </tbody>
+          )}
         </table>
 
         {/* Summary Box */}
