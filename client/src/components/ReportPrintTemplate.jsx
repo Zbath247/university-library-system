@@ -40,11 +40,7 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
           boxSizing: 'border-box'
         }}
       >
-        <style>
-          {`
-            @import url('https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Moul&display=swap');
-          `}
-        </style>
+        <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Moul&family=Moulpali&display=swap" rel="stylesheet" />
         {/* Header Section */}
         <div style={{ display: 'flex', position: 'relative', marginBottom: '30px' }}>
           {/* Left Logo & Uni Name */}
