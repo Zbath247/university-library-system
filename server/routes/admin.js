@@ -389,8 +389,8 @@ router.get('/export/csv', async (req, res) => {
     workbook.eachSheet((s) => {
       s.eachRow({ includeEmpty: false }, (row) => {
         row.eachCell({ includeEmpty: false }, (cell) => {
-          const currentFont = cell.font || {};
-          cell.font = { ...currentFont, name: 'Khmer OS Battambong' };
+          const isBold = cell.font && cell.font.bold;
+          cell.font = { name: 'Khmer OS Battambong', size: 11, bold: isBold };
         });
       });
     });
@@ -752,8 +752,8 @@ router.get('/export/excel', async (req, res) => {
     workbook.eachSheet((sheet) => {
       sheet.eachRow({ includeEmpty: false }, (row) => {
         row.eachCell({ includeEmpty: false }, (cell) => {
-          const currentFont = cell.font || {};
-          cell.font = { ...currentFont, name: 'Khmer OS Battambong' };
+          const isBold = cell.font && cell.font.bold;
+          cell.font = { name: 'Khmer OS Battambong', size: 11, bold: isBold };
         });
       });
     });
