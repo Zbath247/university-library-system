@@ -44,10 +44,10 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
         {/* Header Section */}
         <div style={{ display: 'flex', position: 'relative', marginBottom: '30px' }}>
           {/* Left Logo & Uni Name */}
-          <div style={{ textAlign: 'center', width: '250px' }}>
+          <div style={{ textAlign: 'center', width: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <img src="/duc-logo.png" alt="DUC Logo" style={{ width: '75px', height: 'auto', marginBottom: '8px' }} />
-            <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0 0 5px 0', color: '#000' }}>សាកលវិទ្យាល័យឌីជីថលកម្ពុជា</div>
-            <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0', color: '#000' }}>បណ្ណាល័យសិក្សា</div>
+            <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0 0 5px 0', color: '#000', width: '100%', textAlign: 'center' }}>សាកលវិទ្យាល័យឌីជីថលកម្ពុជា</div>
+            <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0', color: '#000', width: '100%', textAlign: 'center' }}>បណ្ណាល័យសិក្សា</div>
           </div>
           
           {/* Center Kingdom */}
@@ -57,13 +57,7 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
             
             {/* Decorative Line */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '15px 0' }}>
-              <div style={{ width: '60px', borderTop: '1px solid #000', height: '1px' }}></div>
-              <div style={{ margin: '0 10px', fontSize: '14px', color: '#000', display: 'flex', gap: '3px' }}>
-                <span>&#10022;</span>
-                <span>&#10043;</span>
-                <span>&#10022;</span>
-              </div>
-              <div style={{ width: '60px', borderTop: '1px solid #000', height: '1px' }}></div>
+              <img src="/tacteing.png" alt="Decoration" style={{ height: '22px', objectFit: 'contain' }} />
             </div>
           </div>
           
