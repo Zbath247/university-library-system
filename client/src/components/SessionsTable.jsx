@@ -66,8 +66,8 @@ export default function SessionsTable({
   const [showRestoreModal, setShowRestoreModal] = useState(false);
   const [restoreData, setRestoreData] = useState(null);
   const [viewMode, setViewMode] = useState('LOGS'); // 'LOGS' or 'USERS'
-  const [showExcelReportModal, setShowExcelReportModal] = useState(false);
-  const reportRef = useRef();
+  const excelReportRef = useRef(null);
+  const reportRef = useRef(null);
 
   const { t, tRole, tDept, tPurpose } = useLanguage();
 
@@ -202,7 +202,9 @@ export default function SessionsTable({
   };
 
   const handleExportExcel = () => {
-    setShowExcelReportModal(true);
+    if (excelReportRef.current) {
+      excelReportRef.current.generate();
+    }
   };
 
   const fileInputRef = useRef(null);
@@ -488,10 +490,7 @@ export default function SessionsTable({
 
       <ReportPrintTemplate ref={reportRef} sessions={filteredSessions} category={categoryTab} />
       
-      <ExcelReportGenerator 
-        isOpen={showExcelReportModal} 
-        onClose={() => setShowExcelReportModal(false)} 
-      />
+      <ExcelReportGenerator ref={excelReportRef} />
 
       {/* Post Export Reset Notice Banner */}
       {showExportPrompt && (

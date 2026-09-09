@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useImperativeHandle, forwardRef } from 'react';
 import { exportDashboardToExcel } from '../utils/excelExport';
 import {
   Chart as ChartJS,
@@ -54,31 +54,36 @@ const mockData = {
   ]
 };
 
-export const ExcelReportGenerator = ({ isOpen, onClose }) => {
+export const ExcelReportGenerator = forwardRef(({ onClose }, ref) => {
   const lineChartRef = useRef(null);
   const pieChartRef = useRef(null);
   const barChartRef = useRef(null);
   const [isExporting, setIsExporting] = useState(false);
 
-  if (!isOpen) return null;
+  useImperativeHandle(ref, () => ({
+    generate: async () => {
+      if (isExporting) return;
+      setIsExporting(true);
+      try {
+        // Allow time for charts to render if they just mounted
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        const chartsBase64 = {
+          lineChart: lineChartRef.current ? lineChartRef.current.toBase64Image() : null,
+          pieChart: pieChartRef.current ? pieChartRef.current.toBase64Image() : null,
+          barChart: barChartRef.current ? barChartRef.current.toBase64Image() : null,
+        };
 
-  const handleExport = async () => {
-    setIsExporting(true);
-    try {
-      const chartsBase64 = {
-        lineChart: lineChartRef.current ? lineChartRef.current.toBase64Image() : null,
-        pieChart: pieChartRef.current ? pieChartRef.current.toBase64Image() : null,
-        barChart: barChartRef.current ? barChartRef.current.toBase64Image() : null,
-      };
-
-      await exportDashboardToExcel(mockData, chartsBase64);
-    } catch (error) {
-      console.error("Failed to export Excel:", error);
-      alert("Failed to export Excel. See console for details.");
-    } finally {
-      setIsExporting(false);
+        await exportDashboardToExcel(mockData, chartsBase64);
+      } catch (error) {
+        console.error("Failed to export Excel:", error);
+        alert("Failed to export Excel. See console for details.");
+      } finally {
+        setIsExporting(false);
+        if (onClose) onClose();
+      }
     }
-  };
+  }));
 
   const lineData = {
     labels: mockData.monthlyData.map(d => d.month.substring(0, 3)),
@@ -99,7 +104,7 @@ export const ExcelReportGenerator = ({ isOpen, onClose }) => {
     datasets: [
       {
         data: mockData.genderData.map(d => d.qty),
-        backgroundColor: ['#d2b48c', '#ffff00'], // brown, yellow (roughly matching image)
+        backgroundColor: ['#d2b48c', '#ffff00'],
         borderWidth: 1,
       },
     ],
@@ -121,61 +126,21 @@ export const ExcelReportGenerator = ({ isOpen, onClose }) => {
     responsive: true,
     maintainAspectRatio: false,
     plugins: { legend: { display: false } },
-    animation: false, // Important: disable animation so it renders synchronously for export
+    animation: false,
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
-        <div className="p-6 bg-gray-50">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-[#1F497D]">Excel Export Demo</h1>
-            <div className="flex gap-3">
-              <button
-                onClick={handleExport}
-                disabled={isExporting}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow disabled:opacity-50"
-              >
-                {isExporting ? 'Exporting...' : 'Export to Excel'}
-              </button>
-              <button
-                onClick={onClose}
-                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded shadow"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-
-          <p className="text-gray-600 mb-6">The charts below will be embedded into the Excel file along with the tables.</p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Line Chart */}
-            <div className="bg-white p-4 shadow rounded h-64 w-full">
-              <h2 className="text-center font-bold text-sm text-[#1F497D] mb-2">Monthly Student Reading Qty in Library Report</h2>
-              <div className="h-48 w-full">
-                <Line ref={lineChartRef} data={lineData} options={chartOptions} />
-              </div>
-            </div>
-
-            {/* Pie Chart */}
-            <div className="bg-white p-4 shadow rounded h-64 w-full">
-               <h2 className="text-center font-bold text-sm text-[#1F497D] mb-2">Monthly Reading Qty By Gender</h2>
-               <div className="h-48 w-full">
-                <Pie ref={pieChartRef} data={pieData} options={chartOptions} />
-               </div>
-            </div>
-
-            {/* Bar Chart */}
-            <div className="bg-white p-4 shadow rounded h-64 md:col-span-2 w-full">
-               <h2 className="text-center font-bold text-sm text-[#1F497D] mb-2">Top 10 Books' Title Reading</h2>
-               <div className="h-48 w-full">
-                <Bar ref={barChartRef} data={barData} options={chartOptions} />
-               </div>
-            </div>
-          </div>
-        </div>
+    <div style={{ position: 'fixed', left: '-9999px', top: '-9999px', opacity: 0, pointerEvents: 'none' }}>
+      {/* We render them at a fixed size so ChartJS has dimensions to draw on */}
+      <div style={{ width: '800px', height: '400px' }}>
+        <Line ref={lineChartRef} data={lineData} options={chartOptions} />
+      </div>
+      <div style={{ width: '800px', height: '400px' }}>
+        <Pie ref={pieChartRef} data={pieData} options={chartOptions} />
+      </div>
+      <div style={{ width: '800px', height: '400px' }}>
+        <Bar ref={barChartRef} data={barData} options={chartOptions} />
       </div>
     </div>
   );
-};
+});
