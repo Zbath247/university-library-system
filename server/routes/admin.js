@@ -253,13 +253,15 @@ router.get('/export/csv', async (req, res) => {
       endDate
     });
 
-    // Category filter: visit, borrow, return
+    // Category filter: visit, borrow, return, books
     if (category === 'BORROW' || category === 'borrow') {
       sessions = sessions.filter(s => s.purpose_of_visit === 'Book Borrowing');
     } else if (category === 'RETURN' || category === 'return') {
       sessions = sessions.filter(s => s.purpose_of_visit === 'Book Return');
     } else if (category === 'VISIT' || category === 'visit') {
       sessions = sessions.filter(s => s.purpose_of_visit !== 'Book Borrowing' && s.purpose_of_visit !== 'Book Return');
+    } else if (category === 'BOOKS' || category === 'books') {
+      sessions = sessions.filter(s => s.purpose_of_visit === 'Book Borrowing' || s.purpose_of_visit === 'Book Return');
     }
 
     const headers = [
@@ -368,6 +370,8 @@ router.get('/export/excel', async (req, res) => {
       sessions = sessions.filter(s => s.purpose_of_visit === 'Book Return');
     } else if (category === 'VISIT' || category === 'visit') {
       sessions = sessions.filter(s => s.purpose_of_visit !== 'Book Borrowing' && s.purpose_of_visit !== 'Book Return');
+    } else if (category === 'BOOKS' || category === 'books') {
+      sessions = sessions.filter(s => s.purpose_of_visit === 'Book Borrowing' || s.purpose_of_visit === 'Book Return');
     }
 
     const workbook = new ExcelJS.Workbook();
