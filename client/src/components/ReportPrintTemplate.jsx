@@ -32,7 +32,7 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
         ref={ref} 
         style={{ 
           padding: '40px 60px',
-          fontFamily: '"Khmer OS Battambang", "Khmer OS", Arial, sans-serif',
+          fontFamily: '"Battambang", "Khmer OS Battambang", "Khmer OS", Arial, sans-serif',
           color: '#000',
           backgroundColor: '#fff',
           width: '100%',
@@ -40,19 +40,24 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
           boxSizing: 'border-box'
         }}
       >
+        <style>
+          {`
+            @import url('https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Moul&display=swap');
+          `}
+        </style>
         {/* Header Section */}
         <div style={{ display: 'flex', position: 'relative', marginBottom: '30px' }}>
           {/* Left Logo & Uni Name */}
           <div style={{ textAlign: 'center', width: '200px' }}>
             <img src="/duc-logo.png" alt="DUC Logo" style={{ width: '70px', height: 'auto', marginBottom: '5px' }} />
-            <h3 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0' }}>សាកលវិទ្យាល័យឌីជីថលកម្ពុជា</h3>
-            <h3 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0' }}>បណ្ណាល័យសិក្សា</h3>
+            <h3 style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0' }}>សាកលវិទ្យាល័យឌីជីថលកម្ពុជា</h3>
+            <h3 style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0' }}>បណ្ណាល័យសិក្សា</h3>
           </div>
           
           {/* Center Kingdom */}
           <div style={{ flex: 1, textAlign: 'center', paddingTop: '10px' }}>
-            <h2 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '13pt', margin: '0 0 5px 0', fontWeight: 'normal' }}>ព្រះរាជាណាចក្រកម្ពុជា</h2>
-            <h3 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '12pt', margin: '0', fontWeight: 'normal' }}>ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
+            <h2 style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '13pt', margin: '0 0 5px 0', fontWeight: 'normal' }}>ព្រះរាជាណាចក្រកម្ពុជា</h2>
+            <h3 style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '12pt', margin: '0', fontWeight: 'normal' }}>ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
             <div style={{ width: '100px', height: '1px', backgroundColor: '#000', margin: '10px auto' }}></div>
           </div>
           
@@ -62,8 +67,8 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
 
         {/* Report Title */}
         <div style={{ textAlign: 'center', marginBottom: '25px' }}>
-          <h2 style={{ fontFamily: '"Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '12pt', margin: '0 0 8px 0', fontWeight: 'normal' }}>របាយការណ៍សិស្សចូលក្នុងបណ្ណាល័យ</h2>
-          <p style={{ fontFamily: '"Khmer OS Battambang", sans-serif', fontSize: '11pt', margin: '0', fontWeight: 'bold' }}>កាលបរិច្ឆេទ ៖ ទាំងអស់</p>
+          <h2 style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '12pt', margin: '0 0 8px 0', fontWeight: 'normal' }}>របាយការណ៍សិស្សចូលក្នុងបណ្ណាល័យ</h2>
+          <p style={{ fontFamily: '"Battambang", "Khmer OS Battambang", sans-serif', fontSize: '11pt', margin: '0', fontWeight: 'bold' }}>កាលបរិច្ឆេទ ៖ ទាំងអស់</p>
         </div>
 
         {/* Data Table */}
@@ -72,7 +77,7 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
           borderCollapse: 'collapse', 
           marginBottom: '30px',
           fontSize: '10pt',
-          fontFamily: '"Khmer OS Battambang", sans-serif'
+          fontFamily: '"Battambang", "Khmer OS Battambang", sans-serif'
         }}>
           <thead>
             <tr style={{ backgroundColor: '#111827', color: '#fff' }}>
