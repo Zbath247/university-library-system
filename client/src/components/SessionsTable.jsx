@@ -468,14 +468,7 @@ export default function SessionsTable({
               <Download className="w-3.5 h-3.5 text-green-400" />
               <span>{t('btnExcel') || 'Excel Summary'}</span>
             </button>
-            <button
-              onClick={handleExportWord}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 transition border-r border-slate-700"
-              title="ទាញយកជា Word"
-            >
-              <Download className="w-3.5 h-3.5 text-blue-400" />
-              <span>{t('btnWord') || 'Word'}</span>
-            </button>
+
             <button
               onClick={handleExportPDF}
               className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition"
