@@ -179,11 +179,19 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, displayItems, viewMode
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '35px' }}>
           <div style={{ width: '420px', border: '1px solid #e5e7eb', borderRadius: '6px', overflow: 'hidden', fontFamily: '"Battambang", "Khmer OS Battambang", sans-serif', fontSize: '10.5pt' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 20px', backgroundColor: '#fff', borderBottom: '1px solid #e5e7eb' }}>
-              <span>សរុបសិស្សដែលបានចូល ( Total Users )</span>
+              <span>
+                {category === 'BORROW' ? 'សរុបសិស្សដែលបានខ្ចី ( Total Borrowers )' : 
+                 category === 'RETURN' ? 'សរុបសិស្សដែលបានសង ( Total Returners )' : 
+                 'សរុបសិស្សដែលបានចូល ( Total Users )'}
+              </span>
               <span style={{ fontWeight: 'bold' }}>{totalUsers}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 20px', backgroundColor: '#111827', color: '#fff' }}>
-              <span>សរុបការចូលទាំងអស់ ( TOTAL CHECK-INS )</span>
+              <span>
+                {category === 'BORROW' ? 'សរុបការខ្ចីទាំងអស់ ( TOTAL BORROWS )' : 
+                 category === 'RETURN' ? 'សរុបការសងទាំងអស់ ( TOTAL RETURNS )' : 
+                 'សរុបការចូលទាំងអស់ ( TOTAL CHECK-INS )'}
+              </span>
               <span style={{ fontWeight: 'bold' }}>{totalCheckins}</span>
             </div>
           </div>
