@@ -56,8 +56,8 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
             <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '13pt', margin: '0', fontWeight: 'normal', color: '#000' }}>ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
             
             {/* Decorative Line */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '15px 0' }}>
-              <img src="/tacteing.png" alt="Decoration" style={{ height: '22px', objectFit: 'contain' }} />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '8px 0' }}>
+              <img src="/tacteing.png" alt="Decoration" style={{ height: '35px', objectFit: 'contain' }} />
             </div>
           </div>
           
@@ -68,7 +68,6 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
         {/* Report Title */}
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
           <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '13pt', margin: '0 0 10px 0', fontWeight: 'normal', color: '#1e3a8a' }}>របាយការណ៍សិស្សចូលក្នុងបណ្ណាល័យ</div>
-          <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '12pt', margin: '0', fontWeight: 'normal', color: '#1e3a8a' }}>កាលបរិច្ឆេទ ៖ ទាំងអស់</div>
         </div>
 
         {/* Data Table */}
