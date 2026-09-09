@@ -13,6 +13,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line, Bar, Pie } from 'react-chartjs-2';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 ChartJS.register(
   CategoryScale,
@@ -23,7 +24,8 @@ ChartJS.register(
   ArcElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ChartDataLabels
 );
 
 const computeData = (sessions) => {
@@ -155,10 +157,50 @@ export const ExcelReportGenerator = forwardRef(({ onClose, sessions = [] }, ref)
     ],
   };
 
-  const chartOptions = {
+  const lineChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
+    plugins: {
+      legend: { display: false },
+      datalabels: {
+        color: 'red',
+        align: 'top',
+        font: { weight: 'bold' }
+      }
+    },
+    animation: false,
+  };
+
+  const pieChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      datalabels: {
+        color: 'black',
+        font: { weight: 'bold' },
+        formatter: (value, context) => {
+          const label = context.chart.data.labels[context.dataIndex];
+          const ratio = realData.genderData[context.dataIndex].ratio;
+          return `${label}\n${ratio}`;
+        }
+      }
+    },
+    animation: false,
+  };
+
+  const barChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      datalabels: {
+        color: 'black',
+        align: 'top',
+        anchor: 'end',
+        font: { weight: 'bold' }
+      }
+    },
     animation: false,
   };
 
@@ -166,13 +208,13 @@ export const ExcelReportGenerator = forwardRef(({ onClose, sessions = [] }, ref)
     <div style={{ position: 'fixed', left: '-9999px', top: '-9999px', opacity: 0, pointerEvents: 'none' }}>
       {/* We render them at a fixed size so ChartJS has dimensions to draw on */}
       <div style={{ width: '800px', height: '400px' }}>
-        <Line ref={lineChartRef} data={lineData} options={chartOptions} />
+        <Line ref={lineChartRef} data={lineData} options={lineChartOptions} />
       </div>
       <div style={{ width: '800px', height: '400px' }}>
-        <Pie ref={pieChartRef} data={pieData} options={chartOptions} />
+        <Pie ref={pieChartRef} data={pieData} options={pieChartOptions} />
       </div>
       <div style={{ width: '800px', height: '400px' }}>
-        <Bar ref={barChartRef} data={barData} options={chartOptions} />
+        <Bar ref={barChartRef} data={barData} options={barChartOptions} />
       </div>
     </div>
   );
