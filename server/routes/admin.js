@@ -342,49 +342,69 @@ router.get('/export/csv', async (req, res) => {
       if (viewMode === 'USERS') {
         return [
           index + 1,
-          `"${(u.university_id || '').replace(/"/g, '""')}"`,
-          `"${catLabel}"`,
-          `"${(u.full_name || '').replace(/"/g, '""')}"`,
-          `"${(u.gender || '').replace(/"/g, '""')}"`,
+          u.university_id || '',
+          catLabel,
+          u.full_name || '',
+          u.gender || '',
           s.visitCount,
-          `"${(u.role_name || '').replace(/"/g, '""')}"`,
-          `"${(u.department_name || '').replace(/"/g, '""')}"`,
-          `"${(u.phone || '').replace(/"/g, '""')}"`,
-          `"${(u.room || '').replace(/"/g, '""')}"`,
-          `"${s.check_in_time}"`,
-          `"${s.check_out_time || 'N/A'}"`
-        ].join(',');
+          u.role_name || '',
+          u.department_name || '',
+          u.phone || '',
+          u.room || '',
+          s.check_in_time ? new Date(s.check_in_time).toLocaleString() : '',
+          s.check_out_time ? new Date(s.check_out_time).toLocaleString() : ''
+        ];
       } else {
         return [
           index + 1,
-          `"${catLabel}"`,
-          `"${(u.university_id || '').replace(/"/g, '""')}"`,
-          `"${(u.full_name || '').replace(/"/g, '""')}"`,
-          `"${(u.gender || '').replace(/"/g, '""')}"`,
-          `"${(u.role_name || '').replace(/"/g, '""')}"`,
-          `"${(u.department_name || '').replace(/"/g, '""')}"`,
-          `"${(u.phone || '').replace(/"/g, '""')}"`,
-          `"${(u.room || '').replace(/"/g, '""')}"`,
-          `"${(s.purpose_of_visit || '').replace(/"/g, '""')}"`,
-          `"${(s.research_topic || '').replace(/"/g, '""')}"`,
-          `"${s.check_in_time}"`,
-          `"${s.check_out_time || 'N/A'}"`,
-          s.status
-        ].join(',');
+          catLabel,
+          u.university_id || '',
+          u.full_name || '',
+          u.gender || '',
+          u.role_name || '',
+          u.department_name || '',
+          u.phone || '',
+          u.room || '',
+          s.purpose_of_visit || '',
+          s.research_topic || '',
+          s.check_in_time ? new Date(s.check_in_time).toLocaleString() : '',
+          s.check_out_time ? new Date(s.check_out_time).toLocaleString() : '',
+          s.status || ''
+        ];
       }
     });
 
-    const csvContent = [headers.join(','), ...rows].join('\r\n');
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'University Library System';
+    const sheet = workbook.addWorksheet('Raw Data');
+
+    sheet.columns = headers.map((h, i) => ({ header: h, key: `col${i}`, width: 20 }));
+    sheet.getRow(1).font = { bold: true };
+
+    rows.forEach(row => {
+      sheet.addRow(row);
+    });
+
+    // Apply Khmer OS Battambong font
+    workbook.eachSheet((s) => {
+      s.eachRow({ includeEmpty: false }, (row) => {
+        row.eachCell({ includeEmpty: false }, (cell) => {
+          const currentFont = cell.font || {};
+          cell.font = { ...currentFont, name: 'Khmer OS Battambong' };
+        });
+      });
+    });
 
     let filenamePrefix = 'library_all_attendance';
     if (category === 'BORROW' || category === 'borrow') filenamePrefix = 'library_book_borrowing_report';
     else if (category === 'RETURN' || category === 'return') filenamePrefix = 'library_book_return_report';
     else if (category === 'VISIT' || category === 'visit') filenamePrefix = 'library_visits_attendance_report';
 
-    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-    res.setHeader('Content-Disposition', `attachment; filename="${filenamePrefix}_${new Date().toISOString().slice(0, 10)}.csv"`);
-    // Prepend UTF-8 BOM (\uFEFF) so Microsoft Excel opens Khmer and English text flawlessly
-    return res.send('\uFEFF' + csvContent);
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename="${filenamePrefix}_${new Date().toISOString().slice(0, 10)}.xlsx"`);
+    
+    await workbook.xlsx.write(res);
+    res.end();
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

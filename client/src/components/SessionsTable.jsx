@@ -474,10 +474,10 @@ export default function SessionsTable({
             <button
               onClick={handleExportCsv}
               className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 transition border-r border-slate-700"
-              title="ទាញយកជា CSV (ទិន្នន័យចាស់)"
+              title="ទាញយកជា Excel (ទិន្នន័យដើមគ្មានតារាងសង្ខេប)"
             >
               <Download className="w-3.5 h-3.5 text-emerald-400" />
-              <span>{t('btnCsv') || 'CSV'}</span>
+              <span>Excel (Raw Data)</span>
             </button>
             <button
               onClick={handleExportExcel}
