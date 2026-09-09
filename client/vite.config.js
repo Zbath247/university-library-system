@@ -8,6 +8,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['duc-logo.png'],
+      workbox: {
+        maximumFileSizeToCacheInBytes: 5242880 // 5 MB
+      },
       manifest: {
         name: 'Intern Attendance',
         short_name: 'Attendance',
