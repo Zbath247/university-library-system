@@ -192,7 +192,8 @@ export default function SessionsTable({
       search,
       category: categoryTab !== 'ALL' ? categoryTab : undefined,
       startDate,
-      endDate
+      endDate,
+      viewMode
     });
     window.open(exportUrl, '_blank');
     setShowExportPrompt(true);
@@ -219,7 +220,8 @@ export default function SessionsTable({
       search,
       category: categoryTab !== 'ALL' ? categoryTab : undefined,
       startDate,
-      endDate
+      endDate,
+      viewMode
     });
     window.open(exportUrl, '_blank');
     setShowExportPrompt(true);

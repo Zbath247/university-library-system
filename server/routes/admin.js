@@ -240,10 +240,37 @@ router.post('/reject-session/:sessionId', async (req, res) => {
   }
 });
 
+function aggregateSessionsByUser(sessions) {
+  const userMap = new Map();
+  sessions.forEach(session => {
+    const u = session.user || {};
+    const uid = u.university_id || u.full_name || session.id;
+    if (!userMap.has(uid)) {
+      userMap.set(uid, {
+        ...session,
+        visitCount: 1,
+        totalDuration: session.duration_minutes || 0
+      });
+    } else {
+      const existing = userMap.get(uid);
+      existing.visitCount += 1;
+      existing.totalDuration += (session.duration_minutes || 0);
+      if (new Date(session.check_in_time) > new Date(existing.check_in_time)) {
+        existing.check_in_time = session.check_in_time;
+        existing.check_out_time = session.check_out_time;
+        existing.status = session.status;
+        existing.purpose_of_visit = session.purpose_of_visit;
+        existing.research_topic = session.research_topic;
+      }
+    }
+  });
+  return Array.from(userMap.values());
+}
+
 // GET /api/admin/export/csv - Direct CSV download of attendance & research logs
 router.get('/export/csv', async (req, res) => {
   try {
-    const { status, role_id, department_id, search, startDate, endDate, category } = req.query;
+    const { status, role_id, department_id, search, startDate, endDate, category, viewMode } = req.query;
     let sessions = await db.getSessions({
       status,
       role_id,
@@ -264,22 +291,45 @@ router.get('/export/csv', async (req, res) => {
       sessions = sessions.filter(s => s.purpose_of_visit === 'Book Borrowing' || s.purpose_of_visit === 'Book Return');
     }
 
-    const headers = [
-      'Session ID',
-      'Category (ប្រភេទទិន្នន័យ)',
-      'University ID',
-      'Full Name',
-      'Gender (ភេទ)',
-      'Role',
-      'Department / Faculty',
-      'Contact Phone',
-      'Room (បន្ទប់)',
-      'Purpose of Visit',
-      'Book Title / Research Topic (ឈ្មោះសៀវភៅ / ប្រធានបទ)',
-      'Check-in Timestamp',
-      'Check-out Timestamp',
-      'Status'
-    ];
+    if (viewMode === 'USERS') {
+      sessions = aggregateSessionsByUser(sessions);
+    }
+
+    let headers = [];
+    if (viewMode === 'USERS') {
+      headers = [
+        'No',
+        'University ID',
+        'Full Name',
+        'Gender (ភេទ)',
+        'Role',
+        'Department / Faculty',
+        'Contact Phone',
+        'Room (បន្ទប់)',
+        'Number of Visits (ចំនួនដង)',
+        'Total Duration (នាទីសរុប)',
+        'Last Visit Category',
+        'Last Check-in',
+        'Last Check-out'
+      ];
+    } else {
+      headers = [
+        'Session ID',
+        'Category (ប្រភេទទិន្នន័យ)',
+        'University ID',
+        'Full Name',
+        'Gender (ភេទ)',
+        'Role',
+        'Department / Faculty',
+        'Contact Phone',
+        'Room (បន្ទប់)',
+        'Purpose of Visit',
+        'Book Title / Research Topic (ឈ្មោះសៀវភៅ / ប្រធានបទ)',
+        'Check-in Timestamp',
+        'Check-out Timestamp',
+        'Status'
+      ];
+    }
 
     const rows = sessions.map((s, index) => {
       const u = s.user || {};
@@ -290,22 +340,40 @@ router.get('/export/csv', async (req, res) => {
         catLabel = 'សងសៀវភៅ';
       }
 
-      return [
-        index + 1,
-        `"${catLabel}"`,
-        `"${(u.university_id || '').replace(/"/g, '""')}"`,
-        `"${(u.full_name || '').replace(/"/g, '""')}"`,
-        `"${(u.gender || '').replace(/"/g, '""')}"`,
-        `"${(u.role_name || '').replace(/"/g, '""')}"`,
-        `"${(u.department_name || '').replace(/"/g, '""')}"`,
-        `"${(u.phone || '').replace(/"/g, '""')}"`,
-        `"${(u.room || '').replace(/"/g, '""')}"`,
-        `"${(s.purpose_of_visit || '').replace(/"/g, '""')}"`,
-        `"${(s.research_topic || '').replace(/"/g, '""')}"`,
-        `"${s.check_in_time}"`,
-        `"${s.check_out_time || 'N/A'}"`,
-        s.status
-      ].join(',');
+      if (viewMode === 'USERS') {
+        return [
+          index + 1,
+          `"${(u.university_id || '').replace(/"/g, '""')}"`,
+          `"${(u.full_name || '').replace(/"/g, '""')}"`,
+          `"${(u.gender || '').replace(/"/g, '""')}"`,
+          `"${(u.role_name || '').replace(/"/g, '""')}"`,
+          `"${(u.department_name || '').replace(/"/g, '""')}"`,
+          `"${(u.phone || '').replace(/"/g, '""')}"`,
+          `"${(u.room || '').replace(/"/g, '""')}"`,
+          s.visitCount,
+          s.totalDuration,
+          `"${catLabel}"`,
+          `"${s.check_in_time}"`,
+          `"${s.check_out_time || 'N/A'}"`
+        ].join(',');
+      } else {
+        return [
+          index + 1,
+          `"${catLabel}"`,
+          `"${(u.university_id || '').replace(/"/g, '""')}"`,
+          `"${(u.full_name || '').replace(/"/g, '""')}"`,
+          `"${(u.gender || '').replace(/"/g, '""')}"`,
+          `"${(u.role_name || '').replace(/"/g, '""')}"`,
+          `"${(u.department_name || '').replace(/"/g, '""')}"`,
+          `"${(u.phone || '').replace(/"/g, '""')}"`,
+          `"${(u.room || '').replace(/"/g, '""')}"`,
+          `"${(s.purpose_of_visit || '').replace(/"/g, '""')}"`,
+          `"${(s.research_topic || '').replace(/"/g, '""')}"`,
+          `"${s.check_in_time}"`,
+          `"${s.check_out_time || 'N/A'}"`,
+          s.status
+        ].join(',');
+      }
     });
 
     const csvContent = [headers.join(','), ...rows].join('\r\n');
@@ -374,6 +442,10 @@ router.get('/export/excel', async (req, res) => {
       sessions = sessions.filter(s => s.purpose_of_visit === 'Book Borrowing' || s.purpose_of_visit === 'Book Return');
     }
 
+    if (viewMode === 'USERS') {
+      sessions = aggregateSessionsByUser(sessions);
+    }
+
     const workbook = new ExcelJS.Workbook();
     workbook.creator = 'University Library System';
     
@@ -394,17 +466,15 @@ router.get('/export/excel', async (req, res) => {
       const u = s.user || {};
       const gender = u.gender || '';
       
-      totalVisits++;
+      totalVisits += s.visitCount || 1;
       
       if (s.purpose_of_visit === 'Book Borrowing') {
         const topic = s.research_topic || '';
-        // Extract quantity from "[ខ្ចី X ក្បាល]" or "[សង X ក្បាល]"
         const qtyMatch = topic.match(/^\[(?:ខ្ចី|សង)\s+(\d+)\s+ក្បាល\]/);
-        const qty = qtyMatch ? parseInt(qtyMatch[1], 10) : 1;
+        const qty = (qtyMatch ? parseInt(qtyMatch[1], 10) : 1) * (s.visitCount || 1);
         
         totalBorrows += qty;
         
-        // Remove the prefix to get the clean title
         const cleanTopic = topic.replace(/^\[(ខ្ចី|សង)(?:\s+\d+\s+ក្បាល)?\]\s*/, '').trim();
         if (cleanTopic) {
           bookCounts[cleanTopic] = (bookCounts[cleanTopic] || 0) + qty;
@@ -412,12 +482,11 @@ router.get('/export/excel', async (req, res) => {
       } else if (s.purpose_of_visit === 'Book Return') {
         const topic = s.research_topic || '';
         const qtyMatch = topic.match(/^\[(?:ខ្ចី|សង)\s+(\d+)\s+ក្បាល\]/);
-        const qty = qtyMatch ? parseInt(qtyMatch[1], 10) : 1;
+        const qty = (qtyMatch ? parseInt(qtyMatch[1], 10) : 1) * (s.visitCount || 1);
         totalReturns += qty;
         
         const cleanTopic = topic.replace(/^\[(ខ្ចី|សង)(?:\s+\d+\s+ក្បាល)?\]\s*/, '').trim();
         if (cleanTopic) {
-          // Subtract the returned quantity to get net outstanding books
           bookCounts[cleanTopic] = (bookCounts[cleanTopic] || 0) - qty;
         }
       }
@@ -581,22 +650,40 @@ router.get('/export/excel', async (req, res) => {
     // ==========================================
     const logsSheet = workbook.addWorksheet('ទិន្នន័យលម្អិត (Raw Data)');
     
-    logsSheet.columns = [
-      { header: 'Session ID', key: 'id', width: 15 },
-      { header: 'Category (ប្រភេទទិន្នន័យ)', key: 'cat', width: 25 },
-      { header: 'University ID', key: 'uid', width: 15 },
-      { header: 'Full Name', key: 'name', width: 20 },
-      { header: 'Gender (ភេទ)', key: 'gender', width: 10 },
-      { header: 'Role', key: 'role', width: 15 },
-      { header: 'Department / Faculty', key: 'dept', width: 25 },
-      { header: 'Contact Phone', key: 'phone', width: 15 },
-      { header: 'Room (បន្ទប់)', key: 'room', width: 10 },
-      { header: 'Purpose of Visit', key: 'purpose', width: 20 },
-      { header: 'Book Title / Research Topic (ឈ្មោះសៀវភៅ / ប្រធានបទ)', key: 'topic', width: 30 },
-      { header: 'Check-in Timestamp', key: 'inTime', width: 20 },
-      { header: 'Check-out Timestamp', key: 'outTime', width: 20 },
-      { header: 'Status', key: 'status', width: 15 }
-    ];
+    if (viewMode === 'USERS') {
+      logsSheet.columns = [
+        { header: 'No', key: 'id', width: 10 },
+        { header: 'University ID', key: 'uid', width: 15 },
+        { header: 'Full Name', key: 'name', width: 20 },
+        { header: 'Gender (ភេទ)', key: 'gender', width: 10 },
+        { header: 'Role', key: 'role', width: 15 },
+        { header: 'Department / Faculty', key: 'dept', width: 25 },
+        { header: 'Contact Phone', key: 'phone', width: 15 },
+        { header: 'Room (បន្ទប់)', key: 'room', width: 10 },
+        { header: 'Number of Visits (ចំនួនដង)', key: 'visits', width: 20 },
+        { header: 'Total Duration (នាទីសរុប)', key: 'duration', width: 20 },
+        { header: 'Last Visit Category', key: 'cat', width: 20 },
+        { header: 'Last Check-in', key: 'inTime', width: 20 },
+        { header: 'Last Check-out', key: 'outTime', width: 20 },
+      ];
+    } else {
+      logsSheet.columns = [
+        { header: 'Session ID', key: 'id', width: 15 },
+        { header: 'Category (ប្រភេទទិន្នន័យ)', key: 'cat', width: 25 },
+        { header: 'University ID', key: 'uid', width: 15 },
+        { header: 'Full Name', key: 'name', width: 20 },
+        { header: 'Gender (ភេទ)', key: 'gender', width: 10 },
+        { header: 'Role', key: 'role', width: 15 },
+        { header: 'Department / Faculty', key: 'dept', width: 25 },
+        { header: 'Contact Phone', key: 'phone', width: 15 },
+        { header: 'Room (បន្ទប់)', key: 'room', width: 10 },
+        { header: 'Purpose of Visit', key: 'purpose', width: 20 },
+        { header: 'Book Title / Research Topic (ឈ្មោះសៀវភៅ / ប្រធានបទ)', key: 'topic', width: 30 },
+        { header: 'Check-in Timestamp', key: 'inTime', width: 20 },
+        { header: 'Check-out Timestamp', key: 'outTime', width: 20 },
+        { header: 'Status', key: 'status', width: 15 }
+      ];
+    }
 
     logsSheet.getRow(1).font = { bold: true };
 
@@ -609,22 +696,40 @@ router.get('/export/excel', async (req, res) => {
         catLabel = 'សងសៀវភៅ';
       }
 
-      logsSheet.addRow({
-        id: index + 1,
-        cat: catLabel,
-        uid: u.university_id || '',
-        name: u.full_name || '',
-        gender: u.gender || '',
-        role: u.role ? u.role.name : (s.role_id || ''),
-        dept: u.department ? u.department.name : (s.department_id || ''),
-        phone: u.phone || '',
-        room: u.room || '',
-        purpose: s.purpose_of_visit || '',
-        topic: s.research_topic || '',
-        inTime: s.check_in_time ? new Date(s.check_in_time).toLocaleString() : '',
-        outTime: s.check_out_time ? new Date(s.check_out_time).toLocaleString() : '',
-        status: s.status || ''
-      });
+      if (viewMode === 'USERS') {
+        logsSheet.addRow({
+          id: index + 1,
+          uid: u.university_id || '',
+          name: u.full_name || '',
+          gender: u.gender || '',
+          role: u.role ? u.role.name : (s.role_id || ''),
+          dept: u.department ? u.department.name : (s.department_id || ''),
+          phone: u.phone || '',
+          room: u.room || '',
+          visits: s.visitCount,
+          duration: s.totalDuration,
+          cat: catLabel,
+          inTime: s.check_in_time ? new Date(s.check_in_time).toLocaleString() : '',
+          outTime: s.check_out_time ? new Date(s.check_out_time).toLocaleString() : ''
+        });
+      } else {
+        logsSheet.addRow({
+          id: index + 1,
+          cat: catLabel,
+          uid: u.university_id || '',
+          name: u.full_name || '',
+          gender: u.gender || '',
+          role: u.role ? u.role.name : (s.role_id || ''),
+          dept: u.department ? u.department.name : (s.department_id || ''),
+          phone: u.phone || '',
+          room: u.room || '',
+          purpose: s.purpose_of_visit || '',
+          topic: s.research_topic || '',
+          inTime: s.check_in_time ? new Date(s.check_in_time).toLocaleString() : '',
+          outTime: s.check_out_time ? new Date(s.check_out_time).toLocaleString() : '',
+          status: s.status || ''
+        });
+      }
     });
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
