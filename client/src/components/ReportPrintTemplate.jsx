@@ -46,14 +46,14 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
           {/* Left Logo & Uni Name */}
           <div style={{ textAlign: 'center', width: '200px' }}>
             <img src="/duc-logo.png" alt="DUC Logo" style={{ width: '70px', height: 'auto', marginBottom: '5px' }} />
-            <h3 style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0' }}>សាកលវិទ្យាល័យឌីជីថលកម្ពុជា</h3>
-            <h3 style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0' }}>បណ្ណាល័យសិក្សា</h3>
+            <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0' }}>សាកលវិទ្យាល័យឌីជីថលកម្ពុជា</div>
+            <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0' }}>បណ្ណាល័យសិក្សា</div>
           </div>
           
           {/* Center Kingdom */}
           <div style={{ flex: 1, textAlign: 'center', paddingTop: '10px' }}>
-            <h2 style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '13pt', margin: '0 0 5px 0', fontWeight: 'normal' }}>ព្រះរាជាណាចក្រកម្ពុជា</h2>
-            <h3 style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '12pt', margin: '0', fontWeight: 'normal' }}>ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
+            <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '13pt', margin: '0 0 5px 0', fontWeight: 'normal' }}>ព្រះរាជាណាចក្រកម្ពុជា</div>
+            <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '12pt', margin: '0', fontWeight: 'normal' }}>ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
             <div style={{ width: '100px', height: '1px', backgroundColor: '#000', margin: '10px auto' }}></div>
           </div>
           
@@ -63,7 +63,7 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
 
         {/* Report Title */}
         <div style={{ textAlign: 'center', marginBottom: '25px' }}>
-          <h2 style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '12pt', margin: '0 0 8px 0', fontWeight: 'normal' }}>របាយការណ៍សិស្សចូលក្នុងបណ្ណាល័យ</h2>
+          <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '12pt', margin: '0 0 8px 0', fontWeight: 'normal' }}>របាយការណ៍សិស្សចូលក្នុងបណ្ណាល័យ</div>
           <p style={{ fontFamily: '"Battambang", "Khmer OS Battambang", sans-serif', fontSize: '11pt', margin: '0', fontWeight: 'bold' }}>កាលបរិច្ឆេទ ៖ ទាំងអស់</p>
         </div>
 
