@@ -300,7 +300,6 @@ router.get('/export/csv', async (req, res) => {
       headers = [
         'No',
         'Number of Visits (ចំនួនដង)',
-        'Total Duration (នាទីសរុប)',
         'University ID',
         'Full Name',
         'Gender (ភេទ)',
@@ -344,7 +343,6 @@ router.get('/export/csv', async (req, res) => {
         return [
           index + 1,
           s.visitCount,
-          s.totalDuration,
           `"${(u.university_id || '').replace(/"/g, '""')}"`,
           `"${(u.full_name || '').replace(/"/g, '""')}"`,
           `"${(u.gender || '').replace(/"/g, '""')}"`,
@@ -654,7 +652,6 @@ router.get('/export/excel', async (req, res) => {
       logsSheet.columns = [
         { header: 'No', key: 'id', width: 10 },
         { header: 'Number of Visits (ចំនួនដង)', key: 'visits', width: 20 },
-        { header: 'Total Duration (នាទីសរុប)', key: 'duration', width: 20 },
         { header: 'University ID', key: 'uid', width: 15 },
         { header: 'Full Name', key: 'name', width: 20 },
         { header: 'Gender (ភេទ)', key: 'gender', width: 10 },
@@ -700,7 +697,6 @@ router.get('/export/excel', async (req, res) => {
         logsSheet.addRow({
           id: index + 1,
           visits: s.visitCount,
-          duration: s.totalDuration,
           uid: u.university_id || '',
           name: u.full_name || '',
           gender: u.gender || '',
