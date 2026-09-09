@@ -281,11 +281,11 @@ router.get('/export/csv', async (req, res) => {
 
     const rows = sessions.map((s, index) => {
       const u = s.user || {};
-      let catLabel = 'ចូលបណ្ណាល័យ (Library Visit)';
+      let catLabel = 'ចូលបណ្ណាល័យ';
       if (s.purpose_of_visit === 'Book Borrowing') {
-        catLabel = 'ខ្ចីសៀវភៅ (Book Borrowing)';
+        catLabel = 'ខ្ចីសៀវភៅ';
       } else if (s.purpose_of_visit === 'Book Return') {
-        catLabel = 'សងសៀវភៅ (Book Return)';
+        catLabel = 'សងសៀវភៅ';
       }
 
       return [
@@ -598,11 +598,11 @@ router.get('/export/excel', async (req, res) => {
 
     sessions.forEach((s, index) => {
       const u = s.user || {};
-      let catLabel = 'ចូលបណ្ណាល័យ (Library Visit)';
+      let catLabel = 'ចូលបណ្ណាល័យ';
       if (s.purpose_of_visit === 'Book Borrowing') {
-        catLabel = 'ខ្ចីសៀវភៅ (Book Borrowing)';
+        catLabel = 'ខ្ចីសៀវភៅ';
       } else if (s.purpose_of_visit === 'Book Return') {
-        catLabel = 'សងសៀវភៅ (Book Return)';
+        catLabel = 'សងសៀវភៅ';
       }
 
       logsSheet.addRow({
