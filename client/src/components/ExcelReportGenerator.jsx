@@ -52,7 +52,9 @@ const computeData = (sessions) => {
 
     const purpose = s.purpose_of_visit || '';
     if (purpose.includes('Book') || purpose.includes('សៀវភៅ') || s.research_topic) {
-      const bookName = s.research_topic || 'សៀវភៅផ្សេងៗ (Other)';
+      let bookName = s.research_topic || 'សៀវភៅផ្សេងៗ (Other)';
+      // Remove any prefix like [ខ្ចី 1 ក្បាល] 
+      bookName = bookName.replace(/^\[.*?\]\s*/, '').trim();
       bookCounts[bookName] = (bookCounts[bookName] || 0) + 1;
     }
   });
