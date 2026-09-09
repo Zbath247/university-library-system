@@ -83,9 +83,9 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
           <thead>
             <tr style={{ backgroundColor: '#111827', color: '#fff' }}>
               <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ល.រ</th>
-              <th style={{ padding: '12px 15px', textAlign: 'left', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>គោត្តនាម-នាម</th>
+              <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>គោត្តនាម-នាម</th>
               <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ភេទ</th>
-              <th style={{ padding: '12px 15px', textAlign: 'left', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ដេប៉ាតឺម៉ង់</th>
+              <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ដេប៉ាតឺម៉ង់</th>
               <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ចំនួនចូលសរុប</th>
             </tr>
           </thead>
