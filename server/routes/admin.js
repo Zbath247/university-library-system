@@ -390,7 +390,7 @@ router.get('/export/csv', async (req, res) => {
       s.eachRow({ includeEmpty: false }, (row) => {
         row.eachCell({ includeEmpty: false }, (cell) => {
           const isBold = cell.font && cell.font.bold;
-          cell.font = { name: 'Khmer OS Battambong', size: 11, bold: isBold };
+          cell.font = { name: 'Khmer OS Battambang', size: 11, bold: isBold };
         });
       });
     });
@@ -753,7 +753,7 @@ router.get('/export/excel', async (req, res) => {
       sheet.eachRow({ includeEmpty: false }, (row) => {
         row.eachCell({ includeEmpty: false }, (cell) => {
           const isBold = cell.font && cell.font.bold;
-          cell.font = { name: 'Khmer OS Battambong', size: 11, bold: isBold };
+          cell.font = { name: 'Khmer OS Battambang', size: 11, bold: isBold };
         });
       });
     });
