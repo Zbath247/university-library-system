@@ -728,6 +728,16 @@ router.get('/export/excel', async (req, res) => {
       }
     });
 
+    // Apply Khmer OS Battambong font to all cells
+    workbook.eachSheet((sheet) => {
+      sheet.eachRow({ includeEmpty: false }, (row) => {
+        row.eachCell({ includeEmpty: false }, (cell) => {
+          const currentFont = cell.font || {};
+          cell.font = { ...currentFont, name: 'Khmer OS Battambong' };
+        });
+      });
+    });
+
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', `attachment; filename="Library_Logs_${new Date().toISOString().slice(0, 10)}.xlsx"`);
     
