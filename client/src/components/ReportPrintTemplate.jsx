@@ -44,27 +44,31 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, category }, ref) => {
         {/* Header Section */}
         <div style={{ display: 'flex', position: 'relative', marginBottom: '30px' }}>
           {/* Left Logo & Uni Name */}
-          <div style={{ textAlign: 'center', width: '220px' }}>
+          <div style={{ textAlign: 'center', width: '250px' }}>
             <img src="/duc-logo.png" alt="DUC Logo" style={{ width: '75px', height: 'auto', marginBottom: '8px' }} />
-            <div style={{ fontFamily: '"Battambang", "Khmer OS Battambang", sans-serif', fontSize: '10.5pt', margin: '0', fontWeight: 'bold' }}>សាកលវិទ្យាល័យឌីជីថលកម្ពុជា</div>
-            <div style={{ fontFamily: '"Battambang", "Khmer OS Battambang", sans-serif', fontSize: '10.5pt', margin: '0', fontWeight: 'bold' }}>បណ្ណាល័យសិក្សា</div>
+            <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0 0 5px 0', color: '#000' }}>សាកលវិទ្យាល័យឌីជីថលកម្ពុជា</div>
+            <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '11pt', margin: '0', color: '#000' }}>បណ្ណាល័យសិក្សា</div>
           </div>
           
           {/* Center Kingdom */}
           <div style={{ flex: 1, textAlign: 'center', paddingTop: '10px' }}>
-            <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '14pt', margin: '0 0 8px 0', fontWeight: 'normal' }}>ព្រះរាជាណាចក្រកម្ពុជា</div>
-            <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '13pt', margin: '0', fontWeight: 'normal' }}>ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
+            <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '14pt', margin: '0 0 8px 0', fontWeight: 'normal', color: '#000' }}>ព្រះរាជាណាចក្រកម្ពុជា</div>
+            <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '13pt', margin: '0', fontWeight: 'normal', color: '#000' }}>ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
             
             {/* Decorative Line */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '15px 0' }}>
-              <div style={{ width: '40px', height: '1px', backgroundColor: '#000' }}></div>
-              <div style={{ margin: '0 8px', fontSize: '12px' }}>&#x2724;</div>
-              <div style={{ width: '40px', height: '1px', backgroundColor: '#000' }}></div>
+              <div style={{ width: '60px', borderTop: '1px solid #000', height: '1px' }}></div>
+              <div style={{ margin: '0 10px', fontSize: '14px', color: '#000', display: 'flex', gap: '3px' }}>
+                <span>&#10022;</span>
+                <span>&#10043;</span>
+                <span>&#10022;</span>
+              </div>
+              <div style={{ width: '60px', borderTop: '1px solid #000', height: '1px' }}></div>
             </div>
           </div>
           
           {/* Right Spacer */}
-          <div style={{ width: '220px' }}></div>
+          <div style={{ width: '250px' }}></div>
         </div>
 
         {/* Report Title */}
