@@ -279,7 +279,7 @@ router.get('/export/csv', async (req, res) => {
       'Status'
     ];
 
-    const rows = sessions.map(s => {
+    const rows = sessions.map((s, index) => {
       const u = s.user || {};
       let catLabel = 'ចូលបណ្ណាល័យ (Library Visit)';
       if (s.purpose_of_visit === 'Book Borrowing') {
@@ -289,7 +289,7 @@ router.get('/export/csv', async (req, res) => {
       }
 
       return [
-        s.id,
+        index + 1,
         `"${catLabel}"`,
         `"${(u.university_id || '').replace(/"/g, '""')}"`,
         `"${(u.full_name || '').replace(/"/g, '""')}"`,
@@ -596,7 +596,7 @@ router.get('/export/excel', async (req, res) => {
 
     logsSheet.getRow(1).font = { bold: true };
 
-    sessions.forEach(s => {
+    sessions.forEach((s, index) => {
       const u = s.user || {};
       let catLabel = 'ចូលបណ្ណាល័យ (Library Visit)';
       if (s.purpose_of_visit === 'Book Borrowing') {
@@ -606,7 +606,7 @@ router.get('/export/excel', async (req, res) => {
       }
 
       logsSheet.addRow({
-        id: s.session_id,
+        id: index + 1,
         cat: catLabel,
         uid: u.university_id || '',
         name: u.full_name || '',
