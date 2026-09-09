@@ -7,6 +7,8 @@ export const exportDashboardToExcel = async (data, chartsBase64) => {
     views: [{ showGridLines: false }],
   });
 
+  const year = new Date().getFullYear();
+
   // Basic Setup
   sheet.getColumn('A').width = 4;
   sheet.getColumn('B').width = 15;
@@ -35,7 +37,7 @@ export const exportDashboardToExcel = async (data, chartsBase64) => {
   // Title
   sheet.mergeCells('A1:S2');
   const titleCell = sheet.getCell('A1');
-  titleCell.value = "Monthly Students' Reading in Library Report - 2025";
+  titleCell.value = `Monthly Students' Reading in Library Report - ${year}`;
   titleCell.font = { name: 'Arial', size: 16, bold: true, color: { argb: 'FF1F497D' } };
   titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
 
@@ -241,5 +243,5 @@ export const exportDashboardToExcel = async (data, chartsBase64) => {
   // Generate and save file
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  saveAs(blob, 'Monthly_Students_Reading_Report_2025.xlsx');
+  saveAs(blob, `Monthly_Students_Reading_Report_${year}.xlsx`);
 };

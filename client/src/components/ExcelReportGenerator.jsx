@@ -157,11 +157,19 @@ export const ExcelReportGenerator = forwardRef(({ onClose, sessions = [] }, ref)
     ],
   };
 
+  const year = new Date().getFullYear();
+
   const lineChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
+      title: {
+        display: true,
+        text: `Monthly Student Reading Qty in Library Report\n(Jan-Dec - ${year})`,
+        color: '#1F497D',
+        font: { size: 14, weight: 'bold' }
+      },
       datalabels: {
         color: 'red',
         align: 'top',
@@ -176,6 +184,12 @@ export const ExcelReportGenerator = forwardRef(({ onClose, sessions = [] }, ref)
     maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
+      title: {
+        display: true,
+        text: `Monthly Reading Qty By Gender-${year}`,
+        color: '#1F497D',
+        font: { size: 14, weight: 'bold' }
+      },
       datalabels: {
         color: 'black',
         font: { weight: 'bold' },
@@ -194,6 +208,12 @@ export const ExcelReportGenerator = forwardRef(({ onClose, sessions = [] }, ref)
     maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
+      title: {
+        display: true,
+        text: `Top 10 Books' Title Reading in Library Report-${year}`,
+        color: '#1F497D',
+        font: { size: 14, weight: 'bold' }
+      },
       datalabels: {
         color: 'black',
         align: 'top',
