@@ -477,7 +477,7 @@ export default function SessionsTable({
               title="ទាញយកជា Excel (ទិន្នន័យដើមគ្មានតារាងសង្ខេប)"
             >
               <Download className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Excel (Raw Data)</span>
+              <span>Excel</span>
             </button>
             <button
               onClick={handleExportExcel}
