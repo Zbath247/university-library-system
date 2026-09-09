@@ -299,6 +299,8 @@ router.get('/export/csv', async (req, res) => {
     if (viewMode === 'USERS') {
       headers = [
         'No',
+        'Number of Visits (ចំនួនដង)',
+        'Total Duration (នាទីសរុប)',
         'University ID',
         'Full Name',
         'Gender (ភេទ)',
@@ -306,8 +308,6 @@ router.get('/export/csv', async (req, res) => {
         'Department / Faculty',
         'Contact Phone',
         'Room (បន្ទប់)',
-        'Number of Visits (ចំនួនដង)',
-        'Total Duration (នាទីសរុប)',
         'Last Visit Category',
         'Last Check-in',
         'Last Check-out'
@@ -343,6 +343,8 @@ router.get('/export/csv', async (req, res) => {
       if (viewMode === 'USERS') {
         return [
           index + 1,
+          s.visitCount,
+          s.totalDuration,
           `"${(u.university_id || '').replace(/"/g, '""')}"`,
           `"${(u.full_name || '').replace(/"/g, '""')}"`,
           `"${(u.gender || '').replace(/"/g, '""')}"`,
@@ -350,8 +352,6 @@ router.get('/export/csv', async (req, res) => {
           `"${(u.department_name || '').replace(/"/g, '""')}"`,
           `"${(u.phone || '').replace(/"/g, '""')}"`,
           `"${(u.room || '').replace(/"/g, '""')}"`,
-          s.visitCount,
-          s.totalDuration,
           `"${catLabel}"`,
           `"${s.check_in_time}"`,
           `"${s.check_out_time || 'N/A'}"`
@@ -653,6 +653,8 @@ router.get('/export/excel', async (req, res) => {
     if (viewMode === 'USERS') {
       logsSheet.columns = [
         { header: 'No', key: 'id', width: 10 },
+        { header: 'Number of Visits (ចំនួនដង)', key: 'visits', width: 20 },
+        { header: 'Total Duration (នាទីសរុប)', key: 'duration', width: 20 },
         { header: 'University ID', key: 'uid', width: 15 },
         { header: 'Full Name', key: 'name', width: 20 },
         { header: 'Gender (ភេទ)', key: 'gender', width: 10 },
@@ -660,8 +662,6 @@ router.get('/export/excel', async (req, res) => {
         { header: 'Department / Faculty', key: 'dept', width: 25 },
         { header: 'Contact Phone', key: 'phone', width: 15 },
         { header: 'Room (បន្ទប់)', key: 'room', width: 10 },
-        { header: 'Number of Visits (ចំនួនដង)', key: 'visits', width: 20 },
-        { header: 'Total Duration (នាទីសរុប)', key: 'duration', width: 20 },
         { header: 'Last Visit Category', key: 'cat', width: 20 },
         { header: 'Last Check-in', key: 'inTime', width: 20 },
         { header: 'Last Check-out', key: 'outTime', width: 20 },
@@ -699,6 +699,8 @@ router.get('/export/excel', async (req, res) => {
       if (viewMode === 'USERS') {
         logsSheet.addRow({
           id: index + 1,
+          visits: s.visitCount,
+          duration: s.totalDuration,
           uid: u.university_id || '',
           name: u.full_name || '',
           gender: u.gender || '',
@@ -706,8 +708,6 @@ router.get('/export/excel', async (req, res) => {
           dept: u.department ? u.department.name : (s.department_id || ''),
           phone: u.phone || '',
           room: u.room || '',
-          visits: s.visitCount,
-          duration: s.totalDuration,
           cat: catLabel,
           inTime: s.check_in_time ? new Date(s.check_in_time).toLocaleString() : '',
           outTime: s.check_out_time ? new Date(s.check_out_time).toLocaleString() : ''
