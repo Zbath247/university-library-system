@@ -214,10 +214,14 @@ export const exportDashboardToExcel = async (data, chartsBase64) => {
         base64: chartsBase64.pieChart,
         extension: 'png',
       });
-      // Place it in G20 to M30
+      
+      // Ensure pie chart starts below the line chart (which ends at row 17)
+      const pieRowStart = Math.max(19, genderStartRow - 1);
+      
+      // Place it in G to M
       sheet.addImage(imageId, {
-        tl: { col: 6, row: genderStartRow - 1 },
-        br: { col: 13, row: genderStartRow + 10 }
+        tl: { col: 6, row: pieRowStart },
+        br: { col: 13, row: pieRowStart + 12 }
       });
     }
 
