@@ -190,18 +190,18 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, displayItems, viewMode
           <div style={{ width: '420px', border: '1px solid #e5e7eb', borderRadius: '6px', overflow: 'hidden', fontFamily: '"Battambang", "Khmer OS Battambang", sans-serif', fontSize: '10.5pt' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 20px', backgroundColor: '#fff', borderBottom: '1px solid #e5e7eb' }}>
               <span>
-                {category === 'BORROW' ? 'សរុបសិស្សដែលបានខ្ចី ( Total Borrowers )' : 
-                 category === 'RETURN' ? 'សរុបសិស្សដែលបានសង ( Total Returners )' : 
-                 category === 'BOOKS' ? 'សរុបសិស្សខ្ចីសង ( Total Borrowers/Returners )' :
+                {category === 'BORROW' ? 'សរុបសិស្សដែលបានខ្ចី ( Total Users )' : 
+                 category === 'RETURN' ? 'សរុបសិស្សដែលបានសង ( Total Users )' : 
+                 category === 'BOOKS' ? 'សរុបសិស្សខ្ចីសង ( Total Users )' :
                  'សរុបសិស្សដែលបានចូល ( Total Users )'}
               </span>
               <span style={{ fontWeight: 'bold' }}>{totalUsers}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 20px', backgroundColor: '#111827', color: '#fff' }}>
               <span>
-                {category === 'BORROW' ? 'សរុបការខ្ចីទាំងអស់ ( TOTAL BORROWS )' : 
-                 category === 'RETURN' ? 'សរុបការសងទាំងអស់ ( TOTAL RETURNS )' : 
-                 category === 'BOOKS' ? 'សរុបការខ្ចីសងទាំងអស់ ( TOTAL TRANSACTIONS )' :
+                {category === 'BORROW' ? 'សរុបការខ្ចីទាំងអស់ ( TOTAL CHECK-INS )' : 
+                 category === 'RETURN' ? 'សរុបការសងទាំងអស់ ( TOTAL CHECK-INS )' : 
+                 category === 'BOOKS' ? 'សរុបការខ្ចីសងទាំងអស់ ( TOTAL CHECK-INS )' :
                  'សរុបការចូលទាំងអស់ ( TOTAL CHECK-INS )'}
               </span>
               <span style={{ fontWeight: 'bold' }}>{totalCheckins}</span>
