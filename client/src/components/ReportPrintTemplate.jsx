@@ -28,6 +28,17 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, displayItems, viewMode
 
   const itemsToRender = displayItems || groupedData; // Fallback
 
+  let effectiveCategory = category;
+  if (!effectiveCategory || effectiveCategory === 'ALL' || effectiveCategory === 'VISIT') {
+    const validSessions = sessions || [];
+    if (validSessions.length > 0) {
+      const allBorrow = validSessions.every(s => s.purpose_of_visit === 'Book Borrowing');
+      const allReturn = validSessions.every(s => s.purpose_of_visit === 'Book Return');
+      if (allBorrow) effectiveCategory = 'BORROW';
+      else if (allReturn) effectiveCategory = 'RETURN';
+    }
+  }
+
   return (
     <div style={{ display: 'none' }}>
       <div 
@@ -72,9 +83,9 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, displayItems, viewMode
         {/* Report Title */}
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
           <div style={{ fontFamily: '"Moul", "Khmer OS Muol Light", "Khmer OS Muol", cursive', fontSize: '13pt', margin: '0 0 10px 0', fontWeight: 'normal', color: '#1e3a8a' }}>
-            {category === 'BORROW' ? 'របាយការណ៍សិស្សខ្ចីសៀវភៅ' : 
-             category === 'RETURN' ? 'របាយការណ៍សិស្សសងសៀវភៅ' : 
-             category === 'BOOKS' ? 'របាយការណ៍សិស្សខ្ចីនិងសងសៀវភៅ' :
+            {effectiveCategory === 'BORROW' ? 'របាយការណ៍សិស្សខ្ចីសៀវភៅ' : 
+             effectiveCategory === 'RETURN' ? 'របាយការណ៍សិស្សសងសៀវភៅ' : 
+             effectiveCategory === 'BOOKS' ? 'របាយការណ៍សិស្សខ្ចីនិងសងសៀវភៅ' :
              'របាយការណ៍សិស្សចូលក្នុងបណ្ណាល័យ'}
           </div>
         </div>
@@ -137,9 +148,9 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, displayItems, viewMode
                   <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ភេទ</th>
                   <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>ដេប៉ាតឺម៉ង់</th>
                   <th style={{ padding: '12px 15px', textAlign: 'center', border: '1px solid #e5e7eb', fontWeight: 'normal' }}>
-                    {category === 'BORROW' ? 'ចំនួនខ្ចីសរុប' : 
-                     category === 'RETURN' ? 'ចំនួនសងសរុប' : 
-                     category === 'BOOKS' ? 'ចំនួនខ្ចីសងសរុប' : 
+                    {effectiveCategory === 'BORROW' ? 'ចំនួនខ្ចីសរុប' : 
+                     effectiveCategory === 'RETURN' ? 'ចំនួនសងសរុប' : 
+                     effectiveCategory === 'BOOKS' ? 'ចំនួនខ្ចីសងសរុប' : 
                      'ចំនួនចូលសរុប'}
                   </th>
                 </tr>
@@ -190,18 +201,18 @@ const ReportPrintTemplate = React.forwardRef(({ sessions, displayItems, viewMode
           <div style={{ width: '420px', border: '1px solid #e5e7eb', borderRadius: '6px', overflow: 'hidden', fontFamily: '"Battambang", "Khmer OS Battambang", sans-serif', fontSize: '10.5pt' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 20px', backgroundColor: '#fff', borderBottom: '1px solid #e5e7eb' }}>
               <span>
-                {category === 'BORROW' ? 'សរុបសិស្សដែលបានខ្ចី ( Total Users )' : 
-                 category === 'RETURN' ? 'សរុបសិស្សដែលបានសង ( Total Users )' : 
-                 category === 'BOOKS' ? 'សរុបសិស្សខ្ចីសង ( Total Users )' :
+                {effectiveCategory === 'BORROW' ? 'សរុបសិស្សដែលបានខ្ចី ( Total Users )' : 
+                 effectiveCategory === 'RETURN' ? 'សរុបសិស្សដែលបានសង ( Total Users )' : 
+                 effectiveCategory === 'BOOKS' ? 'សរុបសិស្សខ្ចីសង ( Total Users )' :
                  'សរុបសិស្សដែលបានចូល ( Total Users )'}
               </span>
               <span style={{ fontWeight: 'bold' }}>{totalUsers}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 20px', backgroundColor: '#111827', color: '#fff' }}>
               <span>
-                {category === 'BORROW' ? 'សរុបការខ្ចីទាំងអស់ ( TOTAL CHECK-INS )' : 
-                 category === 'RETURN' ? 'សរុបការសងទាំងអស់ ( TOTAL CHECK-INS )' : 
-                 category === 'BOOKS' ? 'សរុបការខ្ចីសងទាំងអស់ ( TOTAL CHECK-INS )' :
+                {effectiveCategory === 'BORROW' ? 'សរុបការខ្ចីទាំងអស់ ( TOTAL CHECK-INS )' : 
+                 effectiveCategory === 'RETURN' ? 'សរុបការសងទាំងអស់ ( TOTAL CHECK-INS )' : 
+                 effectiveCategory === 'BOOKS' ? 'សរុបការខ្ចីសងទាំងអស់ ( TOTAL CHECK-INS )' :
                  'សរុបការចូលទាំងអស់ ( TOTAL CHECK-INS )'}
               </span>
               <span style={{ fontWeight: 'bold' }}>{totalCheckins}</span>
