@@ -60,7 +60,6 @@ export default function SessionsTable({
     setCategoryTab(initialCategory);
   }, [initialCategory]);
   const [editingSession, setEditingSession] = useState(null);
-  const [showResetModal, setShowResetModal] = useState(false);
   const [showExportPrompt, setShowExportPrompt] = useState(false);
   const [viewMode, setViewMode] = useState('LOGS'); // 'LOGS' or 'USERS'
   const excelReportRef = useRef(null);
@@ -421,35 +420,6 @@ export default function SessionsTable({
       
       <ExcelReportGenerator ref={excelReportRef} sessions={filteredSessions} />
 
-      {/* Post Export Reset Notice Banner */}
-      {showExportPrompt && (
-        <div className="p-4 bg-gradient-to-r from-amber-950/60 via-slate-900 to-rose-950/60 border-b border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 animate-slide-up">
-          <div className="flex items-center gap-2.5 text-xs text-amber-200">
-            <CheckCircle2 className="w-5 h-5 text-teal-400 shrink-0" />
-            <span>
-              <strong>បានទាញយករបាយការណ៍ជោគជ័យ!</strong> តើលោកអ្នកចង់សម្អាតទិន្នន័យ (Reset) ចាស់ទាំងអស់ដើម្បីចាប់ផ្តើមវដ្តទិន្នន័យថ្មីដែរឬទេ?
-            </span>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={() => setShowExportPrompt(false)}
-              className="px-3 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white transition"
-            >
-              ទុកទិន្នន័យដដែល
-            </button>
-            <button
-              onClick={() => {
-                setShowExportPrompt(false);
-                setShowResetModal(true);
-              }}
-              className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-400 text-white shadow-md shadow-rose-500/20 transition flex items-center gap-1.5"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Reset ទិន្នន័យឥឡូវនេះ</span>
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Segmented Category Filter Tabs */}
       {!hideCategoryFilters && (
@@ -1186,62 +1156,6 @@ export default function SessionsTable({
           onDeleteSuccess={() => onRefresh && onRefresh()}
         />
       )}
-
-      {/* Confirm Reset Modal with Admin Password */}
-      {showResetModal && (
-        <ConfirmResetModal
-          isOpen={showResetModal}
-          onClose={() => setShowResetModal(false)}
-          onSubmit={async (password) => {
-            const res = await api.resetSessions(password);
-            if (res.success) {
-              if (onRefresh) onRefresh();
-            } else {
-              throw new Error(res.message || 'លេខសម្ងាត់មិនត្រឹមត្រូវ!');
-            }
-          }}
-          title="សម្អាតទិន្នន័យវត្តមានជា ០ (Reset Logs)"
-          description="សកម្មភាពនេះនឹងសម្អាតទិន្នន័យវត្តមាន និងការខ្ចី-សងទាំងអស់ ដើម្បីចាប់ផ្តើមវដ្តទិន្នន័យថ្មីជា ០។ សូមបញ្ចូលលេខសម្ងាត់ Admin ដើម្បីបញ្ជាក់៖"
-        />
-      )}
-
-      {/* Backup Admin Password Modal */}
-      {showBackupModal && (
-        <ConfirmResetModal
-          isOpen={showBackupModal}
-          onClose={() => setShowBackupModal(false)}
-          onSubmit={async (password) => {
-            const url = api.backupSystem(password);
-            window.open(url, '_blank');
-          }}
-          title="ទាញយកទិន្នន័យប្រព័ន្ធទុក (Backup)"
-          description="សកម្មភាពនេះនឹងទាញយកទិន្នន័យទាំងអស់នៃប្រព័ន្ធទុកជាឯកសារ .json។ សូមបញ្ចូលលេខសម្ងាត់ Admin ដើម្បីអនុញ្ញាត៖"
-          buttonText="ទាញយកឥឡូវនេះ"
-          buttonIcon={Download}
-        />
-      )}
-
-      {/* Restore Admin Password Modal */}
-      {showRestoreModal && (
-        <ConfirmResetModal
-          isOpen={showRestoreModal}
-          onClose={() => setShowRestoreModal(false)}
-          onSubmit={async (password) => {
-            const res = await api.restoreSystem(restoreData, password);
-            if (res.success) {
-              alert('Restore ទិន្នន័យបានជោគជ័យ! សូម Refresh ទំព័រនេះ។');
-              window.location.reload();
-            } else {
-              throw new Error(res.message || 'Restore បរាជ័យ!');
-            }
-          }}
-          title="ទាញទិន្នន័យចាស់មកវិញ (Restore)"
-          description="សកម្មភាពនេះនឹងលុបទិន្នន័យបច្ចុប្បន្នចោលទាំងស្រុង និងជំនួសដោយទិន្នន័យពីឯកសារចាស់វិញ។ តើអ្នកពិតជាចង់បន្តមែនទេ? សូមបញ្ចូលលេខសម្ងាត់ Admin ដើម្បិអនុញ្ញាត៖"
-          buttonText="បញ្ជាក់ការ Restore ឥឡូវនេះ"
-          buttonIcon={Upload}
-        />
-      )}
-
     </div>
   );
 }
