@@ -24,7 +24,6 @@ import {
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
 import EditSessionModal from './EditSessionModal';
-import ConfirmResetModal from './ConfirmResetModal';
 import { useReactToPrint } from 'react-to-print';
 import { Document, Packer, Paragraph, Table, TableCell, TableRow, TextRun, AlignmentType, WidthType, ImageRun, SectionType } from 'docx';
 import { saveAs } from 'file-saver';
@@ -63,9 +62,6 @@ export default function SessionsTable({
   const [editingSession, setEditingSession] = useState(null);
   const [showResetModal, setShowResetModal] = useState(false);
   const [showExportPrompt, setShowExportPrompt] = useState(false);
-  const [showBackupModal, setShowBackupModal] = useState(false);
-  const [showRestoreModal, setShowRestoreModal] = useState(false);
-  const [restoreData, setRestoreData] = useState(null);
   const [viewMode, setViewMode] = useState('LOGS'); // 'LOGS' or 'USERS'
   const excelReportRef = useRef(null);
   const reportRef = useRef(null);
@@ -208,33 +204,6 @@ export default function SessionsTable({
     }
   };
 
-  const fileInputRef = useRef(null);
-
-  const handleBackup = () => {
-    setShowBackupModal(true);
-  };
-
-  const handleRestoreClick = () => {
-    fileInputRef.current.click();
-  };
-
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      try {
-        const jsonData = JSON.parse(event.target.result);
-        setRestoreData(jsonData);
-        setShowRestoreModal(true);
-      } catch (err) {
-        alert('ឯកសារមិនត្រឹមត្រូវ (Invalid Backup File)!');
-      }
-    };
-    reader.readAsText(file);
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  };
 
   const handleExportPDF = useReactToPrint({
     content: () => reportRef.current,
@@ -415,41 +384,7 @@ export default function SessionsTable({
           </div>
 
 
-          {/* Reset Logs Button */}
-          <button
-            onClick={() => setShowResetModal(true)}
-            className="flex shrink-0 items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-500/15 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition shadow-sm"
-            title="សម្អាតទិន្នន័យទាំងអស់ជា ០ (ទាមទារ Password Admin)"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>{t('btnReset') || 'សម្អាតទិន្នន័យ (Reset)'}</span>
-          </button>
 
-          <div className="flex shrink-0 bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-lg shadow-teal-500/10">
-            <button
-              onClick={handleBackup}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-amber-300 transition border-r border-slate-700"
-              title="ទាញយកទិន្នន័យប្រព័ន្ធទុក (Backup)"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Backup</span>
-            </button>
-            <button
-              onClick={handleRestoreClick}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-amber-300 transition border-r border-slate-700"
-              title="ទាញទិន្នន័យចាស់មកវិញ (Restore)"
-            >
-              <Upload className="w-3.5 h-3.5" />
-              <span>Restore</span>
-            </button>
-            <input 
-              type="file" 
-              accept=".json" 
-              ref={fileInputRef} 
-              style={{ display: 'none' }} 
-              onChange={handleFileChange} 
-            />
-          </div>
 
           <div className="flex shrink-0 bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-lg shadow-teal-500/10">
             <button
