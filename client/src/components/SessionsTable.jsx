@@ -480,6 +480,8 @@ export default function SessionsTable({
           </div>
         </div>
 
+      </div>
+
       <ReportPrintTemplate ref={reportRef} sessions={filteredSessions} displayItems={displayItems} viewMode={viewMode} category={categoryTab} />
       
       <ExcelReportGenerator ref={excelReportRef} sessions={filteredSessions} />
