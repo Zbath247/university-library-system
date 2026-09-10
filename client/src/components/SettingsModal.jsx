@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, X, Save, MapPin, RefreshCw, Search, Navigation, Calendar } from 'lucide-react';
+import { Settings, X, Save, MapPin, RefreshCw, Search, Navigation, Calendar, Database, Download, Upload, RotateCcw } from 'lucide-react';
+import ConfirmResetModal from './ConfirmResetModal';
 import { api } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
 import 'leaflet/dist/leaflet.css';
@@ -23,6 +24,12 @@ L.Marker.prototype.options.icon = DefaultIcon;
 export default function SettingsModal({ isOpen, onClose }) {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('borrowing');
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [showBackupModal, setShowBackupModal] = useState(false);
+  const [showRestoreModal, setShowRestoreModal] = useState(false);
+  const [restoreData, setRestoreData] = useState(null);
+  const fileInputRef = React.useRef(null);
+
   const [settings, setSettings] = useState({
     isLocationRequired: false,
     libraryLat: 11.5564,
@@ -55,6 +62,32 @@ export default function SettingsModal({ isOpen, onClose }) {
       }
     }, [lat, lng, map]);
     return null;
+  };
+
+  const handleBackup = () => {
+    setShowBackupModal(true);
+  };
+
+  const handleRestoreClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const jsonData = JSON.parse(event.target.result);
+        setRestoreData(jsonData);
+        setShowRestoreModal(true);
+      } catch (err) {
+        alert('ឯកសារមិនត្រឹមត្រូវ (Invalid Backup File)!');
+      }
+    };
+    reader.readAsText(file);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const [loading, setLoading] = useState(true);
@@ -209,6 +242,11 @@ export default function SettingsModal({ isOpen, onClose }) {
                 className={`whitespace-nowrap px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2 ${activeTab === 'location' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'text-slate-400 bg-slate-800/30'}`}
               >
                  <MapPin className="w-4 h-4" />{t('settingsLocationSetup', 'Location Setup')}</button>
+              <button 
+                onClick={() => setActiveTab('database')}
+                className={`whitespace-nowrap px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2 ${activeTab === 'database' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'text-slate-400 bg-slate-800/30'}`}
+              >
+                 <Database className="w-4 h-4" />Database & System</button>
            </div>
         </div>
 
@@ -225,6 +263,11 @@ export default function SettingsModal({ isOpen, onClose }) {
                 className={`w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-bold transition ${activeTab === 'location' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border border-transparent'}`}
               >
                  <MapPin className="w-4 h-4" />{t('settingsLocationSetup', 'Location Setup')}</button>
+              <button 
+                onClick={() => setActiveTab('database')}
+                className={`w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-bold transition ${activeTab === 'database' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border border-transparent'}`}
+              >
+                 <Database className="w-4 h-4" />Database & System</button>
            </div>
 
            {/* Content */}
@@ -410,6 +453,53 @@ export default function SettingsModal({ isOpen, onClose }) {
                    </div>
                  )}
 
+                 {activeTab === 'database' && (
+                   <div className="space-y-6">
+                     <div className="bg-[#12161F] border border-slate-800/80 rounded-2xl p-6 shadow-sm">
+                       <h3 className="text-base font-bold text-slate-200 flex items-center gap-2 mb-1">
+                         <Database className="w-5 h-5 text-indigo-400" />Data Management
+                       </h3>
+                       <p className="text-sm text-slate-400 mb-6">Backup, restore, or completely reset system attendance data.</p>
+                       
+                       <div className="flex flex-col gap-4 max-w-sm">
+                         <input 
+                           type="file" 
+                           ref={fileInputRef} 
+                           style={{ display: 'none' }} 
+                           accept=".json" 
+                           onChange={handleFileChange} 
+                         />
+                         
+                         <button
+                           onClick={handleBackup}
+                           className="flex items-center justify-center gap-2 w-full px-5 py-3 text-sm font-bold bg-slate-800 hover:bg-slate-700 text-amber-300 transition border border-slate-700 rounded-xl"
+                         >
+                           <Download className="w-4 h-4" />
+                           Backup System Data
+                         </button>
+
+                         <button
+                           onClick={handleRestoreClick}
+                           className="flex items-center justify-center gap-2 w-full px-5 py-3 text-sm font-bold bg-slate-800 hover:bg-slate-700 text-amber-300 transition border border-slate-700 rounded-xl"
+                         >
+                           <Upload className="w-4 h-4" />
+                           Restore System Data
+                         </button>
+
+                         <div className="h-px bg-slate-800/60 my-2"></div>
+
+                         <button
+                           onClick={() => setShowResetModal(true)}
+                           className="flex items-center justify-center gap-2 w-full px-5 py-3 text-sm font-bold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 transition rounded-xl"
+                         >
+                           <RotateCcw className="w-4 h-4" />
+                           Reset All Data (Danger)
+                         </button>
+                       </div>
+                     </div>
+                   </div>
+                 )}
+
                </div>
              )}
            </div>
@@ -434,6 +524,60 @@ export default function SettingsModal({ isOpen, onClose }) {
         </div>
 
       </div>
+
+      {/* Database Action Modals */}
+      {showResetModal && (
+        <ConfirmResetModal
+          isOpen={showResetModal}
+          onClose={() => setShowResetModal(false)}
+          onSubmit={async (password) => {
+            const res = await api.resetSessions(password);
+            if (res.success) {
+              window.location.reload();
+            } else {
+              throw new Error(res.message || 'លេខសម្ងាត់មិនត្រឹមត្រូវ!');
+            }
+          }}
+          title="សម្អាតទិន្នន័យវត្តមានជា ០ (Reset Logs)"
+          description="សកម្មភាពនេះនឹងសម្អាតទិន្នន័យវត្តមាន និងការខ្ចី-សងទាំងអស់ ដើម្បីចាប់ផ្តើមវដ្តទិន្នន័យថ្មីជា ០។ សូមបញ្ចូលលេខសម្ងាត់ Admin ដើម្បីបញ្ជាក់៖"
+        />
+      )}
+
+      {showBackupModal && (
+        <ConfirmResetModal
+          isOpen={showBackupModal}
+          onClose={() => setShowBackupModal(false)}
+          onSubmit={async (password) => {
+            const url = api.backupSystem(password);
+            window.open(url, '_blank');
+          }}
+          title="ទាញយកទិន្នន័យប្រព័ន្ធទុក (Backup)"
+          description="សកម្មភាពនេះនឹងទាញយកទិន្នន័យទាំងអស់នៃប្រព័ន្ធទុកជាឯកសារ .json។ សូមបញ្ចូលលេខសម្ងាត់ Admin ដើម្បីអនុញ្ញាត៖"
+          buttonText="ទាញយកឥឡូវនេះ"
+          buttonIcon={Download}
+        />
+      )}
+
+      {showRestoreModal && (
+        <ConfirmResetModal
+          isOpen={showRestoreModal}
+          onClose={() => setShowRestoreModal(false)}
+          onSubmit={async (password) => {
+            const res = await api.restoreSystem(restoreData, password);
+            if (res.success) {
+              alert('Restore ទិន្នន័យបានជោគជ័យ! សូម Refresh ទំព័រនេះ។');
+              window.location.reload();
+            } else {
+              throw new Error(res.message || 'Restore បរាជ័យ!');
+            }
+          }}
+          title="ទាញទិន្នន័យចាស់មកវិញ (Restore)"
+          description="សកម្មភាពនេះនឹងលុបទិន្នន័យបច្ចុប្បន្នចោលទាំងស្រុង និងជំនួសដោយទិន្នន័យពីឯកសារចាស់វិញ។ តើអ្នកពិតជាចង់បន្តមែនទេ? សូមបញ្ចូលលេខសម្ងាត់ Admin ដើម្បិអនុញ្ញាត៖"
+          buttonText="បញ្ជាក់ការ Restore ឥឡូវនេះ"
+          buttonIcon={Upload}
+        />
+      )}
+
     </div>
   );
 }
