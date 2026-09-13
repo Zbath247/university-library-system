@@ -51,18 +51,59 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
 
   const overdueBooks = React.useMemo(() => {
     const now = Date.now();
-    const maxDays = settings?.maxBorrowDays || 10;
-    const overdue = sessions.filter(session => {
-      if (session.status !== 'ACTIVE') return false;
-      if (session.purpose_of_visit !== 'Book Borrowing' && session.purpose_of_visit !== 'ខ្ចីសៀវភៅ') {
-        return false;
+    const maxDays = Number(settings?.maxBorrowDays) || 10;
+
+    // 1. Collect all completed/valid return sessions
+    const returnSessions = sessions.filter(s =>
+      s &&
+      (s.purpose_of_visit === 'Book Return' || s.purpose_of_visit === 'សងសៀវភៅ') &&
+      s.status !== 'REJECTED'
+    );
+    const usedReturnIds = new Set();
+
+    // 2. Collect all approved/completed borrow sessions
+    const borrowSessions = sessions.filter(s =>
+      s &&
+      (s.purpose_of_visit === 'Book Borrowing' || s.purpose_of_visit === 'ខ្ចីសៀវភៅ') &&
+      s.status !== 'REJECTED' &&
+      s.status !== 'PENDING_APPROVAL'
+    );
+
+    // 3. Sort chronologically to pair borrows with subsequent returns
+    const sortedBorrows = [...borrowSessions].sort((a, b) =>
+      new Date(a.check_in_time).getTime() - new Date(b.check_in_time).getTime()
+    );
+
+    const overdue = [];
+    for (const borrow of sortedBorrows) {
+      const borrowUser = borrow.user || {};
+      const borrowUid = borrow.user_id || borrowUser.id || borrowUser.university_id;
+      const borrowTime = new Date(borrow.check_in_time).getTime();
+
+      const match = returnSessions.find(ret => {
+        if (usedReturnIds.has(ret.id)) return false;
+        const retUser = ret.user || {};
+        const retUid = ret.user_id || retUser.id || retUser.university_id;
+        const retTime = new Date(ret.check_in_time).getTime();
+        const isSameUser = (borrowUid && retUid && borrowUid === retUid);
+        return isSameUser && retTime >= borrowTime;
+      });
+
+      if (match) {
+        usedReturnIds.add(match.id);
+      } else {
+        const diffDays = Math.max(0, Math.floor((now - borrowTime) / (1000 * 60 * 60 * 24)));
+        if (diffDays >= maxDays) {
+          overdue.push({
+            ...borrow,
+            total_days: diffDays,
+            days_overdue: Math.max(0, diffDays - maxDays)
+          });
+        }
       }
-      const checkInTime = new Date(session.check_in_time).getTime();
-      const diffDays = Math.floor((now - checkInTime) / (1000 * 60 * 60 * 24));
-      session.days_overdue = diffDays;
-      return diffDays >= maxDays;
-    });
-    return overdue.sort((a, b) => b.days_overdue - a.days_overdue);
+    }
+
+    return overdue.sort((a, b) => b.total_days - a.total_days);
   }, [sessions, settings]);
 
   const fetchAllData = async () => {
@@ -112,6 +153,17 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
       fetchAllData();
     });
 
+    socket.on('settings_updated', (newSettings) => {
+      if (newSettings) setSettings(newSettings);
+      fetchAllData();
+    });
+
+    const handleWindowSettings = (e) => {
+      if (e.detail) setSettings(e.detail);
+      fetchAllData();
+    };
+    window.addEventListener('settings_updated', handleWindowSettings);
+
     // Fallback polling just in case (every 1 minute instead of 20s to save load)
     const interval = setInterval(fetchAllData, 60000);
     
@@ -123,6 +175,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
     return () => {
       clearInterval(interval);
       clearInterval(clockInterval);
+      window.removeEventListener('settings_updated', handleWindowSettings);
       socket.disconnect();
     };
   }, []);
@@ -226,27 +279,30 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
                 </div>
                 <div className="max-h-72 overflow-y-auto">
                   {overdueBooks.length > 0 ? (
-                    <div className="p-2 space-y-1">
-                      {overdueBooks.map(book => (
-                        <div key={book.id} className="p-2 rounded-xl bg-slate-800/50 hover:bg-slate-800 transition">
-                          <div className="flex justify-between items-start">
-                            <span className="text-xs font-bold text-slate-200">{book.user?.full_name || 'Unknown'}</span>
-                            <span className="text-[10px] font-bold text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded-md">
-                              {book.days_overdue} {t('daysOverdue') || 'days overdue'}
-                            </span>
+                    <div className="p-2 space-y-1.5">
+                      {overdueBooks.map(book => {
+                        const cleanTopic = (book.research_topic || '').replace(/^\[(?:ខ្ចី|សង)(?:\s+\d+\s+ក្បាល)?\]\s*/, '').trim();
+                        return (
+                          <div key={book.id} className="p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 transition border border-slate-700/40">
+                            <div className="flex justify-between items-start gap-2">
+                              <span className="text-xs font-bold text-slate-200">{book.user?.full_name || 'Unknown'}</span>
+                              <span className="text-[10px] font-bold text-rose-400 bg-rose-500/15 border border-rose-500/25 px-2 py-0.5 rounded-md whitespace-nowrap">
+                                ខ្ចី {book.total_days} ថ្ងៃ {book.days_overdue > 0 ? `(ហួស ${book.days_overdue} ថ្ងៃ)` : '(ដល់កំណត់)'}
+                              </span>
+                            </div>
+                            <div className="text-[11px] text-slate-400 mt-1.5 flex flex-col gap-0.5">
+                              <span className="font-mono text-slate-400">ID: {book.user?.university_id}</span>
+                              <span className="text-amber-300 font-medium truncate" title={cleanTopic || book.research_topic}>
+                                📖 {cleanTopic || book.research_topic || 'សៀវភៅគ្មានចំណងជើង'}
+                              </span>
+                            </div>
                           </div>
-                          <div className="text-[10px] text-slate-400 mt-1 flex flex-col gap-0.5">
-                            <span>ID: {book.user?.university_id}</span>
-                            <span className="truncate" title={book.research_topic}>
-                              Book: {book.research_topic || 'N/A'}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   ) : (
                     <div className="p-6 text-center text-slate-500 text-xs">
-                      {t('noOverdueBooks') || 'No overdue books'}
+                      {t('noOverdueBooks') || 'មិនមានសៀវភៅហួសកំណត់សងទេ'}
                     </div>
                   )}
                 </div>
@@ -362,6 +418,7 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
       {(view === 'LOGS' || view === 'LIBRARY_VISITS' || view === 'LIBRARY_TRANSACTIONS') && (
         <div className="space-y-6 animate-fade-in">
           <SessionsTable
+            settings={settings}
             sessions={sessions}
             roles={roles}
             departments={departments}
@@ -414,7 +471,14 @@ export default function AdminDashboard({ view = 'OVERVIEW', onStatsUpdate, onLog
     />
 
     {showSettingsModal && (
-      <SettingsModal isOpen={showSettingsModal} onClose={() => setShowSettingsModal(false)} />
+      <SettingsModal 
+        isOpen={showSettingsModal} 
+        onClose={() => setShowSettingsModal(false)}
+        onSaveSuccess={(newSettings) => {
+          setSettings(newSettings);
+          fetchAllData();
+        }}
+      />
     )}
 
   </div>

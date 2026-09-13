@@ -114,6 +114,7 @@ router.get('/settings', async (req, res) => {
 router.post('/settings', async (req, res) => {
   try {
     const settings = await db.updateSettings(req.body);
+    if (req.io) req.io.emit('settings_updated', settings);
     res.json({ success: true, settings, message: 'Settings updated successfully.' });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

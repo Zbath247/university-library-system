@@ -21,7 +21,7 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-export default function SettingsModal({ isOpen, onClose }) {
+export default function SettingsModal({ isOpen, onClose, onSaveSuccess }) {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('borrowing');
   const [showResetModal, setShowResetModal] = useState(false);
@@ -196,6 +196,9 @@ export default function SettingsModal({ isOpen, onClose }) {
       const res = await api.updateSettings(settings);
       if (res.success) {
         setSuccess('Settings updated successfully!');
+        const updated = res.settings || settings;
+        if (onSaveSuccess) onSaveSuccess(updated);
+        window.dispatchEvent(new CustomEvent('settings_updated', { detail: updated }));
         setTimeout(() => setSuccess(''), 3000);
       } else {
         setError(res.message || 'Failed to save settings.');

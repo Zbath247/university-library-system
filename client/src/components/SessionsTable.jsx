@@ -31,6 +31,7 @@ import ReportPrintTemplate from './ReportPrintTemplate';
 import { ExcelReportGenerator } from './ExcelReportGenerator';
 
 export default function SessionsTable({
+  settings = null,
   sessions = [],
   roles = [],
   departments = [],
@@ -47,6 +48,59 @@ export default function SessionsTable({
   const safeSessions = Array.isArray(sessions) ? sessions : [];
   const safeRoles = Array.isArray(roles) ? roles : [];
   const safeDepts = Array.isArray(departments) ? departments : [];
+
+  const overdueSessionMap = React.useMemo(() => {
+    const now = Date.now();
+    const maxDays = Number(settings?.maxBorrowDays) || 10;
+    const map = new Map();
+
+    const returnSessions = safeSessions.filter(s =>
+      s &&
+      (s.purpose_of_visit === 'Book Return' || s.purpose_of_visit === 'សងសៀវភៅ') &&
+      s.status !== 'REJECTED'
+    );
+    const usedReturnIds = new Set();
+
+    const borrowSessions = safeSessions.filter(s =>
+      s &&
+      (s.purpose_of_visit === 'Book Borrowing' || s.purpose_of_visit === 'ខ្ចីសៀវភៅ') &&
+      s.status !== 'REJECTED' &&
+      s.status !== 'PENDING_APPROVAL'
+    );
+
+    const sortedBorrows = [...borrowSessions].sort((a, b) =>
+      new Date(a.check_in_time).getTime() - new Date(b.check_in_time).getTime()
+    );
+
+    for (const borrow of sortedBorrows) {
+      const borrowUser = borrow.user || {};
+      const borrowUid = borrow.user_id || borrowUser.id || borrowUser.university_id;
+      const borrowTime = new Date(borrow.check_in_time).getTime();
+
+      const match = returnSessions.find(ret => {
+        if (usedReturnIds.has(ret.id)) return false;
+        const retUser = ret.user || {};
+        const retUid = ret.user_id || retUser.id || retUser.university_id;
+        const retTime = new Date(ret.check_in_time).getTime();
+        const isSameUser = (borrowUid && retUid && borrowUid === retUid);
+        return isSameUser && retTime >= borrowTime;
+      });
+
+      if (match) {
+        usedReturnIds.add(match.id);
+      } else {
+        const diffDays = Math.max(0, Math.floor((now - borrowTime) / (1000 * 60 * 60 * 24)));
+        if (diffDays >= maxDays) {
+          map.set(borrow.id, {
+            total_days: diffDays,
+            days_overdue: Math.max(0, diffDays - maxDays)
+          });
+        }
+      }
+    }
+
+    return map;
+  }, [safeSessions, settings]);
 
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -708,13 +762,19 @@ export default function SessionsTable({
                         const cleanTopic = rawTopic.replace(/^\[(ខ្ចី|សង)\]\s*/, '').trim();
 
                         if (isBorrow) {
+                          const overdueInfo = overdueSessionMap.get(session.id);
                           return (
                             <div className="flex flex-col gap-1">
-                              <div className="flex items-center gap-1.5">
+                              <div className="flex items-center gap-1.5 flex-wrap">
                                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
                                   <BookOpen className="w-3 h-3 text-amber-400" />
                                   {tPurpose('Book Borrowing')}
                                 </span>
+                                {overdueInfo && (
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/25 text-rose-300 border border-rose-500/40 animate-pulse whitespace-nowrap shadow-sm shadow-rose-500/20">
+                                    ⚠️ ហួសកំណត់ ({overdueInfo.total_days} ថ្ងៃ)
+                                  </span>
+                                )}
                               </div>
                               {cleanTopic && (
                                 <p className="text-xs text-amber-100 font-bold flex items-start gap-1.5" title={cleanTopic}>
@@ -797,9 +857,16 @@ export default function SessionsTable({
                           Rejected
                         </span>
                       ) : (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-400">
-                          {t('statusCompleted')}
-                        </span>
+                        <div className="flex flex-col items-start gap-1">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-400">
+                            {t('statusCompleted')}
+                          </span>
+                          {overdueSessionMap.get(session.id) && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 whitespace-nowrap animate-pulse">
+                              ⚠️ ហួសកំណត់ {overdueSessionMap.get(session.id).days_overdue > 0 ? `+${overdueSessionMap.get(session.id).days_overdue} ថ្ងៃ` : ''}
+                            </span>
+                          )}
+                        </div>
                       )}
                     </td>
 
@@ -936,10 +1003,17 @@ export default function SessionsTable({
                 <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800/80 text-xs">
                   {isBorrow ? (
                     <div className="space-y-1">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                        <BookOpen className="w-3 h-3 text-amber-400" />
-                        {tPurpose('Book Borrowing')}
-                      </span>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                          <BookOpen className="w-3 h-3 text-amber-400" />
+                          {tPurpose('Book Borrowing')}
+                        </span>
+                        {overdueSessionMap.get(session.id) && (
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 animate-pulse">
+                            ⚠️ ហួសកំណត់ ({overdueSessionMap.get(session.id).total_days} ថ្ងៃ)
+                          </span>
+                        )}
+                      </div>
                       {cleanTopic && (
                         <p className="text-xs text-amber-100 font-bold flex items-start gap-1" title={cleanTopic}>
                           <span className="mt-0.5 shrink-0">📖</span> <span className="leading-relaxed break-words">{cleanTopic}</span>

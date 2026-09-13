@@ -44,7 +44,8 @@ class DatabaseWrapper {
         isLocationRequired: false,
         libraryLat: 11.5564,
         libraryLng: 104.9282,
-        maxDistance: 500
+        maxDistance: 500,
+        maxBorrowDays: 10
       });
     }
   }
@@ -59,7 +60,8 @@ class DatabaseWrapper {
         isLocationRequired: false,
         libraryLat: 11.5564,
         libraryLng: 104.9282,
-        maxDistance: 500
+        maxDistance: 500,
+        maxBorrowDays: 10
       });
     }
     return settings;
@@ -74,6 +76,7 @@ class DatabaseWrapper {
     if (payload.libraryLat !== undefined) settings.libraryLat = payload.libraryLat;
     if (payload.libraryLng !== undefined) settings.libraryLng = payload.libraryLng;
     if (payload.maxDistance !== undefined) settings.maxDistance = payload.maxDistance;
+    if (payload.maxBorrowDays !== undefined) settings.maxBorrowDays = Number(payload.maxBorrowDays) || 10;
     
     await settings.save();
     return settings;
